@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Manrope, Orbitron } from "next/font/google";
+import { Manrope, Chakra_Petch } from "next/font/google";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -7,14 +7,14 @@ const manrope = Manrope({
   variable: "--font-sans",
 });
 
-// Bold, geometric sci-fi display face with strong circular letterforms —
-// closest free match to the chunky futuristic logotype look (swapped in
-// from Zen Dots, whose dot accents didn't show up much in this name).
+// Techy display face with real stroke variation and distinct per-letter
+// shapes rather than a uniform geometric grid — swapped in after Orbitron
+// and Zen Dots both read as too blocky/monotone for this name.
 // A licensed/custom font would match closer if you ever want to go
 // further than what Google Fonts offers.
-const orbitron = Orbitron({
+const chakraPetch = Chakra_Petch({
   subsets: ["latin"],
-  weight: "700",
+  weight: "600",
   variable: "--font-display",
 });
 
@@ -48,7 +48,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${manrope.variable} ${orbitron.variable}`}>
+    <html lang="en" className={`${manrope.variable} ${chakraPetch.variable}`}>
       <body className="font-sans antialiased">{children}</body>
     </html>
   );
