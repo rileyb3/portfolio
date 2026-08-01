@@ -20,11 +20,12 @@ export default function Hero() {
 
         {/* Edge strip: a thin (half-inch) repeating sliver of the photo's
             own leftmost, person-free edge (rocks/ocean, cropped off well
-            before any clothing), bleeding half an inch into the black
-            panel — softens the hard cut without a gradient. Desktop only,
-            since the photo is full-width (no black panel) on mobile. */}
+            before any clothing) — floats in the black panel with at
+            least a half-inch gap of solid black on both sides of it,
+            rather than touching the photo. Desktop only, since the photo
+            is full-width (no black panel) on mobile. */}
         <div
-          className="absolute inset-y-0 left-[calc(38%-48px)] hidden w-12 bg-[url('/edge-strip.jpg')] bg-[length:48px_auto] bg-repeat-y bg-left-top sm:block"
+          className="absolute inset-y-0 left-[calc(38%-96px)] hidden w-12 bg-[url('/edge-strip.jpg')] bg-[length:48px_auto] bg-repeat-y bg-left-top sm:block"
           aria-hidden="true"
         />
       </div>
