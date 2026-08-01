@@ -66,7 +66,7 @@ export default function AboutPage() {
               <img
                 src={profile.aboutPhotoSrc}
                 alt={profile.name}
-                className="h-full w-full object-cover object-top"
+                className="h-full w-full object-cover object-[50%_28%]"
               />
             </div>
           </div>
