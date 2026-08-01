@@ -15,8 +15,8 @@ export default function Hero() {
     function onScroll() {
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
-        const maxDrift = window.innerHeight * 0.4;
-        setPhotoOffset(-Math.min(window.scrollY * 0.4, maxDrift));
+        const maxDrift = window.innerHeight * 0.3;
+        setPhotoOffset(-Math.min(window.scrollY * 0.3, maxDrift));
       });
     }
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -38,10 +38,13 @@ export default function Hero() {
     <section id="top" className="relative grid h-[140vh] grid-cols-1">
       <div className="sticky top-0 col-start-1 row-start-1 h-screen overflow-hidden bg-ink">
         {/* Photo: full-bleed on the right. Hard cut to black on the left —
-            no gradient, just a clean edge. Parallax drift applied here via
-            transform, independent of the edge strip below. */}
+            no gradient, just a clean edge. Deliberately oversized (145% of
+            container height) so the upward parallax drift below always has
+            extra image material to reveal — without this, translating a
+            100%-height image upward exposes empty black space at the
+            bottom, which is the gap that showed up before. */}
         <div
-          className="absolute inset-y-0 right-0 w-full will-change-transform sm:w-[62%]"
+          className="absolute right-0 top-0 h-[145%] w-full will-change-transform sm:w-[62%]"
           style={{ transform: `translateY(${photoOffset}px)` }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -69,10 +72,14 @@ export default function Hero() {
       {/* Name: sticky (pinned), not scrolling on its own — plain live text
           in a simple, clean font, centered horizontally and sized big
           enough that it runs off both edges of the screen on purpose.
-          globals.css sets overflow-x:hidden so that doesn't create a
-          horizontal scrollbar. */}
+          Pulled back up from top-[68%] to top-[58%] — at the largest font
+          size, 68% pushed the letters' descenders (the "y"s) past the
+          bottom edge of the viewport on shorter screens, so the full name
+          was never fully visible even at rest. globals.css sets
+          overflow-x:hidden so the horizontal overflow doesn't create a
+          scrollbar. */}
       <div className="sticky top-0 z-10 col-start-1 row-start-1 h-screen">
-        <h1 className="pointer-events-none absolute left-1/2 top-[68%] -translate-x-1/2 whitespace-nowrap font-sans text-9xl font-semibold leading-none tracking-tight text-paper sm:text-[12rem] lg:text-[15rem]">
+        <h1 className="pointer-events-none absolute left-1/2 top-[58%] -translate-x-1/2 whitespace-nowrap font-sans text-9xl font-semibold leading-none tracking-tight text-paper sm:text-[12rem] lg:text-[15rem]">
           {profile.name}
         </h1>
       </div>
