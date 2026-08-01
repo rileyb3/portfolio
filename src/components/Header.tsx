@@ -1,24 +1,38 @@
+import Link from "next/link";
 import { categories } from "@/data/projects";
 
+// Global nav — sticky across every page (wired into layout.tsx). Dark
+// theme + real category page links, replacing the unused light-themed
+// version left over from the original starter (which pointed at stale
+// #anchor sections instead of the actual /build, /design, etc. pages).
 export default function Header() {
   return (
-    <header className="sticky top-0 z-50 border-b border-ink/10 bg-paper/80 backdrop-blur">
-      <nav className="mx-auto flex max-w-4xl items-center justify-between px-6 py-4">
-        <a href="#top" className="font-semibold tracking-tight">
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-ink/80 backdrop-blur">
+      <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4 sm:px-10">
+        <Link
+          href="/"
+          className="text-sm font-semibold tracking-wide text-paper transition hover:text-accent"
+        >
           Riley Byers
-        </a>
+        </Link>
         <ul className="hidden gap-6 text-sm sm:flex">
           {categories.map((c) => (
             <li key={c.id}>
-              <a href={`#${c.id}`} className="hover:text-accent">
+              <Link
+                href={`/${c.id}`}
+                className="text-muted transition hover:text-accent"
+              >
                 {c.label}
-              </a>
+              </Link>
             </li>
           ))}
           <li>
-            <a href="#contact" className="hover:text-accent">
+            <Link
+              href="/#contact"
+              className="text-muted transition hover:text-accent"
+            >
               Contact
-            </a>
+            </Link>
           </li>
         </ul>
       </nav>
