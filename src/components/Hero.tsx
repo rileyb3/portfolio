@@ -37,7 +37,7 @@ export default function Hero() {
         {/* Name: overlaps the boundary between the dark panel and the photo.
             Solid color, no gradient — plain font choice only. Extra line-height
             and padding keep descenders (y, g) from clipping against the edge. */}
-        <h1 className="pointer-events-none absolute left-6 top-[38%] whitespace-nowrap pb-4 font-display text-6xl font-medium leading-[1.15] tracking-normal text-paper sm:left-10 sm:text-8xl lg:text-9xl">
+        <h1 className="pointer-events-none absolute left-6 top-[38%] whitespace-nowrap pb-4 font-display text-7xl font-medium leading-[1.15] tracking-normal text-paper sm:left-10 sm:text-9xl lg:text-[10rem]">
           {profile.name}
         </h1>
       </div>
