@@ -31,11 +31,13 @@ export default function Hero() {
       current += (target - current) * 0.08; // lerp factor — lower = softer/laggier
       setPhotoOffset(current);
 
-      // Same scroll range Disciplines uses to arrive (~28vh) and fully
-      // occlude the name (~65vh) — see the comments below on the name
-      // wrapper and in Disciplines.tsx for how those numbers come out.
+      // Disciplines arrives at ~28vh and fully occludes the name at
+      // ~65vh (see comments below / in Disciplines.tsx) — coverEnd here
+      // is deliberately set to the halfway point of that range (~46vh)
+      // rather than 65vh, so the color has already finished fading to
+      // black by the time occlusion is only half done.
       const coverStart = vh * 0.28;
-      const coverEnd = vh * 0.65;
+      const coverEnd = vh * 0.465;
       const progress = Math.min(
         Math.max((scrollY - coverStart) / (coverEnd - coverStart), 0),
         1
