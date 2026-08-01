@@ -11,9 +11,6 @@ export default function Hero() {
   // scroll event — that clamp-on-event approach was what caused the
   // abrupt "hits max drift and instantly freezes" stop.
   const [photoOffset, setPhotoOffset] = useState(0);
-  // Soft one-time entrance for the name, instead of it just snapping
-  // into its sticky position the instant the page paints.
-  const [nameIn, setNameIn] = useState(false);
   // Drives the name's color shift as Disciplines covers it — "Riley"
   // fades white -> accent green, "Byers" fades white -> ink black (see
   // the color mixing below), so the whole thing has settled into its
@@ -32,13 +29,15 @@ export default function Hero() {
       current += (target - current) * 0.08; // lerp factor — lower = softer/laggier
       setPhotoOffset(current);
 
-      // Disciplines arrives at ~28vh and fully occludes the name at
-      // ~68vh (see comments below / in Disciplines.tsx) — coverEnd here
-      // is deliberately set to the halfway point of that range (~48vh)
-      // rather than 68vh, so the color has already finished fading to
+      // The name now rises up from below the fold before locking (see
+      // the wrapper/h1 markup below) — it locks at scrollY≈40vh. Disciplines
+      // arrives at ~68vh and fully occludes the name at ~108vh (see
+      // comments below / in Disciplines.tsx) — coverEnd here is
+      // deliberately set to the halfway point of that range (~88vh)
+      // rather than 108vh, so the color has already finished fading to
       // black by the time occlusion is only half done.
-      const coverStart = vh * 0.28;
-      const coverEnd = vh * 0.48;
+      const coverStart = vh * 0.68;
+      const coverEnd = vh * 0.88;
       const progress = Math.min(
         Math.max((scrollY - coverStart) / (coverEnd - coverStart), 0),
         1
@@ -48,11 +47,7 @@ export default function Hero() {
       raf = requestAnimationFrame(frame);
     }
     raf = requestAnimationFrame(frame);
-    const t = setTimeout(() => setNameIn(true), 50);
-    return () => {
-      cancelAnimationFrame(raf);
-      clearTimeout(t);
-    };
+    return () => cancelAnimationFrame(raf);
   }, []);
 
   // "Riley" fades from white to accent green, "Byers" fades from white
@@ -78,7 +73,7 @@ export default function Hero() {
     // Outer section is taller than one screen — that extra height is the
     // runway the sticky photo holds, and separately the runway the name's
     // own wrapper (below) holds before it releases too.
-    <section id="top" className="relative h-[198vh]">
+    <section id="top" className="relative h-[238vh]">
       <div className="sticky top-0 h-screen overflow-hidden bg-ink">
         {/* Photo: full-bleed on the right. Hard cut to black on the left —
             no gradient, just a clean edge. Deliberately oversized (145% of
@@ -112,23 +107,19 @@ export default function Hero() {
         />
       </div>
 
-      {/* Name: wrapper's natural top is 60vh down the page — matching the
-          lock threshold below (levitates a bit higher than the previous
-          63%), so the name is already at (essentially) its locked
-          position from scroll=0. A one-time soft fade/rise transition on
-          mount (nameIn) replaces the previous instant snap-into-place.
-          Plain live text in a simple, clean font, sized big enough that
-          it runs off both edges of the screen. globals.css sets
-          overflow-x:hidden so that doesn't create a horizontal
-          scrollbar. Stays visible and untouched until Disciplines
-          (below, -mt-[70vh]) starts arriving around scroll≈28vh, then
-          fully occludes it shortly after. */}
-      <div className="absolute inset-x-0 top-[60vh] z-10 h-[138vh]">
-        <h1
-          className={`pointer-events-none sticky top-[60%] mx-auto w-fit whitespace-nowrap font-sans text-9xl font-semibold leading-none tracking-tight transition-[transform,opacity] duration-700 ease-out sm:text-[12rem] lg:text-[15rem] ${
-            nameIn ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
-          }`}
-        >
+      {/* Name: wrapper's natural top is 100vh down the page — exactly one
+          screen, so at scroll=0 the name sits just below the fold,
+          off-screen. Scrolling moves it up in normal flow (1:1 with the
+          page) until it hits the sticky threshold below (top-[60%] =
+          60vh) at scrollY≈40vh, where it locks — same final resting
+          position as before. Plain live text in a simple, clean font,
+          sized big enough that it runs off both edges of the screen.
+          globals.css sets overflow-x:hidden so that doesn't create a
+          horizontal scrollbar. Stays locked and untouched until
+          Disciplines (below, -mt-[70vh]) starts arriving around
+          scroll≈68vh, then fully occludes it shortly after. */}
+      <div className="absolute inset-x-0 top-[100vh] z-10 h-[138vh]">
+        <h1 className="pointer-events-none sticky top-[60%] mx-auto w-fit whitespace-nowrap font-sans text-9xl font-semibold leading-none tracking-tight sm:text-[12rem] lg:text-[15rem]">
           <span style={{ color: firstColor }}>{firstName}</span>{" "}
           <span style={{ color: lastColor }}>{lastName}</span>
         </h1>
