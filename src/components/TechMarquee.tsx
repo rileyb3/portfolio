@@ -49,7 +49,9 @@ export default function TechMarquee() {
           {track.map((tool, i) => (
             <div
               key={`${tool}-${i}`}
-              className="flex shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-surface px-8 py-5 text-base font-medium text-paper"
+              className={`flex shrink-0 items-center justify-center rounded-full px-8 py-5 text-base font-medium text-ink ${
+                i % 2 === 0 ? "bg-accent" : "bg-paper"
+              }`}
             >
               {tool}
             </div>
