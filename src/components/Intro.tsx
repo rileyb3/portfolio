@@ -4,7 +4,7 @@ import { profile } from "@/data/projects";
 // work. Both lines are your own approved copy — nothing invented here.
 export default function Intro() {
   return (
-    <section className="mx-auto max-w-5xl px-6 py-24 sm:py-32">
+    <section className="mx-auto max-w-5xl px-6 pt-24 pb-8 sm:pt-32 sm:pb-10">
       <div className="grid gap-10 sm:grid-cols-2 sm:gap-16">
         <h2 className="max-w-md text-3xl italic leading-snug text-paper sm:text-4xl lg:text-5xl">
           {profile.tagline}

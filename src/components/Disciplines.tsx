@@ -21,12 +21,12 @@ const iconMap: Record<string, LucideIcon> = {
   write: PenTool,
 };
 
-// Each tile is its own page — /build, /design, etc. Gallery gets a tile
-// too, which conveniently rounds the grid to 6.
-const tiles = [
-  ...categories.map((c) => ({ href: `/${c.id}`, label: c.label, id: c.id })),
-  { href: "/gallery", label: "Gallery", id: "gallery" },
-];
+// Each tile is its own page — /build, /design, etc.
+const tiles = categories.map((c) => ({
+  href: `/${c.id}`,
+  label: c.label,
+  id: c.id,
+}));
 
 const cardStyle =
   "border border-white/10 bg-white/5 hover:border-white/25 hover:bg-white/10";
@@ -53,8 +53,9 @@ export default function Disciplines() {
 
   return (
     <section
+      id="disciplines"
       ref={ref}
-      className="relative z-20 -mt-24 rounded-t-[3rem] bg-ink px-6 pb-24 pt-16 text-center sm:-mt-32 sm:pb-32 sm:pt-24"
+      className="relative z-20 -mt-24 scroll-mt-6 rounded-t-[3rem] bg-ink px-6 pb-24 pt-16 text-center sm:-mt-32 sm:pb-32 sm:pt-24"
     >
       <div className="mx-auto max-w-5xl">
         <h2 className="mb-10 text-sm font-medium uppercase tracking-widest text-muted">
