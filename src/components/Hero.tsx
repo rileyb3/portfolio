@@ -14,9 +14,10 @@ export default function Hero() {
   // Soft one-time entrance for the name, instead of it just snapping
   // into its sticky position the instant the page paints.
   const [nameIn, setNameIn] = useState(false);
-  // White -> near-black as Disciplines covers the name, so the letters
-  // blend into its background instead of just getting clipped. 0 = white
-  // (#fafafa, matches text-paper), 1 = ink (#0a0a0a, matches bg-ink).
+  // Drives the name's color shift as Disciplines covers it — "Riley"
+  // fades white -> accent green, "Byers" fades white -> ink black (see
+  // the color mixing below), so the whole thing has settled into its
+  // final colors before Disciplines' rise physically clips it.
   const [coverProgress, setCoverProgress] = useState(0);
 
   useEffect(() => {
@@ -54,12 +55,24 @@ export default function Hero() {
     };
   }, []);
 
-  // Interpolate #fafafa -> #0a0a0a by coverProgress.
-  const from = { r: 0xfa, g: 0xfa, b: 0xfa };
-  const to = { r: 0x0a, g: 0x0a, b: 0x0a };
-  const nameColor = `rgb(${Math.round(from.r + (to.r - from.r) * coverProgress)}, ${Math.round(
-    from.g + (to.g - from.g) * coverProgress
-  )}, ${Math.round(from.b + (to.b - from.b) * coverProgress)})`;
+  // "Riley" fades from white to accent green, "Byers" fades from white
+  // to ink black — same coverProgress driving both, just different
+  // target colors.
+  function mix(
+    from: { r: number; g: number; b: number },
+    to: { r: number; g: number; b: number },
+    t: number
+  ) {
+    return `rgb(${Math.round(from.r + (to.r - from.r) * t)}, ${Math.round(
+      from.g + (to.g - from.g) * t
+    )}, ${Math.round(from.b + (to.b - from.b) * t)})`;
+  }
+  const white = { r: 0xfa, g: 0xfa, b: 0xfa };
+  const green = { r: 0xc8, g: 0xff, b: 0x3d }; // accent
+  const ink = { r: 0x0a, g: 0x0a, b: 0x0a };
+  const firstColor = mix(white, green, coverProgress);
+  const lastColor = mix(white, ink, coverProgress);
+  const [firstName, lastName] = profile.name.split(" ");
 
   return (
     // Outer section is taller than one screen — that extra height is the
@@ -115,9 +128,9 @@ export default function Hero() {
           className={`pointer-events-none sticky top-[63%] mx-auto w-fit whitespace-nowrap font-sans text-9xl font-semibold leading-none tracking-tight transition-[transform,opacity] duration-700 ease-out sm:text-[12rem] lg:text-[15rem] ${
             nameIn ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
           }`}
-          style={{ color: nameColor }}
         >
-          {profile.name}
+          <span style={{ color: firstColor }}>{firstName}</span>{" "}
+          <span style={{ color: lastColor }}>{lastName}</span>
         </h1>
       </div>
     </section>
