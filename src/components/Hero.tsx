@@ -37,7 +37,7 @@ export default function Hero() {
           overflow-x:hidden so this doesn't create a horizontal
           scrollbar. */}
       <div className="absolute inset-x-0 top-0 z-10 h-screen">
-        <h1 className="pointer-events-none absolute left-1/2 top-[55%] -translate-x-1/2 whitespace-nowrap font-sans text-9xl font-semibold leading-none tracking-tight text-paper sm:text-[12rem] lg:text-[15rem]">
+        <h1 className="pointer-events-none absolute left-1/2 top-[68%] -translate-x-1/2 whitespace-nowrap font-sans text-9xl font-semibold leading-none tracking-tight text-paper sm:text-[12rem] lg:text-[15rem]">
           {profile.name}
         </h1>
       </div>
