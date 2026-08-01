@@ -8,14 +8,14 @@ import { categories } from "@/data/projects";
 export default function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-ink/80 backdrop-blur">
-      <nav className="relative mx-auto flex max-w-6xl items-center px-6 py-4 sm:px-10">
+      <nav className="flex items-center gap-10 px-4 py-4 sm:px-6">
         <Link
           href="/"
           className="text-sm font-semibold tracking-wide text-paper transition hover:text-accent"
         >
           Riley Byers
         </Link>
-        <ul className="absolute left-1/2 hidden -translate-x-1/2 gap-6 text-sm sm:flex">
+        <ul className="hidden gap-6 text-sm sm:flex">
           {categories.map((c) => (
             <li key={c.id}>
               <Link
