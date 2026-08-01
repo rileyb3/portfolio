@@ -35,8 +35,8 @@ export default function Hero() {
     // (higher z-index, opaque background) rises up from below and
     // overlays it as you scroll, rather than the name scrolling away on
     // its own.
-    <section id="top" className="relative h-[140vh]">
-      <div className="sticky top-0 h-screen overflow-hidden bg-ink">
+    <section id="top" className="relative grid h-[140vh] grid-cols-1">
+      <div className="sticky top-0 col-start-1 row-start-1 h-screen overflow-hidden bg-ink">
         {/* Photo: full-bleed on the right. Hard cut to black on the left —
             no gradient, just a clean edge. Parallax drift applied here via
             transform, independent of the edge strip below. */}
@@ -71,7 +71,7 @@ export default function Hero() {
           enough that it runs off both edges of the screen on purpose.
           globals.css sets overflow-x:hidden so that doesn't create a
           horizontal scrollbar. */}
-      <div className="sticky top-0 z-10 h-screen">
+      <div className="sticky top-0 z-10 col-start-1 row-start-1 h-screen">
         <h1 className="pointer-events-none absolute left-1/2 top-[68%] -translate-x-1/2 whitespace-nowrap font-sans text-9xl font-semibold leading-none tracking-tight text-paper sm:text-[12rem] lg:text-[15rem]">
           {profile.name}
         </h1>
