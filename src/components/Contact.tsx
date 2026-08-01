@@ -1,6 +1,24 @@
+"use client";
+
+import { useState } from "react";
 import { profile } from "@/data/projects";
 
 export default function Contact() {
+  const [copied, setCopied] = useState(false);
+
+  async function copyEmail() {
+    try {
+      await navigator.clipboard.writeText(profile.email);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    } catch {
+      // Clipboard API unavailable (e.g. insecure context) — mailto below
+      // still works as a fallback via the link semantics of the button
+      // itself failing gracefully into nothing; not worth extra UI for
+      // such a rare case.
+    }
+  }
+
   return (
     <section id="contact" className="mx-auto max-w-4xl px-6 py-20">
       <div className="rounded-2xl border border-white/10 bg-surface p-10 text-center">
@@ -12,12 +30,13 @@ export default function Contact() {
           writing. Reach out any time.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-4">
-          <a
-            href={`mailto:${profile.email}`}
-            className="rounded-full bg-accent3 px-5 py-2.5 text-sm font-medium text-ink transition hover:opacity-80"
+          <button
+            type="button"
+            onClick={copyEmail}
+            className="rounded-full bg-accent2 px-5 py-2.5 text-sm font-medium text-ink transition hover:opacity-80"
           >
-            {profile.email}
-          </a>
+            {copied ? "Copied!" : profile.email}
+          </button>
           <a
             href={profile.cvHref}
             download

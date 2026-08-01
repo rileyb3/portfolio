@@ -741,6 +741,10 @@ export const profile = {
   cvHref: "/cv.pdf",
   photoSrc: "/hero-photo.jpg",
   aboutPhotoSrc: "/about-photo.jpg",
+  // Second image the About page's photo crossfades to once the "Am
+  // seeking" text scrolls into view — Riley's own pick from the batch of
+  // photos dropped into public/.
+  aboutPhotoSrc2: "/IMG_1382.JPG",
   socials: [
     { label: "GitHub", href: "https://github.com/rileyb3" },
     { label: "LinkedIn", href: "https://www.linkedin.com/in/riley-byers-45ab10191/" },
