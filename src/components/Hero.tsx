@@ -30,12 +30,13 @@ export default function Hero() {
   return (
     // Outer section is taller than one screen — that extra height is the
     // runway the sticky photo holds, and separately the runway the name's
-    // own wrapper (below) holds before it releases too. Tall (240vh) on
-    // purpose: the name needs ~42vh of scroll just to rise from off-screen
-    // to its locked position, then a dwell stretch where it's fully
-    // visible and NOT yet touched by Disciplines, then room for
-    // Disciplines to rise and fully cover it, all before release.
-    <section id="top" className="relative h-[240vh]">
+    // own wrapper (below) holds before it releases too. Whole sequence
+    // shifted ~42vh earlier vs. the previous version, so the name is
+    // already at (or essentially at) its locked position on landing
+    // instead of requiring scroll to reveal it — the gaps between
+    // "name locked" / "Disciplines arrives" / "Disciplines fully covers
+    // it" are unchanged, just moved earlier together.
+    <section id="top" className="relative h-[198vh]">
       <div className="sticky top-0 h-screen overflow-hidden bg-ink">
         {/* Photo: full-bleed on the right. Hard cut to black on the left —
             no gradient, just a clean edge. Deliberately oversized (145% of
@@ -69,20 +70,17 @@ export default function Hero() {
         />
       </div>
 
-      {/* Name: starts fully below the fold (invisible at rest — this
-          wrapper's natural top is exactly 100vh down the page, i.e. right
-          at the bottom edge of the first screen). As you scroll, it rises
-          into view like normal content, reaching its locked position
-          (top:58% of viewport) at scroll≈42vh — plain live text in a
-          simple, clean font, sized big enough that it runs off both edges
-          of the screen. globals.css sets overflow-x:hidden so that
-          doesn't create a horizontal scrollbar. From there it stays fully
-          visible and untouched until Disciplines (below, -mt-[70vh])
-          starts arriving around scroll≈70vh, giving a clean dwell period
-          with no overlap between "still rising" and "getting covered" —
-          then fully occludes the name by scroll≈112vh, well before this
-          wrapper's 140vh runway ends. */}
-      <div className="absolute inset-x-0 top-[100vh] z-10 h-[140vh]">
+      {/* Name: wrapper's natural top is 58vh down the page — exactly
+          matching the lock threshold below, so the name is already at
+          (essentially) its locked position from scroll=0, mostly visible
+          on landing rather than requiring scroll to appear. Plain live
+          text in a simple, clean font, sized big enough that it runs off
+          both edges of the screen. globals.css sets overflow-x:hidden so
+          that doesn't create a horizontal scrollbar. It stays visible and
+          untouched until Disciplines (below, -mt-[70vh]) starts arriving
+          around scroll≈28vh, then fully occludes it by scroll≈70vh, well
+          before this wrapper's 140vh runway ends. */}
+      <div className="absolute inset-x-0 top-[58vh] z-10 h-[140vh]">
         <h1 className="pointer-events-none sticky top-[58%] mx-auto w-fit whitespace-nowrap font-sans text-9xl font-semibold leading-none tracking-tight text-paper sm:text-[12rem] lg:text-[15rem]">
           {profile.name}
         </h1>
