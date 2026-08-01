@@ -70,7 +70,7 @@ export default function Hero() {
         />
       </div>
 
-      {/* Name: wrapper's natural top is 64vh down the page — exactly
+      {/* Name: wrapper's natural top is 66vh down the page — exactly
           matching the lock threshold below, so the name is already at
           (essentially) its locked position from scroll=0, mostly visible
           on landing rather than requiring scroll to appear. Plain live
@@ -81,8 +81,8 @@ export default function Hero() {
           arriving around scroll≈28vh, then fully occludes it shortly
           after — same relative relationship as before, just carried a
           bit lower. */}
-      <div className="absolute inset-x-0 top-[64vh] z-10 h-[134vh]">
-        <h1 className="pointer-events-none sticky top-[64%] mx-auto w-fit whitespace-nowrap font-sans text-9xl font-semibold leading-none tracking-tight text-paper sm:text-[12rem] lg:text-[15rem]">
+      <div className="absolute inset-x-0 top-[66vh] z-10 h-[132vh]">
+        <h1 className="pointer-events-none sticky top-[66%] mx-auto w-fit whitespace-nowrap font-sans text-9xl font-semibold leading-none tracking-tight text-paper sm:text-[12rem] lg:text-[15rem]">
           {profile.name}
         </h1>
       </div>
