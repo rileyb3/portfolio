@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Manrope, Chakra_Petch } from "next/font/google";
+import { Manrope, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -7,14 +7,13 @@ const manrope = Manrope({
   variable: "--font-sans",
 });
 
-// Techy display face with real stroke variation and distinct per-letter
-// shapes rather than a uniform geometric grid — swapped in after Orbitron
-// and Zen Dots both read as too blocky/monotone for this name.
-// A licensed/custom font would match closer if you ever want to go
-// further than what Google Fonts offers.
-const chakraPetch = Chakra_Petch({
+// Techy display face with quirky, rounded, non-uniform letterforms —
+// swapped in after Orbitron, Zen Dots, and Chakra Petch all read as too
+// square/blocky for this name. A licensed/custom font would match closer
+// if you ever want to go further than what Google Fonts offers.
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  weight: "600",
+  weight: "700",
   variable: "--font-display",
 });
 
@@ -48,7 +47,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${manrope.variable} ${chakraPetch.variable}`}>
+    <html lang="en" className={`${manrope.variable} ${spaceGrotesk.variable}`}>
       <body className="font-sans antialiased">{children}</body>
     </html>
   );
