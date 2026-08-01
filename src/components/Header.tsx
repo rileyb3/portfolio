@@ -8,7 +8,7 @@ import { categories } from "@/data/projects";
 export default function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-ink/80 backdrop-blur">
-      <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4 sm:px-10">
+      <nav className="mx-auto flex max-w-6xl items-center gap-10 px-6 py-4 sm:px-10">
         <Link
           href="/"
           className="text-sm font-semibold tracking-wide text-paper transition hover:text-accent"
