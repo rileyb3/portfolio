@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Manrope, Zen_Dots } from "next/font/google";
+import { Manrope, Orbitron } from "next/font/google";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -7,13 +7,14 @@ const manrope = Manrope({
   variable: "--font-sans",
 });
 
-// Bold, geometric display face with a circular-dot motif — closest free
-// match to the chunky sci-fi logotype look (swapped in from Audiowide).
+// Bold, geometric sci-fi display face with strong circular letterforms —
+// closest free match to the chunky futuristic logotype look (swapped in
+// from Zen Dots, whose dot accents didn't show up much in this name).
 // A licensed/custom font would match closer if you ever want to go
 // further than what Google Fonts offers.
-const zenDots = Zen_Dots({
+const orbitron = Orbitron({
   subsets: ["latin"],
-  weight: "400",
+  weight: "700",
   variable: "--font-display",
 });
 
@@ -47,7 +48,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${manrope.variable} ${zenDots.variable}`}>
+    <html lang="en" className={`${manrope.variable} ${orbitron.variable}`}>
       <body className="font-sans antialiased">{children}</body>
     </html>
   );
