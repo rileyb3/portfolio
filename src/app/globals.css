@@ -9,4 +9,8 @@ html {
 body {
   background-color: #0a0a0a;
   color: #fafafa;
+  /* The oversized hero name is allowed to bleed past the right edge on
+     purpose (a visual scroll cue) — this keeps that from creating a
+     horizontal scrollbar. */
+  overflow-x: hidden;
 }

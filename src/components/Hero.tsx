@@ -1,5 +1,4 @@
 import { profile } from "@/data/projects";
-import NameWordmark from "./NameWordmark";
 
 export default function Hero() {
   return (
@@ -20,18 +19,16 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Name: plain absolute positioning, no sticky/lock — starts lower
-          on the page than before (top-[55%] vs the old 38%) and scrolls
-          away normally with the rest of the page, moving continuously
-          past vertical center rather than pausing there. Custom vector
-          wordmark (see NameWordmark) instead of live text — keeps the
-          accessible name via aria-label on this heading. */}
+      {/* Name: back to plain live text in a simple, clean font (no custom
+          wordmark) — sized big enough that it runs off the right edge of
+          the screen on purpose, as a visual cue that there's more to
+          scroll through. globals.css sets overflow-x:hidden so this
+          doesn't create a horizontal scrollbar. */}
       <div className="absolute inset-x-0 top-0 z-10 h-screen">
         <h1
-          aria-label={profile.name}
-          className="pointer-events-none absolute left-6 top-[55%] text-paper sm:left-10"
+          className="pointer-events-none absolute left-6 top-[55%] whitespace-nowrap font-sans text-8xl font-semibold leading-none tracking-tight text-paper sm:left-10 sm:text-9xl lg:text-[11rem]"
         >
-          <NameWordmark className="h-auto w-[420px] sm:w-[740px] lg:w-[930px]" />
+          {profile.name}
         </h1>
       </div>
     </section>
