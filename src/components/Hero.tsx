@@ -5,37 +5,38 @@ import { profile } from "@/data/projects";
 
 export default function Hero() {
   // Photo drifts upward as you scroll, but slower than the page itself
-  // (classic parallax) — computed from real scroll position rather than
-  // pure CSS, since sticky alone can only pin something at a fixed rate
-  // (1x or 0x), not partway between.
+  // (classic parallax). Uses a continuous rAF loop that eases the
+  // displayed offset toward the scroll-derived target every frame
+  // (lerp), rather than jumping straight to a hard-clamped value on each
+  // scroll event — that clamp-on-event approach was what caused the
+  // abrupt "hits max drift and instantly freezes" stop.
   const [photoOffset, setPhotoOffset] = useState(0);
+  // Soft one-time entrance for the name, instead of it just snapping
+  // into its sticky position the instant the page paints.
+  const [nameIn, setNameIn] = useState(false);
 
   useEffect(() => {
     let raf = 0;
-    function onScroll() {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        const maxDrift = window.innerHeight * 0.3;
-        setPhotoOffset(-Math.min(window.scrollY * 0.3, maxDrift));
-      });
+    let current = 0;
+    function frame() {
+      const maxDrift = window.innerHeight * 0.3;
+      const target = -Math.min(window.scrollY * 0.3, maxDrift);
+      current += (target - current) * 0.08; // lerp factor — lower = softer/laggier
+      setPhotoOffset(current);
+      raf = requestAnimationFrame(frame);
     }
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
+    raf = requestAnimationFrame(frame);
+    const t = setTimeout(() => setNameIn(true), 50);
     return () => {
-      window.removeEventListener("scroll", onScroll);
       cancelAnimationFrame(raf);
+      clearTimeout(t);
     };
   }, []);
 
   return (
     // Outer section is taller than one screen — that extra height is the
     // runway the sticky photo holds, and separately the runway the name's
-    // own wrapper (below) holds before it releases too. Whole sequence
-    // shifted ~42vh earlier vs. the previous version, so the name is
-    // already at (or essentially at) its locked position on landing
-    // instead of requiring scroll to reveal it — the gaps between
-    // "name locked" / "Disciplines arrives" / "Disciplines fully covers
-    // it" are unchanged, just moved earlier together.
+    // own wrapper (below) holds before it releases too.
     <section id="top" className="relative h-[198vh]">
       <div className="sticky top-0 h-screen overflow-hidden bg-ink">
         {/* Photo: full-bleed on the right. Hard cut to black on the left —
@@ -70,19 +71,23 @@ export default function Hero() {
         />
       </div>
 
-      {/* Name: wrapper's natural top is 66vh down the page — exactly
-          matching the lock threshold below, so the name is already at
-          (essentially) its locked position from scroll=0, mostly visible
-          on landing rather than requiring scroll to appear. Plain live
-          text in a simple, clean font, sized big enough that it runs off
-          both edges of the screen. globals.css sets overflow-x:hidden so
-          that doesn't create a horizontal scrollbar. It stays visible and
-          untouched until Disciplines (below, -mt-[70vh], unchanged) starts
-          arriving around scroll≈28vh, then fully occludes it shortly
-          after — same relative relationship as before, just carried a
-          bit lower. */}
-      <div className="absolute inset-x-0 top-[66vh] z-10 h-[132vh]">
-        <h1 className="pointer-events-none sticky top-[66%] mx-auto w-fit whitespace-nowrap font-sans text-9xl font-semibold leading-none tracking-tight text-paper sm:text-[12rem] lg:text-[15rem]">
+      {/* Name: wrapper's natural top is 63vh down the page — matching the
+          lock threshold below (a smidge higher than the previous 66%),
+          so the name is already at (essentially) its locked position
+          from scroll=0. A one-time soft fade/rise transition on mount
+          (nameIn) replaces the previous instant snap-into-place. Plain
+          live text in a simple, clean font, sized big enough that it
+          runs off both edges of the screen. globals.css sets
+          overflow-x:hidden so that doesn't create a horizontal
+          scrollbar. Stays visible and untouched until Disciplines
+          (below, -mt-[70vh]) starts arriving around scroll≈28vh, then
+          fully occludes it shortly after. */}
+      <div className="absolute inset-x-0 top-[63vh] z-10 h-[135vh]">
+        <h1
+          className={`pointer-events-none sticky top-[63%] mx-auto w-fit whitespace-nowrap font-sans text-9xl font-semibold leading-none tracking-tight text-paper transition-all duration-700 ease-out sm:text-[12rem] lg:text-[15rem] ${
+            nameIn ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
+          }`}
+        >
           {profile.name}
         </h1>
       </div>
