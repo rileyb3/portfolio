@@ -3,6 +3,7 @@ import Disciplines from "@/components/Disciplines";
 import AccentBand from "@/components/AccentBand";
 import Intro from "@/components/Intro";
 import SelectedWorks from "@/components/SelectedWorks";
+import TechMarquee from "@/components/TechMarquee";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 
@@ -15,6 +16,7 @@ export default function Home() {
         <AccentBand />
         <Intro />
         <SelectedWorks />
+        <TechMarquee />
         <Contact />
       </main>
       <Footer />

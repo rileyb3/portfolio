@@ -14,3 +14,18 @@ body {
      horizontal scrollbar. */
   overflow-x: hidden;
 }
+
+/* Used by TechMarquee.tsx — the track is the tool list duplicated once,
+   so translating exactly -50% loops seamlessly back to an identical copy. */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
