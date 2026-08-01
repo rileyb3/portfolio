@@ -37,11 +37,11 @@ export default function Header() {
           Riley Byers
         </Link>
 
-        <ul className="hidden items-center gap-6 text-sm sm:flex">
+        <ul className="hidden items-center gap-1.5 text-sm sm:flex">
           <li>
             <Link
               href="/"
-              className="flex items-center gap-1.5 text-muted transition hover:text-accent"
+              className="flex items-center gap-1.5 rounded-full bg-white/5 px-3.5 py-1.5 text-muted transition hover:bg-white/10 hover:text-paper"
             >
               <Home className="h-4 w-4" strokeWidth={1.5} />
               Home
@@ -53,7 +53,7 @@ export default function Header() {
               <li key={c.id}>
                 <Link
                   href={`/${c.id}`}
-                  className="flex items-center gap-1.5 text-muted transition hover:text-accent"
+                  className="flex items-center gap-1.5 rounded-full bg-white/5 px-3.5 py-1.5 text-muted transition hover:bg-white/10 hover:text-paper"
                 >
                   {Icon && <Icon className="h-4 w-4" strokeWidth={1.5} />}
                   {c.label}
@@ -64,7 +64,7 @@ export default function Header() {
           <li>
             <Link
               href="/#contact"
-              className="flex items-center gap-1.5 text-muted transition hover:text-accent"
+              className="flex items-center gap-1.5 rounded-full bg-white/5 px-3.5 py-1.5 text-muted transition hover:bg-white/10 hover:text-paper"
             >
               <Mail className="h-4 w-4" strokeWidth={1.5} />
               Contact
