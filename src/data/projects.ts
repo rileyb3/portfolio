@@ -629,7 +629,7 @@ private void UpdateLineRenderer() {
       {
         title: "I am unsure of the validity of my claims",
         description:
-          "Awaiting publication — a poetry chapbook exploring my relationship with truth and my memories.",
+          "Seeking a publisher — a poetry chapbook exploring my relationship with truth and my memories.",
         tags: ["Poetry", "Chapbook"],
         tagLabel: "Poetry Chapbook",
         slug: "unsure-of-the-validity",
@@ -638,7 +638,7 @@ private void UpdateLineRenderer() {
       {
         title: "Sometimes It's All Consuming",
         description:
-          "Awaiting publication — a chapbook exploring mental illness, identity, and my relationship to the external world.",
+          "Seeking a publisher — a chapbook exploring mental illness, identity, and my relationship to the external world.",
         tags: ["Poetry", "Chapbook"],
         tagLabel: "Poetry Chapbook",
         image: "/write/sometimes-consuming/cover.jpg",
