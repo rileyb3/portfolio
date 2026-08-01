@@ -41,7 +41,7 @@ export default function Header() {
         <Link
           href={profile.cvHref}
           download
-          className="ml-auto hidden shrink-0 items-center bg-accent px-4 py-1 text-sm font-medium text-ink transition hover:opacity-85 sm:inline-flex"
+          className="ml-auto hidden shrink-0 items-center rounded-full bg-accent px-4 py-1 text-sm font-medium text-ink transition hover:opacity-85 sm:inline-flex"
         >
           Download CV
         </Link>
