@@ -1,29 +1,34 @@
 // Auto-scrolling row of every tool/software that shows up across the
-// actual project tags in projects.ts (kept in sync with that data rather
-// than a hand-typed list, so it can't drift out of date). Text wordmark
-// cards rather than brand icons — no internet access in this build
-// environment to fetch real logo files, and hand-drawing brand marks
-// from memory risks getting them subtly wrong.
+// actual project tags in projects.ts, plus a few real logo files Riley
+// sent directly (kept in sync with that data rather than a hand-typed
+// list, so it can't drift out of date). Each entry's `logo` points at
+// public/logos/<slug>.png.
 const tools = [
-  "React Native",
-  "Expo",
-  "TypeScript",
-  "JavaScript",
-  "Next.js",
-  "Tailwind CSS",
-  "Supabase",
-  "PostgreSQL",
-  "Mapbox",
-  "Claude API",
-  "RevenueCat",
-  "Fusion 360",
-  "Krita",
-  "Unity",
-  "C#",
-  "A-Frame",
-  "Blender",
-  "Adobe Premiere",
-  "R",
+  { name: "React Native", logo: "react-native" },
+  { name: "Expo", logo: "expo" },
+  { name: "TypeScript", logo: "typescript" },
+  { name: "JavaScript", logo: "javascript" },
+  { name: "Next.js", logo: "nextjs" },
+  { name: "Tailwind CSS", logo: "tailwind" },
+  { name: "Supabase", logo: "supabase" },
+  { name: "PostgreSQL", logo: "postgresql" },
+  { name: "Mapbox", logo: "mapbox" },
+  { name: "Claude API", logo: "claude" },
+  { name: "RevenueCat", logo: "revenuecat" },
+  { name: "Fusion 360", logo: "fusion360" },
+  { name: "Krita", logo: "krita" },
+  { name: "Unity", logo: "unity" },
+  { name: "C#", logo: "csharp" },
+  { name: "A-Frame", logo: "aframe" },
+  { name: "Blender", logo: "blender" },
+  { name: "Adobe Premiere", logo: "premiere" },
+  { name: "Adobe Audition", logo: "audition" },
+  { name: "R", logo: "r" },
+  { name: "Raven Pro", logo: "raven-pro" },
+  { name: "VS Code", logo: "vscode" },
+  { name: "Excel", logo: "excel" },
+  { name: "Eclipse", logo: "eclipse" },
+  { name: "GitHub", logo: "github" },
 ];
 
 // Duplicated once so the track can loop seamlessly — animating from 0%
@@ -48,12 +53,17 @@ export default function TechMarquee() {
         <div className="flex w-max animate-marquee gap-4">
           {track.map((tool, i) => (
             <div
-              key={`${tool}-${i}`}
-              className={`flex shrink-0 items-center justify-center rounded-full px-8 py-5 text-base font-medium text-ink ${
-                i % 2 === 0 ? "bg-accent" : "bg-paper"
-              }`}
+              key={`${tool.name}-${i}`}
+              className="flex shrink-0 items-center gap-3 rounded-full bg-accent px-6 py-4 text-base font-medium text-ink"
             >
-              {tool}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={`/logos/${tool.logo}.png`}
+                alt=""
+                aria-hidden="true"
+                className="h-7 w-auto max-w-[2rem] object-contain"
+              />
+              {tool.name}
             </div>
           ))}
         </div>
