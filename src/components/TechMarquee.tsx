@@ -55,22 +55,15 @@ export default function TechMarquee() {
           {track.map((tool, i) => (
             <div
               key={`${tool.name}-${i}`}
-              className="flex shrink-0 items-center gap-3 rounded-full bg-accent py-2 pl-2 pr-6 text-base font-medium text-ink"
+              className="flex shrink-0 items-center gap-3 rounded-full bg-paper px-6 py-4 text-base font-medium text-ink"
             >
-              {/* Every logo sits in an identically sized white chip —
-                  same shape, padding, and corner radius regardless of
-                  the mark's own colors or complexity — so the row reads
-                  as one consistent style even though the brand art
-                  underneath varies a lot. */}
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-paper p-1.5">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={`/logos/${tool.logo}.png`}
-                  alt=""
-                  aria-hidden="true"
-                  className="h-full w-full object-contain"
-                />
-              </span>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={`/logos/${tool.logo}.png`}
+                alt=""
+                aria-hidden="true"
+                className="h-8 w-auto max-w-[2.25rem] object-contain"
+              />
               {tool.name}
             </div>
           ))}
