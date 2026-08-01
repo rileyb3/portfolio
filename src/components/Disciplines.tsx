@@ -55,7 +55,7 @@ export default function Disciplines() {
     <section
       id="disciplines"
       ref={ref}
-      className="relative z-20 -mt-36 scroll-mt-6 rounded-t-[3rem] bg-ink px-6 pb-24 pt-16 text-center sm:-mt-48 sm:pb-32 sm:pt-24"
+      className="relative z-20 -mt-48 scroll-mt-6 rounded-t-[3rem] bg-ink px-6 pb-24 pt-16 text-center sm:-mt-64 sm:pb-32 sm:pt-24"
     >
       <div className="mx-auto max-w-5xl">
         <h2 className="mb-10 text-sm font-medium uppercase tracking-widest text-muted">
