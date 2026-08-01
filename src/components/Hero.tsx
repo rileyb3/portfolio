@@ -18,14 +18,14 @@ export default function Hero() {
           />
         </div>
 
-        {/* Edge strip: a thin (half-inch) repeating sliver of the photo's
-            own leftmost, person-free edge (rocks/ocean, cropped off well
-            before any clothing) — floats in the black panel with at
-            least a half-inch gap of solid black on both sides of it,
-            rather than touching the photo. Desktop only, since the photo
-            is full-width (no black panel) on mobile. */}
+        {/* Edge strip: a wider (~2/3in), taller repeating sliver of the
+            photo's own leftmost, person-free edge (rocks/ocean — cropped
+            right before any clothing enters frame at this width) —
+            floats in the black panel with at least a half-inch gap of
+            solid black on both sides. Desktop only, since the photo is
+            full-width (no black panel) on mobile. */}
         <div
-          className="absolute inset-y-0 left-[calc(38%-96px)] hidden w-12 bg-[url('/edge-strip.jpg')] bg-[length:48px_auto] bg-repeat-y bg-left-top sm:block"
+          className="absolute inset-y-0 left-[calc(38%-112px)] hidden w-16 bg-[url('/edge-strip-v2.jpg')] bg-[length:64px_auto] bg-repeat-y bg-left-top sm:block"
           aria-hidden="true"
         />
       </div>
