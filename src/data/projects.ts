@@ -462,7 +462,7 @@ private void UpdateLineRenderer() {
         details:
           "A found-footage piece assembled entirely from clips pulled off the Internet Archive and cut together in Adobe Premiere. Started in 2025 and kept getting re-edited into early 2026 as the throughline sharpened. The premise driving the edit: what's real anymore?",
         tags: ["Adobe Premiere", "Found Footage", "Internet Archive"],
-        tagLabel: "Video Art",
+        tagLabel: "Short Film",
         image: "/projects/contact/cover.jpg",
         video: "/projects/contact/contact.mp4",
         slug: "contact",
