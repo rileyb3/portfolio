@@ -33,12 +33,12 @@ export default function Hero() {
       setPhotoOffset(current);
 
       // Disciplines arrives at ~28vh and fully occludes the name at
-      // ~65vh (see comments below / in Disciplines.tsx) — coverEnd here
-      // is deliberately set to the halfway point of that range (~46vh)
-      // rather than 65vh, so the color has already finished fading to
+      // ~68vh (see comments below / in Disciplines.tsx) — coverEnd here
+      // is deliberately set to the halfway point of that range (~48vh)
+      // rather than 68vh, so the color has already finished fading to
       // black by the time occlusion is only half done.
       const coverStart = vh * 0.28;
-      const coverEnd = vh * 0.465;
+      const coverEnd = vh * 0.48;
       const progress = Math.min(
         Math.max((scrollY - coverStart) / (coverEnd - coverStart), 0),
         1
@@ -112,20 +112,20 @@ export default function Hero() {
         />
       </div>
 
-      {/* Name: wrapper's natural top is 63vh down the page — matching the
-          lock threshold below (a smidge higher than the previous 66%),
-          so the name is already at (essentially) its locked position
-          from scroll=0. A one-time soft fade/rise transition on mount
-          (nameIn) replaces the previous instant snap-into-place. Plain
-          live text in a simple, clean font, sized big enough that it
-          runs off both edges of the screen. globals.css sets
+      {/* Name: wrapper's natural top is 60vh down the page — matching the
+          lock threshold below (levitates a bit higher than the previous
+          63%), so the name is already at (essentially) its locked
+          position from scroll=0. A one-time soft fade/rise transition on
+          mount (nameIn) replaces the previous instant snap-into-place.
+          Plain live text in a simple, clean font, sized big enough that
+          it runs off both edges of the screen. globals.css sets
           overflow-x:hidden so that doesn't create a horizontal
           scrollbar. Stays visible and untouched until Disciplines
           (below, -mt-[70vh]) starts arriving around scroll≈28vh, then
           fully occludes it shortly after. */}
-      <div className="absolute inset-x-0 top-[63vh] z-10 h-[135vh]">
+      <div className="absolute inset-x-0 top-[60vh] z-10 h-[138vh]">
         <h1
-          className={`pointer-events-none sticky top-[63%] mx-auto w-fit whitespace-nowrap font-sans text-9xl font-semibold leading-none tracking-tight transition-[transform,opacity] duration-700 ease-out sm:text-[12rem] lg:text-[15rem] ${
+          className={`pointer-events-none sticky top-[60%] mx-auto w-fit whitespace-nowrap font-sans text-9xl font-semibold leading-none tracking-tight transition-[transform,opacity] duration-700 ease-out sm:text-[12rem] lg:text-[15rem] ${
             nameIn ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
           }`}
         >
