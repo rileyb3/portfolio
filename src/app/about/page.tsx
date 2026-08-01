@@ -64,7 +64,7 @@ export default function AboutPage() {
             <div className="aspect-[4/5] overflow-hidden rounded-3xl border border-white/10 bg-surface">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={profile.photoSrc}
+                src={profile.aboutPhotoSrc}
                 alt={profile.name}
                 className="h-full w-full object-cover object-top"
               />
