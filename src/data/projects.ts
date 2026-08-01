@@ -43,6 +43,12 @@ export type Project = {
   // page (e.g. "3D Animation" vs "Video Art" within Play). Projects without
   // a section render together with no heading, same as before.
   section?: string;
+  // A more specific label than the discipline name, shown anywhere the
+  // category badge appears outside the category page itself (Experience
+  // list, homepage cards, project detail page) — e.g. "iOS Build" instead
+  // of "Build", "Video Art" instead of "Play". Falls back to the plain
+  // category label if unset.
+  tagLabel?: string;
 };
 
 export type SlideImage = {
@@ -90,6 +96,7 @@ export const categories: Category[] = [
         title: "AllTrees",
         description:
           "A community-driven mobile map for tree climbers — discover, map, and review climbable trees, log ascents, and build a personal climbing profile. Currently in first-round beta.",
+        tagLabel: "iOS Build",
         featured: true,
         details:
           "AllTrees is a cross-platform (iOS-first) social mapping app where a community of climbers crowdsources a live map of climbable trees. Users drop pins for trees they find, add photos and difficulty ratings, log ascents, write reviews, and flag conditions like private property or dead limbs. Reports past a threshold trigger automatic verification, and community moderation keeps the map trustworthy without a human reviewing every pin. It's built around the same idea as a climbing route database like Mountain Project, applied to trees: every tree gets its own page with a star rating, a leaf-icon difficulty scale, who logged the first ascent, live-reported conditions, and a review thread.\n\nBeyond the core map, the app leans into discovery and community: an AI species ID feature suggests the most likely species from a photo, weighted by GPS location; a \"For You\" recommendation feed scores trees by species affinity, difficulty, and geography; and a profile system assigns a \"climber archetype\" and tracks stats like farthest trees apart and total ascents. Sign-in works via email, Google, or Apple, with a guest-browsing mode for anyone who just wants to look around, and a premium tier (\"Treemium\") unlocks personalization and cosmetic features via RevenueCat.\n\nStill in first-round beta, so there's no usage data yet — but the core map, tree pages, ascent logging, search/filtering, and profile system are all built and working.",
@@ -159,6 +166,7 @@ Deno.serve(async (req) => {
         title: "This Portfolio",
         description:
           "This site — built from scratch in Next.js and Tailwind, with a data-driven content system so every project, slideshow, and category is defined in one typed file rather than hardcoded pages.",
+        tagLabel: "Web Build",
         tags: ["TypeScript", "Next.js", "Tailwind CSS"],
         link: "#",
       },
@@ -166,6 +174,7 @@ Deno.serve(async (req) => {
         title: "Routesetting",
         description:
           "Route and problem setting at climbing gyms across three locations — Active Climbing (Athens, GA), the Brandeis Climbing Wall (Waltham, MA), and Central Rock Gym (Watertown, MA).",
+        tagLabel: "Routesetting",
         details:
           "I set boulder problems and routes at three different gyms: Active Climbing in Athens, GA, the Brandeis Climbing Wall in Waltham, MA, and Central Rock Gym in Watertown, MA. Setting is its own kind of design problem — working within a fixed set of holds and a wall's geometry to build movement that reads clearly at a given grade, feels good in the body, and doesn't have an accidental easier way through it.",
         tags: ["Routesetting"],
@@ -181,6 +190,7 @@ Deno.serve(async (req) => {
         title: "Wall Book Holders",
         description:
           "3D-printed wall mounts that hold a book open to your page, installed with Command Velcro — no drilling required.",
+        tagLabel: "3D Print Build",
         details:
           "A set of wall-mounted book holders that keep a book open to your place, designed in Fusion 360 and 3D printed. Each one is designed to install with Command Velcro strips rather than hardware, so it goes up (and comes down) without putting holes in the wall.\n\nEach bracket prints in two flat halves that slot together and get glued into one rigid piece — easier to print reliably than the full 3D shape in one go, and it keeps the print time and material down.",
         tags: ["Fusion 360", "3D Printing"],
@@ -200,6 +210,7 @@ Deno.serve(async (req) => {
         title: "Digital Clock",
         description:
           "A digital clock built from a WHDTS 4-bit electronic clock kit, housed in a custom black-and-gold case I designed and 3D printed in Fusion 360.",
+        tagLabel: "Hardware Build",
         details:
           "For an electrical engineering class, I built a functioning digital clock using a WHDTS 4-bit electronic clock DIY kit as the electronics base, then designed and 3D printed a custom case for it in Fusion 360 rather than using the kit's stock housing.\n\nThe brief I set for myself: a minimalist case with easy-to-reach buttons, a clearly visible clock face, and a design that never needs to come off the clock. I researched hinge and enclosure ideas before sketching out several case concepts by hand, then modeled the final version — a faceted black case with gold trim, a cutout window for the display, and two accessible buttons — piece by piece in Fusion 360.",
         tags: ["Fusion 360", "3D Printing", "Circuit Assembly", "Soldering"],
@@ -223,6 +234,7 @@ Deno.serve(async (req) => {
         title: "3D Printer Filament Stand",
         description:
           "A shop project designed with a classmate to store 3D-printer filament right at the printers instead of scattered across the engineering room.",
+        tagLabel: "3D Print Build",
         details:
           "For a shop class project, I was tasked with improving how our engineering room stored 3D-printer filament — at the time it lived in a separate area and had to be sorted through and carried to the printers for every print. Working with a classmate, I designed a stand that holds multiple spools directly above the printers, attaches to the printer enclosure frame, and keeps spools locked in place but removable by hand.\n\nI researched lazy susans (which use bearings to spin) and the filament connectors already built into the printers before sketching a rotating, tiered stand concept. In the end we moved away from the lazy susan plan and designed a snap-lock piece modeled after the connector the printers already used, built into the existing structure around the printers rather than a freestanding base — that gave the heaviest, fully-loaded spools much more support.",
         tags: ["Fusion 360", "3D Printing", "CAD"],
@@ -320,6 +332,7 @@ Deno.serve(async (req) => {
         title: "Pete the Snail",
         description:
           "A paused Unity game design — a Snake-inspired twist where you're a snail collecting ants by encircling them with your slime trail.",
+        tagLabel: "Game Design",
         details:
           "A Unity/C# game design, currently paused: a Snake-inspired twist where you play as a snail named Pete leaving a slime trail behind you. Encircle ants with the trail to collect them — the trail fades after a few seconds if you don't loop it around something first. The fuller vision was for your trail to grow longer as you collect bigger colonies, working toward destroying the ant hill.\n\nNo gameplay footage — I can't currently reinstall Unity on this machine to record it — but the core movement, slime-trail tracking, and ant-following mechanics were built and working.",
         tags: ["Unity", "C#", "Game Design", "Krita"],
@@ -377,6 +390,7 @@ private void UpdateLineRenderer() {
         details:
           "Browser-based VR game built with A-Frame and the Ammo.js physics engine, created as a 3-person final project for a 3D animation course. The game spans three connected levels built by each team member; this is mine — a first-person maze of stone platforms surrounded by water where the player is pursued by physics-driven enemies, with reaching the wrong thing ending the game and reaching the right thing advancing it.\n\nFor my level, I modeled, rigged, and animated the fire boy and water girl characters (along with custom signage) myself, and wrote the game logic in JavaScript: a chase component that tracks the player's position each frame, moves enemies toward them, and triggers a game-over or level transition on contact.",
         tags: ["A-Frame", "JavaScript", "Blender", "Physics"],
+        tagLabel: "VR Game Design",
         link: "#",
         featured: true,
         image: "/projects/fire-and-water/cover.jpg",
@@ -448,6 +462,7 @@ private void UpdateLineRenderer() {
         details:
           "A found-footage piece assembled entirely from clips pulled off the Internet Archive and cut together in Adobe Premiere. Started in 2025 and kept getting re-edited into early 2026 as the throughline sharpened. The premise driving the edit: what's real anymore?",
         tags: ["Adobe Premiere", "Found Footage", "Internet Archive"],
+        tagLabel: "Video Art",
         image: "/projects/contact/cover.jpg",
         video: "/projects/contact/contact.mp4",
         slug: "contact",
@@ -468,6 +483,7 @@ private void UpdateLineRenderer() {
           "Adobe Premiere",
           "Adobe Audition",
         ],
+        tagLabel: "Short Film",
         image: "/projects/entrance/cover.jpg",
         video: "/projects/entrance/entrance.mp4",
         slug: "entrance",
@@ -481,6 +497,7 @@ private void UpdateLineRenderer() {
         details:
           "A short character animation piece made almost entirely in Blender, for a 3D animation class.",
         tags: ["3D Animation", "Blender"],
+        tagLabel: "3D Animation",
         image: "/projects/blackjack/cover.jpg",
         video: "/projects/blackjack/blackjack.mp4",
         section: "Videos",
@@ -509,6 +526,7 @@ private void UpdateLineRenderer() {
         details:
           "A study with The Alex Foundation, led by Dr. Irene Pepperberg, testing whether four Grey parrots (Griffin, Athena, Pepper, and Franco) perceive the Ebbinghaus-Titchener illusion — the classic effect where a central circle looks smaller when surrounded by larger circles, and larger when surrounded by smaller ones. Rather than asking the birds to describe what they saw, the design (adapted from a primate study by Hanus et al., 2023) let them choose between two equal-sized juice cups, each on a tile surrounded by differently sized flanker circles, on the assumption that a bird experiencing the illusion would reliably pick the cup that looked larger.\n\nThe paper is co-authored with Anaya Zachery, Francesca M. Cornero, Leigh Ann Hartsfield, Charlotte Mulligan, and Irene M. Pepperberg. Cornero was primarily responsible for the statistical analysis; I reviewed the analysis code and was present for some of the experimental trials.\n\nThe results were largely null: none of the four birds showed a statistically reliable preference consistent with the illusion. Two showed no significant pattern at all; the other two showed a preference that traced back almost entirely to a strong left- or right-side bias rather than to the illusion itself. The discussion works through several explanations — prior studies that had deliberately deceived these same birds may have taught them to distrust cups they couldn't fully inspect, they may have run informal \"contingency tests\" early on and learned both cups held equal juice, or the physical act of approaching and touching a tile may have shifted their viewing angle enough to break the illusion outright. A revised protocol is planned to test that last hypothesis directly.",
         tags: ["Animal Cognition", "Psychology Research", "Data Collection"],
+        tagLabel: "Cognition Research",
         year: "2025",
         slug: "ebbinghaus-illusion-grey-parrots",
         image: "/projects/ebbinghaus-illusion-grey-parrots/parrot-cover-v2.jpg",
@@ -520,6 +538,7 @@ private void UpdateLineRenderer() {
         details:
           "A study at The Alex Foundation (Dr. Irene Pepperberg's lab) led by PhD student Alana Carroll, looking at contrafreeloading in Grey parrots — the well-documented phenomenon, seen across many species, where animals given a choice will sometimes prefer to \"work\" for food (e.g., extracting it from something) over eating identical food that's freely available. I helped keep data collection running for the study while Alana was away.\n\nBirds (Athena, Franco, Griffin, Lucci, and Pepper) chose between food presented loose on a tray versus food wrapped in scrunched-up paper they had to work to open, across three condition types — \"super,\" \"classic,\" and \"calculated.\" A separate round of food-preference testing (pairwise choices between items like almonds, cashews, pecans, crackers, cereal, and safflower seed) was run per bird beforehand, so each parrot's trials used food it was already known to prefer.\n\nThe design builds on two prior contrafreeloading studies from the same lab: Smith, Bastos, Taylor & Pepperberg (2022, Scientific Reports), comparing kea to Grey parrots, and Carroll & Pepperberg (2024/2025, Journal of Comparative Psychology), comparing umbrella cockatoos to Grey parrots. A paper specific to this round of Grey parrot data hasn't come out yet, as far as I can find — I'm trying to track down its status.",
         tags: ["Animal Cognition", "Data Collection", "Psychology Research"],
+        tagLabel: "Cognition Research",
         year: "2025",
         slug: "contrafreeloading-parrots",
         link: "https://pubmed.ncbi.nlm.nih.gov/39250240/",
@@ -537,6 +556,7 @@ private void UpdateLineRenderer() {
         details:
           "An internship at the Clinical and Cognitive Neuroscience Lab at the University of Georgia, run by Dr. McDowell and Dr. Clemenz, working under grad student mentor Beryl Huang on her cognitive flexibility research in young adults. The lab's broader work spans schizophrenia, sensory processing, and aging, using MRI, fMRI, EEG, and eye-tracking.\n\nMy role centered on the technical side of an EEG eye-tracking paradigm: setting up and troubleshooting the hardware, running timing tests, calibrating the eye tracker, and helping design the study's preregistration. I also picked up R to build a script that converts raw eye-movement data (recorded per participant as a large Excel export) into clean PDF reports of eye position and velocity over time — the processing pipeline the study now uses for every participant. Later on I was trained to score EEG data by hand as well, ahead of full-scale data collection.\n\nThe project — an interactive ocular motor set-shifting task designed to evoke distinct electrophysiological markers across stages of cognitive flexibility — was submitted to the Cognitive Neuroscience Society's 2023 meeting with me as a co-author.\n\nOutside the core project, I sat in on other work in the lab (a clozapine drug trial using EEG and eye-tracking, an fMRI study of brain structure in psychosis) and gave weekly presentations to my mentor on assigned and self-chosen readings — a big part of how I found the areas of psychology (autism, executive function, theory of mind) I'm most interested in continuing to explore.",
         tags: ["R", "EEG", "Eye-Tracking", "Psychology Research", "Data Analysis"],
+        tagLabel: "Neuroscience Research",
         year: "2023",
         slug: "cognitive-flexibility-research",
         image: "/projects/cognitive-flexibility-research/eye-movement-plot.png",
@@ -554,6 +574,7 @@ private void UpdateLineRenderer() {
         details:
           "A remote research position at the Cornell Lab of Ornithology, working under Connor Wood and Michael Pardo at the K. Lisa Yang Center for Conservation Bioacoustics on a large bird call database. I used R to clean and optimize the dataset, improving how efficiently it could be accessed for later machine learning work, and built an unsupervised classification cluster analysis using feature embeddings in R to categorize chickadee vocalizations — cutting down the human hours needed to process large amounts of audio data. I also wrote R code to identify the ratios of different chickadee call types within complex datasets, helping distinguish call patterns, and manually identified call types from large audio datasets by hand to help verify and validate the automated analysis tools.\n\nMuch of the pipeline work involved filtering huge detection sets down to something usable: matching site/date combinations against a curated set of goshawk-call mornings, applying BirdNET confidence thresholds (pr(tp) > 0.90/0.95/0.975/0.99) to control for false positives, restricting to a consistent early-morning window to avoid conflating dawn and dusk vocal activity, and setting minimum call-count cutoffs per site/day. From there I generated before/after interval ratio comparisons — like the ones below — to look at how chickadee call rates shifted around a goshawk detection.\n\nThat work became a co-authored paper, \"Passive acoustic monitoring reveals surprising patterns of avian community antipredator behavior at a regional scale,\" accepted into Ecology on January 29, 2026 and since published.",
         tags: ["R", "Data Cleaning", "Cluster Analysis", "Machine Learning", "Bioacoustics"],
+        tagLabel: "Bioacoustics Research",
         year: "2024",
         slug: "bird-call-research",
         link: "https://doi.org/10.1002/ecy.70362",
@@ -582,6 +603,7 @@ private void UpdateLineRenderer() {
         tags: ["Poetry"],
         link: "https://www.laurelmoonmag.com/riley-byers-in-which-illness-is-a-dull-thing-with-feathers",
         linkLabel: "Read on Laurel Moon",
+        tagLabel: "Poetry",
         featured: true,
         year: "2023",
       },
@@ -589,6 +611,7 @@ private void UpdateLineRenderer() {
         title: "Achieving Godhood",
         description: "Prose piece published in The Cairn, an online literary and arts journal.",
         tags: ["Prose"],
+        tagLabel: "Prose",
         year: "2024",
         link: "https://thecairnstonehill.org/achieving-godhood/",
         linkLabel: "Read on The Cairn",
@@ -598,6 +621,7 @@ private void UpdateLineRenderer() {
         description:
           "Poem published (under the pen name Anonymous) in Touch Grass: Antelope Hill Writing Competition 2023, an anthology from Antelope Hill Publishing.",
         tags: ["Poetry"],
+        tagLabel: "Poetry",
         year: "2023",
         link: "https://antelopehillpublishing.com/product/touch-grass-antelope-hill-writing-competition-2023/",
         linkLabel: "View the anthology",
@@ -607,6 +631,7 @@ private void UpdateLineRenderer() {
         description:
           "Awaiting publication — a poetry chapbook exploring my relationship with truth and my memories.",
         tags: ["Poetry", "Chapbook"],
+        tagLabel: "Poetry Chapbook",
         slug: "unsure-of-the-validity",
         image: "/write/chapbook/cover.jpg",
       },
@@ -615,6 +640,7 @@ private void UpdateLineRenderer() {
         description:
           "Awaiting publication — a chapbook exploring mental illness, identity, and my relationship to the external world.",
         tags: ["Poetry", "Chapbook"],
+        tagLabel: "Poetry Chapbook",
         image: "/write/sometimes-consuming/cover.jpg",
       },
     ],
@@ -655,19 +681,38 @@ export function getProjectBySlug(slug: string) {
   return slugProjects.find((p) => p.slug === slug);
 }
 
-// Every project, once each (a few — like AllTrees' UI/UX and Branding
-// entries — appear under more than one discipline as the same slug; the
-// first occurrence, in category order, wins), sorted newest-first by
-// year. A handful of projects don't carry a year at all (ongoing work
-// like this site itself, or writing still awaiting publication) — those
-// sort to the end rather than guessing a date.
+// Rough "how much is actually here" score — used below to pick the
+// fuller entry when the same project shows up under more than one
+// discipline (e.g. AllTrees is also cross-referenced as "UI/UX Design"
+// and "Branding" under Design, and Pete the Snail as "Pete Assets" —
+// those cross-reference stubs carry no year/image/details of their own).
+function richness(p: Project) {
+  return (
+    (p.year ? 1 : 0) +
+    (p.image ? 1 : 0) +
+    (p.details ? 1 : 0) +
+    (p.gallery && p.gallery.length > 0 ? 1 : 0) +
+    (p.video ? 1 : 0) +
+    (p.codeSnippet ? 1 : 0) +
+    (p.reflection ? 1 : 0)
+  );
+}
+
+// Every project, once each — when the same slug shows up under more than
+// one discipline, the fullest entry wins rather than just whichever
+// comes first — sorted newest-first by year. A handful of projects don't
+// carry a year at all (ongoing work like this site itself, or writing
+// still awaiting publication) — those sort to the end rather than
+// guessing a date.
 export const chronologicalProjects = (() => {
-  const seen = new Set<string>();
-  const deduped = slugProjects.filter((p) => {
-    if (seen.has(p.slug)) return false;
-    seen.add(p.slug);
-    return true;
-  });
+  const bySlug = new Map<string, (typeof slugProjects)[number]>();
+  for (const p of slugProjects) {
+    const existing = bySlug.get(p.slug);
+    if (!existing || richness(p) > richness(existing)) {
+      bySlug.set(p.slug, p);
+    }
+  }
+  const deduped = Array.from(bySlug.values());
   return deduped.sort((a, b) => {
     const ay = a.year ? parseInt(a.year, 10) : null;
     const by = b.year ? parseInt(b.year, 10) : null;

@@ -23,7 +23,7 @@ export default function ExperiencePage() {
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
                       <span className="text-xs uppercase tracking-widest text-muted">
-                        {project.categoryLabel}
+                        {project.tagLabel ?? project.categoryLabel}
                       </span>
                       {project.year && (
                         <span className="text-xs text-muted">

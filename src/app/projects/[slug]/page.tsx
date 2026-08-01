@@ -32,7 +32,7 @@ export default function ProjectPage({
               href={`/${project.categoryId}`}
               className="text-xs uppercase tracking-widest text-muted transition hover:text-accent hover:underline"
             >
-              {project.categoryLabel}
+              {project.tagLabel ?? project.categoryLabel}
             </Link>
             {project.year && (
               <span className="text-xs text-muted">{project.year}</span>

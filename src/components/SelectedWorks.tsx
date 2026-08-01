@@ -36,7 +36,7 @@ export default function SelectedWorks() {
                   href={`/${project.categoryId}`}
                   className="relative z-10 text-xs uppercase tracking-widest text-muted transition hover:text-accent hover:underline"
                 >
-                  {project.categoryLabel}
+                  {project.tagLabel ?? project.categoryLabel}
                 </Link>
                 {project.year && (
                   <span className="relative z-10 shrink-0 text-xs text-muted">
