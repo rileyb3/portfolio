@@ -671,7 +671,7 @@ export const profile = {
   workYears: "2023 – 2026",
   email: "rileyabyers@gmail.com",
   cvHref: "/cv.pdf",
-  photoSrc: "/IMG_1983.jpg",
+  photoSrc: "/hero-photo.jpg",
   socials: [
     { label: "GitHub", href: "https://github.com/rileyb3" },
     { label: "LinkedIn", href: "https://www.linkedin.com/in/riley-byers-45ab10191/" },

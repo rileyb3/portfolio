@@ -64,7 +64,7 @@ export default function Hero() {
             parallax) so it doesn't drift out of alignment with the panel
             edge it's meant to echo. */}
         <div
-          className="absolute inset-y-0 left-[calc(38%-112px)] hidden w-16 bg-[url('/edge-strip-v2.jpg')] bg-[length:64px_auto] bg-repeat-y bg-left-top sm:block"
+          className="absolute inset-y-0 left-[calc(38%-112px)] hidden w-16 bg-[url('/edge-strip-v3.jpg')] bg-[length:64px_auto] bg-repeat-y bg-left-top sm:block"
           aria-hidden="true"
         />
       </div>
