@@ -573,7 +573,7 @@ private void UpdateLineRenderer() {
     id: "write",
     label: "Write",
     blurb: "Creative Writing",
-    tagline: "My greatest desire is to be an authentic person in an increasingly fabricated world.",
+    tagline: "To want to be an authentic person in an increasingly fabricated world.",
     projects: [
       {
         title: "In which illness is a dull red thing with feathers",
