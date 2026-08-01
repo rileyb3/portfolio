@@ -674,6 +674,6 @@ export const profile = {
   photoSrc: "/IMG_1983.jpg",
   socials: [
     { label: "GitHub", href: "https://github.com/rileyb3" },
-    { label: "LinkedIn", href: "https://linkedin.com/in/yourusername" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/riley-byers-45ab10191/" },
   ],
 };
