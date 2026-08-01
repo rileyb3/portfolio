@@ -17,17 +17,26 @@ export default function Hero() {
             className="h-full w-full object-cover"
           />
         </div>
+
+        {/* Edge strip: a thin (half-inch) repeating sliver of the photo's
+            own leftmost, person-free edge (rocks/ocean, cropped off well
+            before any clothing), bleeding half an inch into the black
+            panel — softens the hard cut without a gradient. Desktop only,
+            since the photo is full-width (no black panel) on mobile. */}
+        <div
+          className="absolute inset-y-0 left-[calc(38%-48px)] hidden w-12 bg-[url('/edge-strip.jpg')] bg-[length:48px_auto] bg-repeat-y bg-left-top sm:block"
+          aria-hidden="true"
+        />
       </div>
 
       {/* Name: back to plain live text in a simple, clean font (no custom
-          wordmark) — sized big enough that it runs off the right edge of
-          the screen on purpose, as a visual cue that there's more to
-          scroll through. globals.css sets overflow-x:hidden so this
-          doesn't create a horizontal scrollbar. */}
+          wordmark) — centered horizontally and sized big enough that it
+          runs off both edges of the screen on purpose, as a visual cue
+          that there's more to scroll through. globals.css sets
+          overflow-x:hidden so this doesn't create a horizontal
+          scrollbar. */}
       <div className="absolute inset-x-0 top-0 z-10 h-screen">
-        <h1
-          className="pointer-events-none absolute left-6 top-[55%] whitespace-nowrap font-sans text-8xl font-semibold leading-none tracking-tight text-paper sm:left-10 sm:text-9xl lg:text-[11rem]"
-        >
+        <h1 className="pointer-events-none absolute left-1/2 top-[55%] -translate-x-1/2 whitespace-nowrap font-sans text-9xl font-semibold leading-none tracking-tight text-paper sm:text-[12rem] lg:text-[15rem]">
           {profile.name}
         </h1>
       </div>
