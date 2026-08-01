@@ -30,19 +30,23 @@ export default function Hero() {
         </a>
       </div>
 
-      {/* Name: starts lower on the page (pulled up from its natural
-          post-photo flow position via the negative margin below, so it's
-          still visible on load without needing a scroll) and locks once
-          it reaches vertical center — sticky top-1/2, instead of
-          continuing to scroll off screen like before. Custom vector
-          wordmark (see NameWordmark) instead of live text — keeps the
-          accessible name via aria-label on this heading. */}
-      <h1
-        aria-label={profile.name}
-        className="pointer-events-none sticky top-1/2 z-10 mt-[-35vh] w-fit -translate-y-1/2 pl-6 text-paper sm:pl-10"
-      >
-        <NameWordmark className="h-auto w-[420px] sm:w-[740px] lg:w-[930px]" />
-      </h1>
+      {/* Name: a separate absolutely-positioned block starting at 65vh down
+          the section (so it's independent of the photo's own h-screen flow
+          box — no negative margins, which caused the lock to fire, release,
+          and re-trigger). The h1 inside is sticky top-1/2: visible at its
+          natural lower position on load, then holds at vertical center
+          once scrolled there, releasing only when this block's bottom
+          (140vh) runs out — one clean stick, no double-float. Custom
+          vector wordmark (see NameWordmark) instead of live text — keeps
+          the accessible name via aria-label on this heading. */}
+      <div className="absolute inset-x-0 top-[65vh] z-10 h-[75vh]">
+        <h1
+          aria-label={profile.name}
+          className="pointer-events-none sticky top-1/2 w-fit -translate-y-1/2 pl-6 text-paper sm:pl-10"
+        >
+          <NameWordmark className="h-auto w-[420px] sm:w-[740px] lg:w-[930px]" />
+        </h1>
+      </div>
     </section>
   );
 }
