@@ -146,7 +146,7 @@ export default function AboutPage() {
                   alt=""
                   aria-hidden="true"
                   className={`absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out ${
-                    onSecond ? "translate-x-0" : "translate-x-full"
+                    onSecond ? "translate-y-0" : "translate-y-full"
                   }`}
                 />
               </div>
