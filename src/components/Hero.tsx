@@ -14,15 +14,34 @@ export default function Hero() {
   // Soft one-time entrance for the name, instead of it just snapping
   // into its sticky position the instant the page paints.
   const [nameIn, setNameIn] = useState(false);
+  // White -> near-black as Disciplines covers the name, so the letters
+  // blend into its background instead of just getting clipped. 0 = white
+  // (#fafafa, matches text-paper), 1 = ink (#0a0a0a, matches bg-ink).
+  const [coverProgress, setCoverProgress] = useState(0);
 
   useEffect(() => {
     let raf = 0;
     let current = 0;
     function frame() {
-      const maxDrift = window.innerHeight * 0.3;
-      const target = -Math.min(window.scrollY * 0.3, maxDrift);
+      const vh = window.innerHeight;
+      const scrollY = window.scrollY;
+
+      const maxDrift = vh * 0.3;
+      const target = -Math.min(scrollY * 0.3, maxDrift);
       current += (target - current) * 0.08; // lerp factor — lower = softer/laggier
       setPhotoOffset(current);
+
+      // Same scroll range Disciplines uses to arrive (~28vh) and fully
+      // occlude the name (~65vh) — see the comments below on the name
+      // wrapper and in Disciplines.tsx for how those numbers come out.
+      const coverStart = vh * 0.28;
+      const coverEnd = vh * 0.65;
+      const progress = Math.min(
+        Math.max((scrollY - coverStart) / (coverEnd - coverStart), 0),
+        1
+      );
+      setCoverProgress(progress);
+
       raf = requestAnimationFrame(frame);
     }
     raf = requestAnimationFrame(frame);
@@ -32,6 +51,13 @@ export default function Hero() {
       clearTimeout(t);
     };
   }, []);
+
+  // Interpolate #fafafa -> #0a0a0a by coverProgress.
+  const from = { r: 0xfa, g: 0xfa, b: 0xfa };
+  const to = { r: 0x0a, g: 0x0a, b: 0x0a };
+  const nameColor = `rgb(${Math.round(from.r + (to.r - from.r) * coverProgress)}, ${Math.round(
+    from.g + (to.g - from.g) * coverProgress
+  )}, ${Math.round(from.b + (to.b - from.b) * coverProgress)})`;
 
   return (
     // Outer section is taller than one screen — that extra height is the
@@ -84,9 +110,10 @@ export default function Hero() {
           fully occludes it shortly after. */}
       <div className="absolute inset-x-0 top-[63vh] z-10 h-[135vh]">
         <h1
-          className={`pointer-events-none sticky top-[63%] mx-auto w-fit whitespace-nowrap font-sans text-9xl font-semibold leading-none tracking-tight text-paper transition-all duration-700 ease-out sm:text-[12rem] lg:text-[15rem] ${
+          className={`pointer-events-none sticky top-[63%] mx-auto w-fit whitespace-nowrap font-sans text-9xl font-semibold leading-none tracking-tight transition-[transform,opacity] duration-700 ease-out sm:text-[12rem] lg:text-[15rem] ${
             nameIn ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
           }`}
+          style={{ color: nameColor }}
         >
           {profile.name}
         </h1>
