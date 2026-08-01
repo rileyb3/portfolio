@@ -1,11 +1,17 @@
 import Link from "next/link";
-import { categories, profile } from "@/data/projects";
+import { profile } from "@/data/projects";
 
 // Global nav — sticky across every page (wired into layout.tsx). Kept
 // deliberately plain: text-only links, no icons or per-item pill
 // backgrounds — those were adding visual noise once the rest of the
 // homepage got busier. One accent-colored CTA (Download CV) is the only
 // strong visual element in the bar.
+const navLinks = [
+  { label: "About", href: "/about" },
+  { label: "Experience", href: "/experience" },
+  { label: "Contact", href: "/#contact" },
+];
+
 export default function Header() {
   return (
     <header className="sticky top-0 z-50">
@@ -18,24 +24,16 @@ export default function Header() {
         </Link>
 
         <ul className="hidden items-center gap-1 text-sm sm:flex">
-          {categories.map((c) => (
-            <li key={c.id}>
+          {navLinks.map((link) => (
+            <li key={link.href}>
               <Link
-                href={`/${c.id}`}
+                href={link.href}
                 className="inline-block px-2.5 py-1 text-muted transition hover:bg-accent hover:text-ink"
               >
-                {c.label}
+                {link.label}
               </Link>
             </li>
           ))}
-          <li>
-            <Link
-              href="/#contact"
-              className="inline-block px-2.5 py-1 text-muted transition hover:bg-accent hover:text-ink"
-            >
-              Contact
-            </Link>
-          </li>
         </ul>
 
         <Link

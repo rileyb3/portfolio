@@ -655,6 +655,29 @@ export function getProjectBySlug(slug: string) {
   return slugProjects.find((p) => p.slug === slug);
 }
 
+// Every project, once each (a few — like AllTrees' UI/UX and Branding
+// entries — appear under more than one discipline as the same slug; the
+// first occurrence, in category order, wins), sorted newest-first by
+// year. A handful of projects don't carry a year at all (ongoing work
+// like this site itself, or writing still awaiting publication) — those
+// sort to the end rather than guessing a date.
+export const chronologicalProjects = (() => {
+  const seen = new Set<string>();
+  const deduped = slugProjects.filter((p) => {
+    if (seen.has(p.slug)) return false;
+    seen.add(p.slug);
+    return true;
+  });
+  return deduped.sort((a, b) => {
+    const ay = a.year ? parseInt(a.year, 10) : null;
+    const by = b.year ? parseInt(b.year, 10) : null;
+    if (ay === null && by === null) return 0;
+    if (ay === null) return 1;
+    if (by === null) return -1;
+    return by - ay;
+  });
+})();
+
 // Every project card links to its own dedicated page — whatever info
 // exists (description, link, gallery) is shown there, even if that's
 // just the description.
