@@ -1,40 +1,85 @@
 import Link from "next/link";
-import { categories } from "@/data/projects";
+import {
+  Home,
+  Code2,
+  Palette,
+  Gamepad2,
+  Microscope,
+  PenTool,
+  Mail,
+  Download,
+} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import { categories, profile } from "@/data/projects";
 
-// Global nav — sticky across every page (wired into layout.tsx). Dark
-// theme + real category page links, replacing the unused light-themed
-// version left over from the original starter (which pointed at stale
-// #anchor sections instead of the actual /build, /design, etc. pages).
+// Same icon-per-discipline mapping used on the homepage discipline tiles
+// (Disciplines.tsx) — kept in sync so the nav and the tiles read as one
+// system rather than two different icon sets.
+const iconMap: Record<string, LucideIcon> = {
+  build: Code2,
+  design: Palette,
+  play: Gamepad2,
+  discover: Microscope,
+  write: PenTool,
+};
+
+// Global nav — sticky across every page (wired into layout.tsx). Floating
+// rounded pill bar with icon + label nav links and a filled CV button,
+// modeled on a reference layout the user shared.
 export default function Header() {
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-ink/80 backdrop-blur">
-      <nav className="flex items-center gap-10 px-4 py-4 sm:px-6">
+    <header className="sticky top-4 z-50 px-4 sm:px-8">
+      <nav className="mx-auto flex max-w-6xl items-center justify-between gap-6 rounded-full border border-white/10 bg-surface/90 px-5 py-3 shadow-lg backdrop-blur">
         <Link
           href="/"
-          className="text-sm font-semibold tracking-wide text-paper transition hover:text-accent"
+          className="shrink-0 text-sm font-semibold tracking-wide text-paper transition hover:text-accent"
         >
           Riley Byers
         </Link>
-        <ul className="hidden gap-6 text-sm sm:flex">
-          {categories.map((c) => (
-            <li key={c.id}>
-              <Link
-                href={`/${c.id}`}
-                className="text-muted transition hover:text-accent"
-              >
-                {c.label}
-              </Link>
-            </li>
-          ))}
+
+        <ul className="hidden items-center gap-6 text-sm sm:flex">
+          <li>
+            <Link
+              href="/"
+              className="flex items-center gap-1.5 text-muted transition hover:text-accent"
+            >
+              <Home className="h-4 w-4" strokeWidth={1.5} />
+              Home
+            </Link>
+          </li>
+          {categories.map((c) => {
+            const Icon = iconMap[c.id];
+            return (
+              <li key={c.id}>
+                <Link
+                  href={`/${c.id}`}
+                  className="flex items-center gap-1.5 text-muted transition hover:text-accent"
+                >
+                  {Icon && <Icon className="h-4 w-4" strokeWidth={1.5} />}
+                  {c.label}
+                </Link>
+              </li>
+            );
+          })}
           <li>
             <Link
               href="/#contact"
-              className="text-muted transition hover:text-accent"
+              className="flex items-center gap-1.5 text-muted transition hover:text-accent"
             >
+              <Mail className="h-4 w-4" strokeWidth={1.5} />
               Contact
             </Link>
           </li>
         </ul>
+
+        <Link
+          href={profile.cvHref}
+          download
+          className="hidden shrink-0 items-center gap-2 rounded-full bg-accent px-4 py-2 text-sm font-medium text-ink transition hover:opacity-85 sm:inline-flex"
+        >
+          <Download className="h-4 w-4" strokeWidth={2} />
+          Download CV
+        </Link>
       </nav>
     </header>
   );
