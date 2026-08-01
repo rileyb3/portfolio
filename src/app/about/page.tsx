@@ -124,8 +124,9 @@ export default function AboutPage() {
           </div>
 
           {/* Photo column — sticky so it stays in view while both text
-              blocks scroll past, crossfading between the two photos based
-              on which block is centered. */}
+              blocks scroll past. The second photo swipes in over the
+              first (like a curtain) rather than crossfading, based on
+              which text block is centered. */}
           <div className="relative mx-auto hidden w-full max-w-sm lg:block">
             <div className="sticky top-24">
               <span
@@ -137,17 +138,15 @@ export default function AboutPage() {
                 <img
                   src={profile.aboutPhotoSrc}
                   alt={profile.name}
-                  className={`absolute inset-0 h-full w-full object-cover object-[50%_28%] transition-opacity duration-700 ${
-                    onSecond ? "opacity-0" : "opacity-100"
-                  }`}
+                  className="absolute inset-0 h-full w-full object-cover object-[50%_28%]"
                 />
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={profile.aboutPhotoSrc2}
                   alt=""
                   aria-hidden="true"
-                  className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
-                    onSecond ? "opacity-100" : "opacity-0"
+                  className={`absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out ${
+                    onSecond ? "translate-x-0" : "translate-x-full"
                   }`}
                 />
               </div>
