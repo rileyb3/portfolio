@@ -9,7 +9,7 @@ import { categories, profile } from "@/data/projects";
 export default function Header() {
   return (
     <header className="sticky top-0 z-50 px-4 sm:px-8">
-      <nav className="flex items-center gap-8 border border-white/10 bg-surface/90 px-5 py-2 shadow-lg backdrop-blur">
+      <nav className="flex items-center gap-8 border border-white/10 bg-surface/90 px-5 py-1 shadow-lg backdrop-blur">
         <Link
           href="/"
           className="shrink-0 text-sm font-semibold tracking-wide text-paper transition hover:text-accent"
@@ -17,12 +17,12 @@ export default function Header() {
           Riley Byers
         </Link>
 
-        <ul className="hidden items-center gap-7 text-sm sm:flex">
+        <ul className="hidden items-center gap-1 text-sm sm:flex">
           {categories.map((c) => (
             <li key={c.id}>
               <Link
                 href={`/${c.id}`}
-                className="text-muted transition hover:text-paper"
+                className="inline-block px-2.5 py-1 text-muted transition hover:bg-accent hover:text-ink"
               >
                 {c.label}
               </Link>
@@ -31,7 +31,7 @@ export default function Header() {
           <li>
             <Link
               href="/#contact"
-              className="text-muted transition hover:text-paper"
+              className="inline-block px-2.5 py-1 text-muted transition hover:bg-accent hover:text-ink"
             >
               Contact
             </Link>
@@ -41,7 +41,7 @@ export default function Header() {
         <Link
           href={profile.cvHref}
           download
-          className="hidden shrink-0 items-center bg-accent px-4 py-1.5 text-sm font-medium text-ink transition hover:opacity-85 sm:inline-flex"
+          className="hidden shrink-0 items-center bg-accent px-4 py-1 text-sm font-medium text-ink transition hover:opacity-85 sm:inline-flex"
         >
           Download CV
         </Link>
