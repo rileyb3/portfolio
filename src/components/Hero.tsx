@@ -70,18 +70,19 @@ export default function Hero() {
         />
       </div>
 
-      {/* Name: wrapper's natural top is 58vh down the page — exactly
-          matching the lock threshold below, so the name is already at
-          (essentially) its locked position from scroll=0, mostly visible
-          on landing rather than requiring scroll to appear. Plain live
-          text in a simple, clean font, sized big enough that it runs off
-          both edges of the screen. globals.css sets overflow-x:hidden so
-          that doesn't create a horizontal scrollbar. It stays visible and
-          untouched until Disciplines (below, -mt-[70vh]) starts arriving
-          around scroll≈28vh, then fully occludes it by scroll≈70vh, well
-          before this wrapper's 140vh runway ends. */}
-      <div className="absolute inset-x-0 top-[58vh] z-10 h-[140vh]">
-        <h1 className="pointer-events-none sticky top-[58%] mx-auto w-fit whitespace-nowrap font-sans text-9xl font-semibold leading-none tracking-tight text-paper sm:text-[12rem] lg:text-[15rem]">
+      {/* Name: wrapper's natural top is 62vh down the page — exactly
+          matching the lock threshold below (a smidge lower than the
+          previous 58%), so the name is already at (essentially) its
+          locked position from scroll=0, mostly visible on landing rather
+          than requiring scroll to appear. Plain live text in a simple,
+          clean font, sized big enough that it runs off both edges of the
+          screen. globals.css sets overflow-x:hidden so that doesn't
+          create a horizontal scrollbar. It stays visible and untouched
+          until Disciplines (below, -mt-[70vh], unchanged) starts arriving
+          around scroll≈28vh, then fully occludes it shortly after — same
+          relative relationship as before, just carried a smidge lower. */}
+      <div className="absolute inset-x-0 top-[62vh] z-10 h-[136vh]">
+        <h1 className="pointer-events-none sticky top-[62%] mx-auto w-fit whitespace-nowrap font-sans text-9xl font-semibold leading-none tracking-tight text-paper sm:text-[12rem] lg:text-[15rem]">
           {profile.name}
         </h1>
       </div>
