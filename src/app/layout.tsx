@@ -22,9 +22,7 @@ const description =
   "Portfolio of Riley Byers — software, design, games, research, and writing.";
 
 export const metadata: Metadata = {
-  // TODO: swap in your real domain once you deploy (e.g. Vercel URL or
-  // custom domain) so shared links resolve the OG image correctly.
-  metadataBase: new URL("https://riley-byers-portfolio.vercel.app"),
+  metadataBase: new URL("https://portfolio-chi-pink-cb0ctjjaan.vercel.app"),
   title,
   description,
   openGraph: {
