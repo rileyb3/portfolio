@@ -13,8 +13,10 @@ export default function Intro() {
       </div>
 
       <div className="mt-32 flex items-baseline gap-3 sm:mt-40">
-        <span className="text-lg text-paper">Selected work</span>
-        <span className="text-lg text-muted">{profile.workYears}</span>
+        <span className="text-sm font-medium uppercase tracking-widest text-muted">
+          Selected work
+        </span>
+        <span className="text-sm text-muted">{profile.workYears}</span>
       </div>
     </section>
   );
