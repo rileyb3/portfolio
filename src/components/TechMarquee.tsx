@@ -29,6 +29,7 @@ const tools = [
   { name: "Excel", logo: "excel" },
   { name: "Eclipse", logo: "eclipse" },
   { name: "GitHub", logo: "github" },
+  { name: "Xcode", logo: "xcode" },
 ];
 
 // Duplicated once so the track can loop seamlessly — animating from 0%
@@ -61,7 +62,7 @@ export default function TechMarquee() {
                 src={`/logos/${tool.logo}.png`}
                 alt=""
                 aria-hidden="true"
-                className="h-7 w-auto max-w-[2rem] object-contain"
+                className="h-8 w-auto max-w-[2.25rem] object-contain"
               />
               {tool.name}
             </div>
