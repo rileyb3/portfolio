@@ -8,8 +8,8 @@ import { categories, profile } from "@/data/projects";
 // strong visual element in the bar.
 export default function Header() {
   return (
-    <header className="sticky top-0 z-50 px-4 sm:px-8">
-      <nav className="flex items-center gap-8 border border-white/10 bg-surface/90 px-5 py-1 shadow-lg backdrop-blur">
+    <header className="sticky top-0 z-50">
+      <nav className="flex items-center gap-8 border-b border-white/10 bg-surface/90 px-4 py-1 shadow-lg backdrop-blur sm:px-8">
         <Link
           href="/"
           className="shrink-0 text-sm font-semibold tracking-wide text-paper transition hover:text-accent"
@@ -41,7 +41,7 @@ export default function Header() {
         <Link
           href={profile.cvHref}
           download
-          className="hidden shrink-0 items-center bg-accent px-4 py-1 text-sm font-medium text-ink transition hover:opacity-85 sm:inline-flex"
+          className="ml-auto hidden shrink-0 items-center bg-accent px-4 py-1 text-sm font-medium text-ink transition hover:opacity-85 sm:inline-flex"
         >
           Download CV
         </Link>
