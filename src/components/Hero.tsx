@@ -1,4 +1,5 @@
 import { profile } from "@/data/projects";
+import NameWordmark from "./NameWordmark";
 
 export default function Hero() {
   return (
@@ -35,10 +36,13 @@ export default function Hero() {
         </div>
 
         {/* Name: overlaps the boundary between the dark panel and the photo.
-            Solid color, no gradient — plain font choice only. Extra line-height
-            and padding keep descenders (y, g) from clipping against the edge. */}
-        <h1 className="pointer-events-none absolute left-6 top-[38%] whitespace-nowrap pb-4 font-display text-7xl font-medium leading-[1.15] tracking-normal text-paper sm:left-10 sm:text-9xl lg:text-[10rem]">
-          {profile.name}
+            Custom vector wordmark (see NameWordmark) instead of live text —
+            keeps the accessible name via aria-label on this heading. */}
+        <h1
+          aria-label={profile.name}
+          className="pointer-events-none absolute left-6 top-[38%] text-paper sm:left-10"
+        >
+          <NameWordmark className="h-auto w-[420px] sm:w-[740px] lg:w-[930px]" />
         </h1>
       </div>
     </section>
