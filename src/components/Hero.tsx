@@ -20,16 +20,6 @@ export default function Hero() {
         </div>
       </div>
 
-      <div className="absolute left-8 top-8 z-10 sm:left-12 sm:top-10">
-        <a
-          href={profile.cvHref}
-          download
-          className="inline-flex w-fit items-center rounded-full bg-accent3 px-5 py-2.5 text-sm font-medium text-ink transition hover:opacity-80"
-        >
-          Download CV
-        </a>
-      </div>
-
       {/* Name: plain absolute positioning, no sticky/lock — starts lower
           on the page than before (top-[55%] vs the old 38%) and scrolls
           away normally with the rest of the page, moving continuously

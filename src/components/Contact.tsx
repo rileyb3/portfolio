@@ -18,6 +18,13 @@ export default function Contact() {
           >
             {profile.email}
           </a>
+          <a
+            href={profile.cvHref}
+            download
+            className="rounded-full border border-white/20 px-5 py-2.5 text-sm font-medium text-paper transition hover:border-white/40"
+          >
+            Download CV
+          </a>
           {profile.socials.map((s) => (
             <a
               key={s.label}
