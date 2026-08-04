@@ -677,10 +677,6 @@ export const slugProjects = categories.flatMap((c) =>
   }))
 );
 
-export function getProjectBySlug(slug: string) {
-  return slugProjects.find((p) => p.slug === slug);
-}
-
 // Rough "how much is actually here" score — used below to pick the
 // fuller entry when the same project shows up under more than one
 // discipline (e.g. AllTrees is also cross-referenced as "UI/UX Design"
@@ -698,13 +694,14 @@ function richness(p: Project) {
   );
 }
 
-// Every project, once each — when the same slug shows up under more than
-// one discipline, the fullest entry wins rather than just whichever
-// comes first — sorted newest-first by year. A handful of projects don't
-// carry a year at all (ongoing work like this site itself, or writing
-// still awaiting publication) — those sort to the end rather than
-// guessing a date.
-export const chronologicalProjects = (() => {
+// One entry per slug — when the same project is cross-referenced under
+// more than one discipline, the fullest entry wins. Used by both
+// getProjectBySlug (so /projects/pete-the-snail resolves to the full
+// Play entry, not the bare "Pete Assets" stub under Design — that stub
+// winning was a real bug: it has no description/gallery of its own, and
+// its categoryId sent the page's back-arrow to /design instead of
+// /play) and chronologicalProjects below.
+const richestBySlug = (() => {
   const bySlug = new Map<string, (typeof slugProjects)[number]>();
   for (const p of slugProjects) {
     const existing = bySlug.get(p.slug);
@@ -712,7 +709,19 @@ export const chronologicalProjects = (() => {
       bySlug.set(p.slug, p);
     }
   }
-  const deduped = Array.from(bySlug.values());
+  return bySlug;
+})();
+
+export function getProjectBySlug(slug: string) {
+  return richestBySlug.get(slug);
+}
+
+// Every project, once each (see richestBySlug above), sorted
+// newest-first by year. A handful of projects don't carry a year at all
+// (ongoing work like this site itself, or writing still awaiting
+// publication) — those sort to the end rather than guessing a date.
+export const chronologicalProjects = (() => {
+  const deduped = Array.from(richestBySlug.values());
   return deduped.sort((a, b) => {
     const ay = a.year ? parseInt(a.year, 10) : null;
     const by = b.year ? parseInt(b.year, 10) : null;
