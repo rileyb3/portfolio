@@ -30,14 +30,14 @@ export default function Hero() {
       setPhotoOffset(current);
 
       // The name now rises up from just below the fold before locking
-      // (see the wrapper/h1 markup below) — it locks at scrollY≈30vh.
-      // Disciplines arrives at ~58vh and fully occludes the name at
-      // ~98vh (see comments below / in Disciplines.tsx) — coverEnd here
-      // is deliberately set to the halfway point of that range (~78vh)
-      // rather than 98vh, so the color has already finished fading to
+      // (see the wrapper/h1 markup below) — it locks at scrollY≈20vh.
+      // Disciplines arrives at ~48vh and fully occludes the name at
+      // ~88vh (see comments below / in Disciplines.tsx) — coverEnd here
+      // is deliberately set to the halfway point of that range (~68vh)
+      // rather than 88vh, so the color has already finished fading to
       // black by the time occlusion is only half done.
-      const coverStart = vh * 0.58;
-      const coverEnd = vh * 0.78;
+      const coverStart = vh * 0.48;
+      const coverEnd = vh * 0.68;
       const progress = Math.min(
         Math.max((scrollY - coverStart) / (coverEnd - coverStart), 0),
         1
@@ -73,7 +73,7 @@ export default function Hero() {
     // Outer section is taller than one screen — that extra height is the
     // runway the sticky photo holds, and separately the runway the name's
     // own wrapper (below) holds before it releases too.
-    <section id="top" className="relative h-[228vh]">
+    <section id="top" className="relative h-[218vh]">
       <div className="sticky top-0 h-screen overflow-hidden bg-ink">
         {/* Photo: full-bleed on the right. Hard cut to black on the left —
             no gradient, just a clean edge. Deliberately oversized (145% of
@@ -107,19 +107,19 @@ export default function Hero() {
         />
       </div>
 
-      {/* Name: wrapper's natural top is 90vh down the page — just short of
-          one full screen, so at scroll=0 the top of the name is already
-          peeking up from the bottom edge rather than sitting fully
-          off-screen. Scrolling moves it up in normal flow (1:1 with the
-          page) until it hits the sticky threshold below (top-[60%] =
-          60vh) at scrollY≈30vh, where it locks — same final resting
-          position as before. Plain live text in a simple, clean font,
-          sized big enough that it runs off both edges of the screen.
-          globals.css sets overflow-x:hidden so that doesn't create a
-          horizontal scrollbar. Stays locked and untouched until
-          Disciplines (below, -mt-[70vh]) starts arriving around
-          scroll≈58vh, then fully occludes it shortly after. */}
-      <div className="absolute inset-x-0 top-[90vh] z-10 h-[138vh]">
+      {/* Name: wrapper's natural top is 80vh down the page, so at scroll=0
+          more of the name is already peeking up from the bottom edge
+          (previously 90vh — too little was visible on landing).
+          Scrolling moves it up in normal flow (1:1 with the page) until
+          it hits the sticky threshold below (top-[60%] = 60vh) at
+          scrollY≈20vh, where it locks — same final resting position as
+          before. Plain live text in a simple, clean font, sized big
+          enough that it runs off both edges of the screen. globals.css
+          sets overflow-x:hidden so that doesn't create a horizontal
+          scrollbar. Stays locked and untouched until Disciplines (below,
+          -mt-[70vh]) starts arriving around scroll≈48vh, then fully
+          occludes it shortly after. */}
+      <div className="absolute inset-x-0 top-[80vh] z-10 h-[138vh]">
         <h1 className="pointer-events-none sticky top-[60%] mx-auto w-fit whitespace-nowrap font-sans text-9xl font-semibold leading-none tracking-tight sm:text-[12rem] lg:text-[15rem]">
           <span style={{ color: firstColor }}>{firstName}</span>{" "}
           <span style={{ color: lastColor }}>{lastName}</span>
