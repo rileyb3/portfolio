@@ -472,7 +472,7 @@ private void UpdateLineRenderer() {
       {
         title: "Entrance",
         description:
-          "A short film about the body rejecting the world — written, directed, and acted by me, shot on gear rented from the library.",
+          "There's something primal about how the body rejects the world. Short film — directed, written, shot, and acted by me.",
         details:
           "A short film I wrote, directed, and acted in, shot on a proper camera and tripod rented from the library. Edited in Adobe Premiere with Adobe Audition for the audio pass. The idea driving it: there's something primal about how the body rejects the world.",
         tags: [
