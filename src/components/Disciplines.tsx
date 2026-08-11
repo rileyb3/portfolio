@@ -55,34 +55,39 @@ const outlineColor = "rgba(250, 250, 250, 0.35)";
 // classes. Every tile also gets a real hover color shift on its icon/label
 // (cross-mixed with the palette — green tile hovers orange, blue tile
 // hovers green, etc.) instead of some tiles just staying put.
+// Zigzagging x positions (12/30/50/68/86%) with alternating high/low y —
+// rather than the previous "pair left, pair right, one lonely in the
+// middle" layout, which read as three isolated clusters with huge dead
+// gaps between them. Bigger tiles (see render) + this even stagger is what
+// actually closes up the black space.
 const blobStyle = [
   {
-    top: "34%",
-    left: "6%",
+    top: "30%",
+    left: "12%",
     rotate: -18,
     tint: "bg-accent hover:brightness-110",
     text: "text-ink",
     hoverText: "group-hover:text-[#FF7A1A]",
   },
   {
-    top: "28%",
-    left: "90%",
+    top: "64%",
+    left: "30%",
     rotate: 13,
     tint: "bg-surface2 hover:bg-white/10",
     text: "text-paper",
     hoverText: "group-hover:text-accent",
   },
   {
-    top: "58%",
-    left: "48%",
+    top: "32%",
+    left: "50%",
     rotate: -15,
     tint: "bg-accent2 hover:brightness-110",
     text: "text-ink",
     hoverText: "group-hover:text-accent",
   },
   {
-    top: "78%",
-    left: "10%",
+    top: "66%",
+    left: "70%",
     rotate: 20,
     tint: "hover:brightness-110",
     tintStyle: { backgroundColor: brightOrange },
@@ -90,7 +95,7 @@ const blobStyle = [
     hoverText: "group-hover:text-accent2",
   },
   {
-    top: "74%",
+    top: "30%",
     left: "88%",
     rotate: -12,
     tint: "bg-paper hover:brightness-95",
@@ -133,7 +138,7 @@ export default function Disciplines() {
       // add visible extra empty space beyond what the content needs.
       className="relative z-20 -mt-[70vh] min-h-[85vh] scroll-mt-6 rounded-t-[3rem] bg-ink px-6 pb-16 pt-10 text-center sm:pt-14"
     >
-      <div className="mx-auto max-w-7xl">
+      <div className="mx-auto max-w-6xl">
         <h2 className="mb-6 text-sm font-medium uppercase tracking-widest text-muted">
           Explore my work by discipline
         </h2>
@@ -165,7 +170,7 @@ export default function Disciplines() {
                     entranceScale * hoverScale
                   })`,
                 }}
-                className={`group absolute flex aspect-square w-40 shrink-0 p-[3px] transition-all duration-500 ease-out sm:w-52 lg:w-60 ${
+                className={`group absolute flex aspect-square w-48 shrink-0 p-[3px] transition-all duration-500 ease-out sm:w-64 lg:w-72 ${
                   visible ? "opacity-100" : "opacity-0"
                 }`}
               >
@@ -174,11 +179,11 @@ export default function Disciplines() {
                   className={`flex h-full w-full flex-col items-center justify-center gap-3 p-8 text-center transition-colors duration-300 ${tint} ${text}`}
                 >
                   <Icon
-                    className={`h-10 w-10 transition-colors duration-300 sm:h-12 sm:w-12 ${hoverText}`}
+                    className={`h-12 w-12 transition-colors duration-300 sm:h-14 sm:w-14 ${hoverText}`}
                     strokeWidth={1.5}
                   />
                   <span
-                    className={`text-base font-semibold leading-snug transition-colors duration-300 sm:text-lg ${hoverText}`}
+                    className={`text-lg font-semibold leading-snug transition-colors duration-300 sm:text-xl ${hoverText}`}
                   >
                     {tile.label}
                   </span>
