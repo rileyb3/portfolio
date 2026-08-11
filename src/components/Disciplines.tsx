@@ -28,34 +28,30 @@ const tiles = categories.map((c) => ({
   id: c.id,
 }));
 
-// Organic "blob" outlines instead of square cards — asymmetric border-radius
-// pairs (the classic CSS blob trick), pushed to more extreme swings (as low
-// as ~20%, as high as ~80%) so each one reads as a distinctly weird,
-// hand-drawn shape rather than a rounded square.
-const blobShapes = [
-  "78% 22% 65% 35% / 30% 25% 75% 70%",
-  "22% 78% 45% 55% / 65% 20% 80% 35%",
-  "70% 30% 20% 80% / 25% 65% 35% 75%",
-  "30% 70% 75% 25% / 60% 35% 65% 40%",
-  "55% 45% 25% 75% / 75% 25% 70% 30%",
-];
+// One uniform pointed, irregular, star-like outline — same shape and size
+// for every tile now. The chaos lives in each tile's position/rotation
+// (below), not in shape or size variety. Hand-tweaked so the points land
+// at uneven distances/angles rather than a clean 5-point star.
+const starClipPath =
+  "polygon(50% 0%, 63% 32%, 95% 15%, 72% 48%, 100% 62%, 65% 65%, 75% 100%, 50% 75%, 25% 100%, 35% 65%, 0% 62%, 28% 48%, 5% 15%, 37% 32%)";
 
-// Rotation + x/y offset + size all vary per tile so the row reads as
-// scattered/eccentric rather than perfectly aligned, and bigger/bolder so
-// it feels iconic rather than a strip of icons — on-brand accent colors
-// (chartreuse / light blue / orange) cycled in solid/bright, plus a couple
-// dark/neutral ones for contrast, rather than an arbitrary rainbow.
-// rotate/x/y feed a single JS-computed transform (see render) rather than
-// Tailwind's rotate-*/translate-*  utilities, since those and an inline
-// `style.transform` would fight over the same CSS property — inline style
-// always wins, silently no-op'ing the classes.
+// A clip-path shape like this doesn't play well with a CSS border (the
+// border box is rectangular and gets chopped at odd angles), so color does
+// the work of separating each tile instead: bright chartreuse/blue/orange,
+// one dark charcoal, one white, no borders.
+const brightOrange = "#FF7A1A";
+
+// Rotation + x/y offset per tile so the row reads as scattered/eccentric
+// in its placement, feeding a single JS-computed transform (see render)
+// rather than Tailwind's rotate-*/translate-* utilities, since those and
+// an inline `style.transform` would fight over the same CSS property —
+// inline style always wins, silently no-op'ing the classes.
 const blobStyle = [
   {
     rotate: -14,
     x: -8,
     y: -12,
-    size: "w-40 sm:w-52 lg:w-56",
-    tint: "bg-accent hover:brightness-110 border-transparent",
+    tint: "bg-accent hover:brightness-110",
     text: "text-ink",
     icon: "text-ink group-hover:text-ink",
   },
@@ -63,8 +59,7 @@ const blobStyle = [
     rotate: 10,
     x: 16,
     y: 44,
-    size: "w-36 sm:w-44 lg:w-48",
-    tint: "bg-surface2 hover:bg-white/10 border-white/10",
+    tint: "bg-surface2 hover:bg-white/10",
     text: "text-paper",
     icon: "text-paper group-hover:text-accent",
   },
@@ -72,8 +67,7 @@ const blobStyle = [
     rotate: -11,
     x: -20,
     y: -38,
-    size: "w-44 sm:w-56 lg:w-64",
-    tint: "bg-accent2 hover:brightness-110 border-transparent",
+    tint: "bg-accent2 hover:brightness-110",
     text: "text-ink",
     icon: "text-ink group-hover:text-ink",
   },
@@ -81,8 +75,8 @@ const blobStyle = [
     rotate: 16,
     x: 22,
     y: 24,
-    size: "w-40 sm:w-48 lg:w-52",
-    tint: "bg-accent3 hover:brightness-110 border-transparent",
+    tint: "hover:brightness-110",
+    tintStyle: { backgroundColor: brightOrange },
     text: "text-ink",
     icon: "text-ink group-hover:text-ink",
   },
@@ -90,10 +84,9 @@ const blobStyle = [
     rotate: -9,
     x: 6,
     y: -52,
-    size: "w-36 sm:w-44 lg:w-48",
-    tint: "bg-surface2 hover:bg-white/10 border-white/10",
-    text: "text-paper",
-    icon: "text-paper group-hover:text-accent",
+    tint: "bg-paper hover:brightness-95",
+    text: "text-ink",
+    icon: "text-ink group-hover:text-accent",
   },
 ];
 
@@ -134,11 +127,10 @@ export default function Disciplines() {
         <h2 className="mb-14 text-sm font-medium uppercase tracking-widest text-muted">
           Explore my work by discipline
         </h2>
-        <div className="mx-auto flex w-full max-w-5xl flex-wrap items-center justify-center gap-8 sm:flex-nowrap sm:justify-between sm:gap-4">
+        <div className="mx-auto flex w-full max-w-4xl flex-wrap items-center justify-center gap-8">
           {tiles.map((tile, i) => {
             const Icon = iconMap[tile.id] ?? Images;
-            const shape = blobShapes[i % blobShapes.length];
-            const { rotate, x, y, size, tint, text, icon } =
+            const { rotate, x, y, tint, tintStyle, text, icon } =
               blobStyle[i % blobStyle.length];
             const entranceScale = visible ? 1 : 0.85;
             const hoverScale = hoveredId === tile.id ? 1.1 : 1;
@@ -150,14 +142,15 @@ export default function Disciplines() {
                 onMouseLeave={() => setHoveredId(null)}
                 style={{
                   transitionDelay: visible ? `${i * 60}ms` : "0ms",
-                  borderRadius: shape,
+                  clipPath: starClipPath,
+                  ...tintStyle,
                   transform: `translate(${x}px, ${
                     visible ? y : y + 16
                   }px) rotate(${rotate}deg) scale(${
                     entranceScale * hoverScale
                   })`,
                 }}
-                className={`group flex aspect-square ${size} shrink-0 flex-col items-center justify-center gap-3 border p-6 text-center transition-all duration-500 ease-out ${tint} ${text} ${
+                className={`group flex aspect-square w-40 shrink-0 flex-col items-center justify-center gap-3 p-8 text-center transition-all duration-500 ease-out sm:w-48 lg:w-56 ${tint} ${text} ${
                   visible ? "opacity-100" : "opacity-0"
                 }`}
               >
