@@ -100,7 +100,7 @@ const blobStyle = [
     rotate: -12,
     tint: "bg-paper hover:brightness-95",
     text: "text-ink",
-    hoverText: "group-hover:text-accent",
+    hoverText: "group-hover:text-[#FF7A1A]",
   },
 ];
 
