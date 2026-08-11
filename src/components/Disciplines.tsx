@@ -183,7 +183,7 @@ export default function Disciplines() {
                     strokeWidth={1.5}
                   />
                   <span
-                    className={`text-lg font-semibold leading-snug transition-colors duration-300 sm:text-xl ${hoverText}`}
+                    className={`text-base font-semibold leading-snug transition-colors duration-300 sm:text-lg ${hoverText}`}
                   >
                     {tile.label}
                   </span>

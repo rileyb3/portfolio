@@ -75,14 +75,15 @@ export default function Hero() {
     // own wrapper (below) holds before it releases too.
     <section id="top" className="relative h-[208vh]">
       <div className="sticky top-0 h-screen overflow-hidden bg-ink">
-        {/* Photo: full-bleed on the right. Hard cut to black on the left —
-            no gradient, just a clean edge. Deliberately oversized (145% of
-            container height) so the upward parallax drift below always has
-            extra image material to reveal — without this, translating a
-            100%-height image upward exposes empty black space at the
-            bottom. */}
+        {/* Photo: full-bleed edge-to-edge on mobile (inset-0, no black
+            margin anywhere), then on the right ~62% with a hard cut to
+            black on the left from sm+ — no gradient, just a clean edge.
+            Deliberately oversized (145% of container height) so the
+            upward parallax drift below always has extra image material to
+            reveal — without this, translating a 100%-height image upward
+            exposes empty black space at the bottom. */}
         <div
-          className="absolute right-0 top-0 h-[145%] w-full will-change-transform sm:w-[62%]"
+          className="absolute inset-0 h-[145%] will-change-transform sm:inset-y-0 sm:left-auto sm:right-0 sm:h-[145%] sm:w-[62%]"
           style={{ transform: `translateY(${photoOffset}px)` }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -119,7 +120,7 @@ export default function Hero() {
           Disciplines (below, -mt-[70vh]) starts arriving around
           scroll≈38vh, then fully occludes it shortly after. */}
       <div className="absolute inset-x-0 top-[70vh] z-10 h-[138vh]">
-        <h1 className="pointer-events-none sticky top-[60%] mx-auto w-fit whitespace-nowrap font-sans text-9xl font-semibold leading-none tracking-tight sm:text-[12rem] lg:text-[15rem]">
+        <h1 className="pointer-events-none sticky top-[60%] mx-auto w-fit whitespace-nowrap font-sans text-5xl font-semibold leading-none tracking-tight sm:text-[12rem] lg:text-[15rem]">
           <span style={{ color: firstColor }}>{firstName}</span>{" "}
           <span style={{ color: lastColor }}>{lastName}</span>
         </h1>
