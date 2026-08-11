@@ -57,23 +57,23 @@ const outlineColor = "rgba(250, 250, 250, 0.35)";
 // hovers green, etc.) instead of some tiles just staying put.
 const blobStyle = [
   {
-    top: "10%",
-    left: "12%",
+    top: "34%",
+    left: "10%",
     rotate: -18,
     tint: "bg-accent hover:brightness-110",
     text: "text-ink",
     hoverText: "group-hover:text-[#FF7A1A]",
   },
   {
-    top: "6%",
-    left: "68%",
+    top: "30%",
+    left: "66%",
     rotate: 13,
     tint: "bg-surface2 hover:bg-white/10",
     text: "text-paper",
     hoverText: "group-hover:text-accent",
   },
   {
-    top: "42%",
+    top: "56%",
     left: "38%",
     rotate: -15,
     tint: "bg-accent2 hover:brightness-110",
@@ -81,8 +81,8 @@ const blobStyle = [
     hoverText: "group-hover:text-accent",
   },
   {
-    top: "72%",
-    left: "10%",
+    top: "76%",
+    left: "14%",
     rotate: 20,
     tint: "hover:brightness-110",
     tintStyle: { backgroundColor: brightOrange },
@@ -90,8 +90,8 @@ const blobStyle = [
     hoverText: "group-hover:text-accent2",
   },
   {
-    top: "68%",
-    left: "70%",
+    top: "72%",
+    left: "68%",
     rotate: -12,
     tint: "bg-paper hover:brightness-95",
     text: "text-ink",
@@ -124,12 +124,14 @@ export default function Disciplines() {
     <section
       id="disciplines"
       ref={ref}
-      // min-h-[110vh] is load-bearing, not decorative: this section rides up
-      // over Hero via -mt-[70vh] and (at z-20, above Hero's z-10) is what
-      // hides Hero's sticky name/photo once you scroll past it. The canvas
-      // below is h-[90vh], which alone comfortably clears the required
-      // 70vh cover, so this is just a safety floor.
-      className="relative z-20 -mt-[70vh] min-h-[110vh] scroll-mt-6 rounded-t-[3rem] bg-ink px-6 pb-16 pt-10 text-center sm:pt-14"
+      // min-h-[85vh] is a safety floor, not the main mechanism: this section
+      // rides up over Hero via -mt-[70vh] and (at z-20, above Hero's z-10)
+      // is what hides Hero's sticky name/photo once you scroll past it. The
+      // canvas below (h-[60-70vh] depending on breakpoint) plus its own
+      // padding/heading already clears the required 70vh on its own — this
+      // floor only kicks in on unusually short viewports, so it shouldn't
+      // add visible extra empty space beyond what the content needs.
+      className="relative z-20 -mt-[70vh] min-h-[85vh] scroll-mt-6 rounded-t-[3rem] bg-ink px-6 pb-16 pt-10 text-center sm:pt-14"
     >
       <div className="mx-auto max-w-6xl">
         <h2 className="mb-6 text-sm font-medium uppercase tracking-widest text-muted">
@@ -138,8 +140,9 @@ export default function Disciplines() {
         {/* Relative canvas the tiles are pinned into by (top%, left%) — this
             is what actually fills the empty space, versus a single row
             that only ever occupies one horizontal band no matter how much
-            room it's given. */}
-        <div className="relative mx-auto h-[80vh] w-full sm:h-[85vh]">
+            room it's given. Positions all stay well below 0% so nothing
+            ever rises above this heading. */}
+        <div className="relative mx-auto h-[60vh] w-full sm:h-[65vh] lg:h-[70vh]">
           {tiles.map((tile, i) => {
             const Icon = iconMap[tile.id] ?? Images;
             const { top, left, rotate, tint, tintStyle, text, hoverText } =
