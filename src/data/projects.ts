@@ -95,7 +95,7 @@ export const categories: Category[] = [
       {
         title: "AllTrees",
         description:
-          "A community-driven mobile map for tree climbers — discover, map, and review climbable trees, log ascents, and build a personal climbing profile. Currently in first-round beta.",
+          "Think Mountain Project, but for trees. A community map where climbers discover, log, and review climbable trees — currently in first-round beta.",
         tagLabel: "iOS Build",
         featured: true,
         details:
@@ -165,7 +165,7 @@ Deno.serve(async (req) => {
       {
         title: "This Portfolio",
         description:
-          "This site — built from scratch in Next.js and Tailwind, with a data-driven content system so every project, slideshow, and category is defined in one typed file rather than hardcoded pages.",
+          "The site you're looking at right now — hand-built in Next.js, with everything you're browsing pulled from one typed data file.",
         tagLabel: "Web Build",
         tags: ["TypeScript", "Next.js", "Tailwind CSS"],
         link: "#",
@@ -173,7 +173,7 @@ Deno.serve(async (req) => {
       {
         title: "Routesetting",
         description:
-          "Route and problem setting at climbing gyms across three locations — Active Climbing (Athens, GA), the Brandeis Climbing Wall (Waltham, MA), and Central Rock Gym (Watertown, MA).",
+          "Designing boulder problems and routes at three different gyms — same holds, same wall, a hundred ways to get the movement wrong.",
         tagLabel: "Routesetting",
         details:
           "I set boulder problems and routes at three different gyms: Active Climbing in Athens, GA, the Brandeis Climbing Wall in Waltham, MA, and Central Rock Gym in Watertown, MA. Setting is its own kind of design problem — working within a fixed set of holds and a wall's geometry to build movement that reads clearly at a given grade, feels good in the body, and doesn't have an accidental easier way through it.",
@@ -189,7 +189,7 @@ Deno.serve(async (req) => {
       {
         title: "Wall Book Holders",
         description:
-          "3D-printed wall mounts that hold a book open to your page, installed with Command Velcro — no drilling required.",
+          "A 3D-printed mount that holds your book open to the page — no drilling, no bookmark, no losing your spot.",
         tagLabel: "3D Print Build",
         details:
           "A set of wall-mounted book holders that keep a book open to your place, designed in Fusion 360 and 3D printed. Each one is designed to install with Command Velcro strips rather than hardware, so it goes up (and comes down) without putting holes in the wall.\n\nEach bracket prints in two flat halves that slot together and get glued into one rigid piece — easier to print reliably than the full 3D shape in one go, and it keeps the print time and material down.",
@@ -209,7 +209,7 @@ Deno.serve(async (req) => {
       {
         title: "Digital Clock",
         description:
-          "A digital clock built from a WHDTS 4-bit electronic clock kit, housed in a custom black-and-gold case I designed and 3D printed in Fusion 360.",
+          "A stock clock kit given a custom black-and-gold case — designed from scratch to be the one piece of hardware you'd actually want on your wall.",
         tagLabel: "Hardware Build",
         details:
           "For an electrical engineering class, I built a functioning digital clock using a WHDTS 4-bit electronic clock DIY kit as the electronics base, then designed and 3D printed a custom case for it in Fusion 360 rather than using the kit's stock housing.\n\nThe brief I set for myself: a minimalist case with easy-to-reach buttons, a clearly visible clock face, and a design that never needs to come off the clock. I researched hinge and enclosure ideas before sketching out several case concepts by hand, then modeled the final version — a faceted black case with gold trim, a cutout window for the display, and two accessible buttons — piece by piece in Fusion 360.",
@@ -233,7 +233,7 @@ Deno.serve(async (req) => {
       {
         title: "3D Printer Filament Stand",
         description:
-          "A shop project designed with a classmate to store 3D-printer filament right at the printers instead of scattered across the engineering room.",
+          "The filament used to live across the room from the printers that needed it. A classmate and I fixed that.",
         tagLabel: "3D Print Build",
         details:
           "For a shop class project, I was tasked with improving how our engineering room stored 3D-printer filament — at the time it lived in a separate area and had to be sorted through and carried to the printers for every print. Working with a classmate, I designed a stand that holds multiple spools directly above the printers, attaches to the printer enclosure frame, and keeps spools locked in place but removable by hand.\n\nI researched lazy susans (which use bearings to spin) and the filament connectors already built into the printers before sketching a rotating, tiered stand concept. In the end we moved away from the lazy susan plan and designed a snap-lock piece modeled after the connector the printers already used, built into the existing structure around the printers rather than a freestanding base — that gave the heaviest, fully-loaded spools much more support.",
@@ -295,28 +295,28 @@ Deno.serve(async (req) => {
       {
         title: "Pete Assets",
         description:
-          "Character art and sprite assets designed in Krita for Pete the Snail — see the full project under Play.",
+          "The character art and sprites behind Pete the Snail, painted in Krita — full story under Play.",
         tags: ["Krita", "Character Design"],
         slug: "pete-the-snail",
       },
       {
         title: "UI/UX Design",
         description:
-          "Interface and interaction design for AllTrees — see the full project under Build.",
+          "The interface behind AllTrees — full story under Build.",
         tags: ["UI/UX"],
         slug: "alltrees",
       },
       {
         title: "Branding",
         description:
-          "App icon and logo design for AllTrees — see the full project under Build.",
+          "The icon and logo behind AllTrees — full story under Build.",
         tags: ["Branding"],
         slug: "alltrees",
       },
       {
         title: "Route Design",
         description:
-          "Movement design for climbing routes and boulder problems — see the full project under Build.",
+          "The movement design behind my climbing routes — full story under Build.",
         tags: ["Routesetting"],
         slug: "routesetting",
       },
@@ -331,7 +331,7 @@ Deno.serve(async (req) => {
       {
         title: "Pete the Snail",
         description:
-          "A paused Unity game design — a Snake-inspired twist where you're a snail collecting ants by encircling them with your slime trail.",
+          "A Snake-inspired game where the trail behind you is slime, and the things you're chasing are ants. Currently paused.",
         tagLabel: "Game Design",
         details:
           "A Unity/C# game design, currently paused: a Snake-inspired twist where you play as a snail named Pete leaving a slime trail behind you. Encircle ants with the trail to collect them — the trail fades after a few seconds if you don't loop it around something first. The fuller vision was for your trail to grow longer as you collect bigger colonies, working toward destroying the ant hill.\n\nNo gameplay footage — I can't currently reinstall Unity on this machine to record it — but the core movement, slime-trail tracking, and ant-following mechanics were built and working.",
@@ -386,7 +386,7 @@ private void UpdateLineRenderer() {
       {
         title: "Fire & Water",
         description:
-          "Browser-based VR maze game built with A-Frame and Ammo.js physics — one level of a 3-person final project for a 3D animation course. Modeled, rigged, and animated the fire boy and water girl characters myself, and wrote the chase/collision logic in JavaScript.",
+          "A browser-based VR maze where fire boy and water girl are being hunted by something. I modeled, animated, and coded the chase myself.",
         details:
           "Browser-based VR game built with A-Frame and the Ammo.js physics engine, created as a 3-person final project for a 3D animation course. The game spans three connected levels built by each team member; this is mine — a first-person maze of stone platforms surrounded by water where the player is pursued by physics-driven enemies, with reaching the wrong thing ending the game and reaching the right thing advancing it.\n\nFor my level, I modeled, rigged, and animated the fire boy and water girl characters (along with custom signage) myself, and wrote the game logic in JavaScript: a chase component that tracks the player's position each frame, moves enemies toward them, and triggers a game-over or level transition on contact.",
         tags: ["A-Frame", "JavaScript", "Blender", "Physics"],
@@ -458,7 +458,7 @@ private void UpdateLineRenderer() {
       {
         title: "Contact",
         description:
-          "Found-footage video piece cut together in Premiere from clips sourced through the Internet Archive — built around one question: what's real anymore?",
+          "A film with no original footage — every frame pulled from the Internet Archive and cut together around one question: what's real anymore?",
         details:
           "A found-footage piece assembled entirely from clips pulled off the Internet Archive and cut together in Adobe Premiere. Started in 2025 and kept getting re-edited into early 2026 as the throughline sharpened. The premise driving the edit: what's real anymore?",
         tags: ["Adobe Premiere", "Found Footage", "Internet Archive"],
@@ -472,7 +472,7 @@ private void UpdateLineRenderer() {
       {
         title: "Entrance",
         description:
-          "Short film — directed, written, and acted by me, shot on a camera and tripod rented from the library. There's something primal about how the body rejects the world.",
+          "A short film about the body rejecting the world — written, directed, and acted by me, shot on gear rented from the library.",
         details:
           "A short film I wrote, directed, and acted in, shot on a proper camera and tripod rented from the library. Edited in Adobe Premiere with Adobe Audition for the audio pass. The idea driving it: there's something primal about how the body rejects the world.",
         tags: [
@@ -493,7 +493,7 @@ private void UpdateLineRenderer() {
       {
         title: "Blackjack",
         description:
-          "Short character animation made in Blender for a 3D animation class — watchable in full.",
+          "A short Blender character animation with more personality than its runtime should allow.",
         details:
           "A short character animation piece made almost entirely in Blender, for a 3D animation class.",
         tags: ["3D Animation", "Blender"],
@@ -522,7 +522,7 @@ private void UpdateLineRenderer() {
       {
         title: "Ebbinghaus-Titchener Illusion in Grey Parrots",
         description:
-          "Co-authored research with Dr. Irene Pepperberg's lab (The Alex Foundation) testing whether Grey parrots perceive the classic Ebbinghaus-Titchener size illusion, using a juice-reward choice paradigm. Reviewed the analysis code and was present for some of the trials; currently in revision, not yet published.",
+          "Do parrots see the same optical illusions we do? Co-authored research testing that question with Dr. Irene Pepperberg's lab — currently in revision.",
         details:
           "A study with The Alex Foundation, led by Dr. Irene Pepperberg, testing whether four Grey parrots (Griffin, Athena, Pepper, and Franco) perceive the Ebbinghaus-Titchener illusion — the classic effect where a central circle looks smaller when surrounded by larger circles, and larger when surrounded by smaller ones. Rather than asking the birds to describe what they saw, the design (adapted from a primate study by Hanus et al., 2023) let them choose between two equal-sized juice cups, each on a tile surrounded by differently sized flanker circles, on the assumption that a bird experiencing the illusion would reliably pick the cup that looked larger.\n\nThe paper is co-authored with Anaya Zachery, Francesca M. Cornero, Leigh Ann Hartsfield, Charlotte Mulligan, and Irene M. Pepperberg. Cornero was primarily responsible for the statistical analysis; I reviewed the analysis code and was present for some of the experimental trials.\n\nThe results were largely null: none of the four birds showed a statistically reliable preference consistent with the illusion. Two showed no significant pattern at all; the other two showed a preference that traced back almost entirely to a strong left- or right-side bias rather than to the illusion itself. The discussion works through several explanations — prior studies that had deliberately deceived these same birds may have taught them to distrust cups they couldn't fully inspect, they may have run informal \"contingency tests\" early on and learned both cups held equal juice, or the physical act of approaching and touching a tile may have shifted their viewing angle enough to break the illusion outright. A revised protocol is planned to test that last hypothesis directly.",
         tags: ["Animal Cognition", "Psychology Research", "Data Collection"],
@@ -534,7 +534,7 @@ private void UpdateLineRenderer() {
       {
         title: "Contrafreeloading in Grey Parrots",
         description:
-          "Helped keep a PhD student's (Alana Carroll) contrafreeloading study running at The Alex Foundation while she was away — testing whether Grey parrots prefer to work for food over identical food that's freely available.",
+          "Would you rather work for your food, or eat the same thing for free? Grey parrots have opinions — I helped keep this study running at The Alex Foundation.",
         details:
           "A study at The Alex Foundation (Dr. Irene Pepperberg's lab) led by PhD student Alana Carroll, looking at contrafreeloading in Grey parrots — the well-documented phenomenon, seen across many species, where animals given a choice will sometimes prefer to \"work\" for food (e.g., extracting it from something) over eating identical food that's freely available. I helped keep data collection running for the study while Alana was away.\n\nBirds (Athena, Franco, Griffin, Lucci, and Pepper) chose between food presented loose on a tray versus food wrapped in scrunched-up paper they had to work to open, across three condition types — \"super,\" \"classic,\" and \"calculated.\" A separate round of food-preference testing (pairwise choices between items like almonds, cashews, pecans, crackers, cereal, and safflower seed) was run per bird beforehand, so each parrot's trials used food it was already known to prefer.\n\nThe design builds on two prior contrafreeloading studies from the same lab: Smith, Bastos, Taylor & Pepperberg (2022, Scientific Reports), comparing kea to Grey parrots, and Carroll & Pepperberg (2024/2025, Journal of Comparative Psychology), comparing umbrella cockatoos to Grey parrots. A paper specific to this round of Grey parrot data hasn't come out yet, as far as I can find — I'm trying to track down its status.",
         tags: ["Animal Cognition", "Data Collection", "Psychology Research"],
@@ -551,7 +551,7 @@ private void UpdateLineRenderer() {
       {
         title: "Cognitive Flexibility Research",
         description:
-          "Research internship at the Clinical and Cognitive Neuroscience Lab (UGA), studying cognitive flexibility with an EEG eye-tracking paradigm. Co-authored work submitted to the Cognitive Neuroscience Society's 2023 meeting.",
+          "An EEG eye-tracking internship studying how the brain shifts gears — co-authored work submitted to the Cognitive Neuroscience Society.",
         featured: true,
         details:
           "An internship at the Clinical and Cognitive Neuroscience Lab at the University of Georgia, run by Dr. McDowell and Dr. Clemenz, working under grad student mentor Beryl Huang on her cognitive flexibility research in young adults. The lab's broader work spans schizophrenia, sensory processing, and aging, using MRI, fMRI, EEG, and eye-tracking.\n\nMy role centered on the technical side of an EEG eye-tracking paradigm: setting up and troubleshooting the hardware, running timing tests, calibrating the eye tracker, and helping design the study's preregistration. I also picked up R to build a script that converts raw eye-movement data (recorded per participant as a large Excel export) into clean PDF reports of eye position and velocity over time — the processing pipeline the study now uses for every participant. Later on I was trained to score EEG data by hand as well, ahead of full-scale data collection.\n\nThe project — an interactive ocular motor set-shifting task designed to evoke distinct electrophysiological markers across stages of cognitive flexibility — was submitted to the Cognitive Neuroscience Society's 2023 meeting with me as a co-author.\n\nOutside the core project, I sat in on other work in the lab (a clozapine drug trial using EEG and eye-tracking, an fMRI study of brain structure in psychosis) and gave weekly presentations to my mentor on assigned and self-chosen readings — a big part of how I found the areas of psychology (autism, executive function, theory of mind) I'm most interested in continuing to explore.",
@@ -570,7 +570,7 @@ private void UpdateLineRenderer() {
       {
         title: "Bird Call Classification Research",
         description:
-          "Remote undergraduate research assistant position at the Cornell Lab of Ornithology, using R to clean a large bird call database and build classification pipelines for chickadee vocalizations — work that became a co-authored paper published in Ecology.",
+          "Do chickadees change their calls when a hawk is nearby? Cornell Lab of Ornithology research I helped turn into a co-authored paper, published in Ecology.",
         details:
           "A remote research position at the Cornell Lab of Ornithology, working under Connor Wood and Michael Pardo at the K. Lisa Yang Center for Conservation Bioacoustics on a large bird call database. I used R to clean and optimize the dataset, improving how efficiently it could be accessed for later machine learning work, and built an unsupervised classification cluster analysis using feature embeddings in R to categorize chickadee vocalizations — cutting down the human hours needed to process large amounts of audio data. I also wrote R code to identify the ratios of different chickadee call types within complex datasets, helping distinguish call patterns, and manually identified call types from large audio datasets by hand to help verify and validate the automated analysis tools.\n\nMuch of the pipeline work involved filtering huge detection sets down to something usable: matching site/date combinations against a curated set of goshawk-call mornings, applying BirdNET confidence thresholds (pr(tp) > 0.90/0.95/0.975/0.99) to control for false positives, restricting to a consistent early-morning window to avoid conflating dawn and dusk vocal activity, and setting minimum call-count cutoffs per site/day. From there I generated before/after interval ratio comparisons — like the ones below — to look at how chickadee call rates shifted around a goshawk detection.\n\nThat work became a co-authored paper, \"Passive acoustic monitoring reveals surprising patterns of avian community antipredator behavior at a regional scale,\" accepted into Ecology on January 29, 2026 and since published.",
         tags: ["R", "Data Cleaning", "Cluster Analysis", "Machine Learning", "Bioacoustics"],
@@ -599,7 +599,7 @@ private void UpdateLineRenderer() {
       {
         title: "In which illness is a dull red thing with feathers",
         description:
-          "Poem published in Laurel Moon, Brandeis' undergraduate literary magazine — winner of the Andrew Grossbardt Poetry Prize.",
+          "A prize-winning poem about illness, published in Laurel Moon.",
         tags: ["Poetry"],
         link: "https://www.laurelmoonmag.com/riley-byers-in-which-illness-is-a-dull-thing-with-feathers",
         linkLabel: "Read on Laurel Moon",
@@ -609,7 +609,7 @@ private void UpdateLineRenderer() {
       },
       {
         title: "Achieving Godhood",
-        description: "Prose piece published in The Cairn, an online literary and arts journal.",
+        description: "A prose piece about becoming something more — published in The Cairn.",
         tags: ["Prose"],
         tagLabel: "Prose",
         year: "2024",
@@ -619,7 +619,7 @@ private void UpdateLineRenderer() {
       {
         title: "A Gull Calls Me",
         description:
-          "Poem published (under the pen name Anonymous) in Touch Grass: Antelope Hill Writing Competition 2023, an anthology from Antelope Hill Publishing.",
+          "A poem I published under a pen name — included in the Touch Grass anthology.",
         tags: ["Poetry"],
         tagLabel: "Poetry",
         year: "2023",
@@ -629,7 +629,7 @@ private void UpdateLineRenderer() {
       {
         title: "I am unsure of the validity of my claims",
         description:
-          "Seeking a publisher — a poetry chapbook exploring my relationship with truth and my memories.",
+          "A chapbook that interrogates my own memory — seeking a publisher.",
         tags: ["Poetry", "Chapbook"],
         tagLabel: "Poetry Chapbook",
         slug: "unsure-of-the-validity",
@@ -638,7 +638,7 @@ private void UpdateLineRenderer() {
       {
         title: "Sometimes It's All Consuming",
         description:
-          "Seeking a publisher — a chapbook exploring mental illness, identity, and my relationship to the external world.",
+          "A chapbook about the parts of my mind that don't stay quiet — seeking a publisher.",
         tags: ["Poetry", "Chapbook"],
         tagLabel: "Poetry Chapbook",
         image: "/write/sometimes-consuming/cover.jpg",
