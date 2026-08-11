@@ -58,31 +58,31 @@ const outlineColor = "rgba(250, 250, 250, 0.35)";
 const blobStyle = [
   {
     top: "34%",
-    left: "10%",
+    left: "6%",
     rotate: -18,
     tint: "bg-accent hover:brightness-110",
     text: "text-ink",
     hoverText: "group-hover:text-[#FF7A1A]",
   },
   {
-    top: "30%",
-    left: "66%",
+    top: "28%",
+    left: "90%",
     rotate: 13,
     tint: "bg-surface2 hover:bg-white/10",
     text: "text-paper",
     hoverText: "group-hover:text-accent",
   },
   {
-    top: "56%",
-    left: "38%",
+    top: "58%",
+    left: "48%",
     rotate: -15,
     tint: "bg-accent2 hover:brightness-110",
     text: "text-ink",
     hoverText: "group-hover:text-accent",
   },
   {
-    top: "76%",
-    left: "14%",
+    top: "78%",
+    left: "10%",
     rotate: 20,
     tint: "hover:brightness-110",
     tintStyle: { backgroundColor: brightOrange },
@@ -90,8 +90,8 @@ const blobStyle = [
     hoverText: "group-hover:text-accent2",
   },
   {
-    top: "72%",
-    left: "68%",
+    top: "74%",
+    left: "88%",
     rotate: -12,
     tint: "bg-paper hover:brightness-95",
     text: "text-ink",
@@ -133,7 +133,7 @@ export default function Disciplines() {
       // add visible extra empty space beyond what the content needs.
       className="relative z-20 -mt-[70vh] min-h-[85vh] scroll-mt-6 rounded-t-[3rem] bg-ink px-6 pb-16 pt-10 text-center sm:pt-14"
     >
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-7xl">
         <h2 className="mb-6 text-sm font-medium uppercase tracking-widest text-muted">
           Explore my work by discipline
         </h2>
