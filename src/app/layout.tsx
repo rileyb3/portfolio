@@ -18,6 +18,8 @@ const spaceGrotesk = Space_Grotesk({
   variable: "--font-display",
 });
 
+// Deploy test — confirming the GitHub -> Vercel webhook is delivering
+// again after a push earlier didn't trigger a build. Safe to remove.
 const title = "Riley Byers — Portfolio";
 const description =
   "Portfolio of Riley Byers — software, design, games, research, and writing.";
