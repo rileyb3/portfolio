@@ -44,52 +44,55 @@ const starClipPath =
 const brightOrange = "#FF7A1A";
 const outlineColor = "rgba(250, 250, 250, 0.35)";
 
-// Rotation + x/y offset per tile so the row reads as scattered/eccentric
-// in its placement, feeding a single JS-computed transform (see render)
-// rather than Tailwind's rotate-*/translate-* utilities, since those and
-// an inline `style.transform` would fight over the same CSS property —
-// inline style always wins, silently no-op'ing the classes. Every tile
-// also gets a real hover color shift on its icon/label now (cross-mixed
-// with the palette — green tile hovers orange, blue tile hovers green,
-// etc.) instead of some tiles just staying put.
+// Each tile gets an explicit (top%, left%) position within a tall relative
+// canvas (see JSX below) instead of sitting in one horizontal row — that's
+// what actually fills the empty space above/below a single centered row.
+// Positions are staggered corner/center/corner/corner/corner-ish across the
+// full canvas so the whole area reads as occupied. rotate feeds a single
+// JS-computed transform (see render) rather than Tailwind's rotate-*
+// utilities, since those and an inline `style.transform` would fight over
+// the same CSS property — inline style always wins, silently no-op'ing the
+// classes. Every tile also gets a real hover color shift on its icon/label
+// (cross-mixed with the palette — green tile hovers orange, blue tile
+// hovers green, etc.) instead of some tiles just staying put.
 const blobStyle = [
   {
+    top: "10%",
+    left: "12%",
     rotate: -18,
-    x: -30,
-    y: -20,
     tint: "bg-accent hover:brightness-110",
     text: "text-ink",
     hoverText: "group-hover:text-[#FF7A1A]",
   },
   {
+    top: "6%",
+    left: "68%",
     rotate: 13,
-    x: 34,
-    y: 60,
     tint: "bg-surface2 hover:bg-white/10",
     text: "text-paper",
     hoverText: "group-hover:text-accent",
   },
   {
+    top: "42%",
+    left: "38%",
     rotate: -15,
-    x: -42,
-    y: -56,
     tint: "bg-accent2 hover:brightness-110",
     text: "text-ink",
     hoverText: "group-hover:text-accent",
   },
   {
+    top: "72%",
+    left: "10%",
     rotate: 20,
-    x: 44,
-    y: 34,
     tint: "hover:brightness-110",
     tintStyle: { backgroundColor: brightOrange },
     text: "text-ink",
     hoverText: "group-hover:text-accent2",
   },
   {
+    top: "68%",
+    left: "70%",
     rotate: -12,
-    x: 10,
-    y: -72,
     tint: "bg-paper hover:brightness-95",
     text: "text-ink",
     hoverText: "group-hover:text-accent",
@@ -123,20 +126,23 @@ export default function Disciplines() {
       ref={ref}
       // min-h-[110vh] is load-bearing, not decorative: this section rides up
       // over Hero via -mt-[70vh] and (at z-20, above Hero's z-10) is what
-      // hides Hero's sticky name/photo once you scroll past it. Bumped up
-      // again alongside the bigger, more-widely-scattered shapes (now
-      // offset up to ±72px vertically) so there's still headroom above the
-      // required 70vh cover.
-      className="relative z-20 -mt-[70vh] flex min-h-[110vh] scroll-mt-6 flex-col justify-center rounded-t-[3rem] bg-ink px-6 pb-24 pt-6 text-center sm:pb-32 sm:pt-8"
+      // hides Hero's sticky name/photo once you scroll past it. The canvas
+      // below is h-[90vh], which alone comfortably clears the required
+      // 70vh cover, so this is just a safety floor.
+      className="relative z-20 -mt-[70vh] min-h-[110vh] scroll-mt-6 rounded-t-[3rem] bg-ink px-6 pb-16 pt-10 text-center sm:pt-14"
     >
       <div className="mx-auto max-w-6xl">
-        <h2 className="mb-16 text-sm font-medium uppercase tracking-widest text-muted">
+        <h2 className="mb-6 text-sm font-medium uppercase tracking-widest text-muted">
           Explore my work by discipline
         </h2>
-        <div className="mx-auto flex w-full flex-wrap items-center justify-center gap-x-16 gap-y-20 sm:gap-x-10 lg:justify-between">
+        {/* Relative canvas the tiles are pinned into by (top%, left%) — this
+            is what actually fills the empty space, versus a single row
+            that only ever occupies one horizontal band no matter how much
+            room it's given. */}
+        <div className="relative mx-auto h-[80vh] w-full sm:h-[85vh]">
           {tiles.map((tile, i) => {
             const Icon = iconMap[tile.id] ?? Images;
-            const { rotate, x, y, tint, tintStyle, text, hoverText } =
+            const { top, left, rotate, tint, tintStyle, text, hoverText } =
               blobStyle[i % blobStyle.length];
             const entranceScale = visible ? 1 : 0.85;
             const hoverScale = hoveredId === tile.id ? 1.1 : 1;
@@ -147,16 +153,16 @@ export default function Disciplines() {
                 onMouseEnter={() => setHoveredId(tile.id)}
                 onMouseLeave={() => setHoveredId(null)}
                 style={{
+                  top,
+                  left,
                   transitionDelay: visible ? `${i * 60}ms` : "0ms",
                   clipPath: starClipPath,
                   backgroundColor: outlineColor,
-                  transform: `translate(${x}px, ${
-                    visible ? y : y + 16
-                  }px) rotate(${rotate}deg) scale(${
+                  transform: `translate(-50%, -50%) rotate(${rotate}deg) scale(${
                     entranceScale * hoverScale
                   })`,
                 }}
-                className={`group flex aspect-square w-48 shrink-0 p-[3px] transition-all duration-500 ease-out sm:w-56 lg:w-64 ${
+                className={`group absolute flex aspect-square w-40 shrink-0 p-[3px] transition-all duration-500 ease-out sm:w-52 lg:w-60 ${
                   visible ? "opacity-100" : "opacity-0"
                 }`}
               >
