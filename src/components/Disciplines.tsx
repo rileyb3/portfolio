@@ -28,79 +28,64 @@ const tiles = categories.map((c) => ({
   id: c.id,
 }));
 
-// One uniform pointed, irregular, star-like outline — same shape and size
-// for every tile now. The chaos lives in each tile's position/rotation
-// (below), not in shape or size variety. Hand-tweaked so the points land
-// at uneven distances/angles rather than a clean 5-point star.
-const starClipPath =
-  "polygon(50% 0%, 63% 32%, 95% 15%, 72% 48%, 100% 62%, 65% 65%, 75% 100%, 50% 75%, 25% 100%, 35% 65%, 0% 62%, 28% 48%, 5% 15%, 37% 32%)";
+// Five distinct irregular, spiky, non-uniform star outlines — unlike the
+// old single shared shape, each tile now gets its own hand-varied polygon
+// (different point count, different spike lengths/angles) so the cluster
+// reads as genuinely irregular rather than one stencil rotated five times.
+const starShapes = [
+  "polygon(48% 0%, 66% 28%, 100% 10%, 74% 44%, 96% 68%, 60% 58%, 82% 96%, 46% 70%, 40% 100%, 30% 62%, 4% 80%, 22% 42%, 0% 20%, 34% 30%)",
+  "polygon(55% 2%, 70% 30%, 92% 4%, 68% 42%, 100% 55%, 62% 60%, 70% 92%, 42% 68%, 34% 100%, 28% 66%, 0% 70%, 24% 40%, 8% 8%, 40% 24%)",
+  "polygon(40% 0%, 60% 24%, 88% 0%, 66% 38%, 100% 44%, 58% 56%, 92% 82%, 48% 64%, 52% 100%, 32% 60%, 10% 92%, 20% 46%, 0% 30%, 28% 34%)",
+  "polygon(50% 4%, 64% 34%, 96% 20%, 70% 50%, 100% 74%, 56% 62%, 66% 100%, 40% 72%, 36% 100%, 26% 64%, 0% 58%, 20% 40%, 6% 6%, 38% 22%)",
+  "polygon(46% 0%, 68% 26%, 94% 6%, 70% 40%, 100% 60%, 60% 54%, 78% 100%, 44% 66%, 42% 96%, 24% 58%, 2% 76%, 22% 38%, 0% 12%, 32% 28%)",
+];
 
 // A clip-path shape like this doesn't play well with a CSS border (the
 // border box is rectangular and gets chopped at odd angles) — instead each
-// tile is two nested elements sharing the same clip-path: an outer one
-// filled with the outline color, and an inset inner one (via padding)
-// filled with the tile's real color, so the outline color shows through
-// as a thin uniform ring around the star.
-const brightOrange = "#FF7A1A";
-const outlineColor = "rgba(250, 250, 250, 0.35)";
+// tile is two nested elements sharing its own clip-path: an outer one
+// filled solid white (the page background), and an inset inner one (via
+// padding) filled with the tile's gradient, so wherever two tiles overlap,
+// the opaque white ring shows through as a clean gap between them — the
+// "gaps where they overlap" effect — rather than the colors muddying
+// together.
+const outlineColor = "#ffffff";
 
-// Each tile gets an explicit (top%, left%) position within a tall relative
-// canvas (see JSX below) instead of sitting in one horizontal row — that's
-// what actually fills the empty space above/below a single centered row.
-// Positions are staggered corner/center/corner/corner/corner-ish across the
-// full canvas so the whole area reads as occupied. rotate feeds a single
-// JS-computed transform (see render) rather than Tailwind's rotate-*
-// utilities, since those and an inline `style.transform` would fight over
-// the same CSS property — inline style always wins, silently no-op'ing the
-// classes. Every tile also gets a real hover color shift on its icon/label
-// (cross-mixed with the palette — green tile hovers orange, blue tile
-// hovers green, etc.) instead of some tiles just staying put.
-// Zigzagging x positions (12/30/50/68/86%) with alternating high/low y —
-// rather than the previous "pair left, pair right, one lonely in the
-// middle" layout, which read as three isolated clusters with huge dead
-// gaps between them. Bigger tiles (see render) + this even stagger is what
-// actually closes up the black space.
+// Bright, non-uniform gradients per tile — genuinely different hues rather
+// than tints of the same accent, per "bright colors" + "gradient". rotate
+// feeds a single JS-computed transform (see render) rather than Tailwind's
+// rotate-* utilities, since those and an inline `style.transform` would
+// fight over the same CSS property — inline style always wins, silently
+// no-op'ing the classes.
 const blobStyle = [
   {
-    top: "30%",
-    left: "12%",
-    rotate: -18,
-    tint: "bg-accent hover:brightness-110",
-    text: "text-ink",
-    hoverText: "group-hover:text-[#FF7A1A]",
-  },
-  {
-    top: "64%",
-    left: "30%",
-    rotate: 13,
-    tint: "bg-surface2 hover:bg-white/10",
-    text: "text-paper",
-    hoverText: "group-hover:text-accent",
-  },
-  {
-    top: "32%",
-    left: "50%",
-    rotate: -15,
-    tint: "bg-accent2 hover:brightness-110",
-    text: "text-ink",
-    hoverText: "group-hover:text-accent",
-  },
-  {
-    top: "66%",
-    left: "70%",
-    rotate: 20,
-    tint: "hover:brightness-110",
-    tintStyle: { backgroundColor: brightOrange },
-    text: "text-ink",
-    hoverText: "group-hover:text-accent2",
+    top: "38%",
+    left: "20%",
+    rotate: -16,
+    gradient: "linear-gradient(135deg, #C8FF3D 0%, #FFD23D 55%, #FF6EC7 100%)",
   },
   {
     top: "30%",
-    left: "88%",
-    rotate: -12,
-    tint: "bg-paper hover:brightness-95",
-    text: "text-ink",
-    hoverText: "group-hover:text-[#FF7A1A]",
+    left: "42%",
+    rotate: 10,
+    gradient: "linear-gradient(140deg, #FF6EC7 0%, #FF9A3D 60%, #FFD23D 100%)",
+  },
+  {
+    top: "56%",
+    left: "38%",
+    rotate: -10,
+    gradient: "linear-gradient(160deg, #3DFFE0 0%, #7DFFA3 100%)",
+  },
+  {
+    top: "46%",
+    left: "62%",
+    rotate: 18,
+    gradient: "linear-gradient(180deg, #3DD1FF 0%, #7DD3FC 55%, #8FA89B 100%)",
+  },
+  {
+    top: "62%",
+    left: "58%",
+    rotate: -14,
+    gradient: "linear-gradient(135deg, #3DD1FF 0%, #7DD3FC 50%, #7DFFA3 100%)",
   },
 ];
 
@@ -135,25 +120,28 @@ export default function Disciplines() {
       // canvas below (h-[60-70vh] depending on breakpoint) plus its own
       // padding/heading already clears the required 70vh on its own — this
       // floor only kicks in on unusually short viewports, so it shouldn't
-      // add visible extra empty space beyond what the content needs.
-      className="relative z-20 -mt-[70vh] min-h-[85vh] scroll-mt-6 rounded-t-[3rem] bg-ink px-6 pb-16 pt-10 text-center sm:pt-14"
+      // add visible extra empty space beyond what the content needs. bg-paper
+      // matches Hero above it — this and Hero are a deliberate light
+      // "opening chapter"; everything from AccentBand down stays on the
+      // original dark theme, untouched.
+      className="relative z-20 -mt-[70vh] min-h-[85vh] scroll-mt-6 rounded-t-[3rem] bg-paper px-6 pb-16 pt-10 text-center sm:pt-14"
     >
       <div className="mx-auto max-w-6xl">
         <h2 className="mb-6 text-sm font-medium uppercase tracking-widest text-muted">
           Explore my work by discipline
         </h2>
-        {/* Relative canvas the tiles are pinned into by (top%, left%) — this
-            is what actually fills the empty space, versus a single row
-            that only ever occupies one horizontal band no matter how much
-            room it's given. Positions all stay well below 0% so nothing
-            ever rises above this heading. */}
+        {/* Relative canvas the tiles are pinned into by (top%, left%) —
+            positioned close enough together on purpose now that the stars
+            overlap, so the white outline ring between them reads as
+            deliberate gaps rather than a random scatter. */}
         <div className="relative mx-auto h-[60vh] w-full sm:h-[65vh] lg:h-[70vh]">
           {tiles.map((tile, i) => {
             const Icon = iconMap[tile.id] ?? Images;
-            const { top, left, rotate, tint, tintStyle, text, hoverText } =
+            const shape = starShapes[i % starShapes.length];
+            const { top, left, rotate, gradient } =
               blobStyle[i % blobStyle.length];
             const entranceScale = visible ? 1 : 0.85;
-            const hoverScale = hoveredId === tile.id ? 1.1 : 1;
+            const hoverScale = hoveredId === tile.id ? 1.08 : 1;
             return (
               <Link
                 key={tile.id}
@@ -163,28 +151,27 @@ export default function Disciplines() {
                 style={{
                   top,
                   left,
+                  zIndex: hoveredId === tile.id ? 10 : i,
                   transitionDelay: visible ? `${i * 60}ms` : "0ms",
-                  clipPath: starClipPath,
+                  clipPath: shape,
                   backgroundColor: outlineColor,
                   transform: `translate(-50%, -50%) rotate(${rotate}deg) scale(${
                     entranceScale * hoverScale
                   })`,
                 }}
-                className={`group absolute flex aspect-square w-48 shrink-0 p-[3px] transition-all duration-500 ease-out sm:w-64 lg:w-72 ${
+                className={`group absolute flex aspect-square w-40 shrink-0 p-[5px] transition-all duration-500 ease-out sm:w-52 lg:w-60 ${
                   visible ? "opacity-100" : "opacity-0"
                 }`}
               >
                 <div
-                  style={{ clipPath: starClipPath, ...tintStyle }}
-                  className={`flex h-full w-full flex-col items-center justify-center gap-3 p-8 text-center transition-colors duration-300 ${tint} ${text}`}
+                  style={{ clipPath: shape, background: gradient }}
+                  className="flex h-full w-full flex-col items-center justify-center gap-3 p-8 text-center text-ink"
                 >
                   <Icon
-                    className={`h-12 w-12 transition-colors duration-300 sm:h-14 sm:w-14 ${hoverText}`}
+                    className="h-10 w-10 transition-transform duration-300 group-hover:scale-110 sm:h-12 sm:w-12"
                     strokeWidth={1.5}
                   />
-                  <span
-                    className={`text-base font-semibold leading-snug transition-colors duration-300 sm:text-lg ${hoverText}`}
-                  >
+                  <span className="text-base font-semibold leading-snug sm:text-lg">
                     {tile.label}
                   </span>
                 </div>
