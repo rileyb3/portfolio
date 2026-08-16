@@ -11,7 +11,7 @@ export default function SelectedWorks() {
         {featuredProjects.map((project) => (
           <div
             key={`${project.categoryId}-${project.title}`}
-            className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-surface transition hover:border-white/20 hover:bg-surface2"
+            className="group relative flex flex-col overflow-hidden rounded-2xl border border-ink/10 bg-ink/[0.03] transition hover:border-ink/20 hover:bg-ink/[0.06]"
           >
             {/* Stretched link: makes the whole card clickable to the project,
                 while the category label below stays its own, higher, clickable link. */}
@@ -21,7 +21,7 @@ export default function SelectedWorks() {
               aria-label={project.title}
             />
             {project.image && (
-              <div className="aspect-video w-full overflow-hidden border-b border-white/10 bg-surface2">
+              <div className="aspect-video w-full overflow-hidden border-b border-ink/10 bg-ink/[0.06]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={project.image}
@@ -34,7 +34,7 @@ export default function SelectedWorks() {
               <div className="flex items-baseline justify-between gap-2">
                 <Link
                   href={`/${project.categoryId}`}
-                  className="relative z-10 text-xs uppercase tracking-widest text-muted transition hover:text-accent hover:underline"
+                  className="relative z-10 text-xs uppercase tracking-widest text-muted transition hover:text-ink hover:underline"
                 >
                   {project.tagLabel ?? project.categoryLabel}
                 </Link>
@@ -44,7 +44,7 @@ export default function SelectedWorks() {
                   </span>
                 )}
               </div>
-              <h3 className="mt-2 font-semibold text-paper group-hover:text-accent">
+              <h3 className="mt-2 font-semibold text-ink">
                 {project.title}
               </h3>
               <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">

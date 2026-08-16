@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { profile } from "@/data/projects";
+import Link from "next/link";
+import { profile, categories } from "@/data/projects";
 
 // White-theme, Akihiko/Palmer-inspired redesign of the landing hero — this
 // (plus Disciplines.tsx below it) is deliberately scoped as its own light
@@ -19,86 +20,65 @@ export default function Hero() {
   // scroll event — that clamp-on-event approach was what caused the
   // abrupt "hits max drift and instantly freezes" stop.
   const [photoOffset, setPhotoOffset] = useState(0);
-  // Drives the name's color shift as Disciplines covers it — "Riley"
-  // fades ink -> accent green (stays a color pop), "Byers" fades ink ->
-  // paper (dissolves into the incoming white section), so the whole thing
-  // has settled into its final state before Disciplines' rise physically
-  // clips it. Same mechanic as the old dark version, just inverted: there
-  // it faded white->green / white->ink to hide against an ink section;
-  // here it fades ink->green / ink->paper to hide against a paper one.
-  const [coverProgress, setCoverProgress] = useState(0);
 
   useEffect(() => {
     let raf = 0;
     let current = 0;
     function frame() {
-      const vh = window.innerHeight;
       const scrollY = window.scrollY;
-
+      const vh = window.innerHeight;
       const maxDrift = vh * 0.3;
       const target = -Math.min(scrollY * 0.3, maxDrift);
       current += (target - current) * 0.08; // lerp factor — lower = softer/laggier
       setPhotoOffset(current);
-
-      // The name rises up from just below the fold before locking (see
-      // the wrapper/h1 markup below) — it locks at scrollY≈10vh.
-      // Disciplines arrives at ~38vh and fully occludes the name at
-      // ~78vh (see comments below / in Disciplines.tsx) — coverEnd here
-      // is deliberately set to the halfway point of that range (~58vh)
-      // rather than 78vh, so the color has already finished fading by
-      // the time occlusion is only half done.
-      const coverStart = vh * 0.38;
-      const coverEnd = vh * 0.58;
-      const progress = Math.min(
-        Math.max((scrollY - coverStart) / (coverEnd - coverStart), 0),
-        1
-      );
-      setCoverProgress(progress);
-
       raf = requestAnimationFrame(frame);
     }
     raf = requestAnimationFrame(frame);
     return () => cancelAnimationFrame(raf);
   }, []);
 
-  function mix(
-    from: { r: number; g: number; b: number },
-    to: { r: number; g: number; b: number },
-    t: number
-  ) {
-    return `rgb(${Math.round(from.r + (to.r - from.r) * t)}, ${Math.round(
-      from.g + (to.g - from.g) * t
-    )}, ${Math.round(from.b + (to.b - from.b) * t)})`;
-  }
-  const ink = { r: 0x0a, g: 0x0a, b: 0x0a };
-  const green = { r: 0xc8, g: 0xff, b: 0x3d }; // accent
-  const paper = { r: 0xfa, g: 0xfa, b: 0xfa };
-  const firstColor = mix(ink, green, coverProgress);
-  const lastColor = mix(ink, paper, coverProgress);
-  const [firstName, lastName] = profile.name.split(" ");
-
   return (
     // Outer section is taller than one screen — that extra height is the
     // runway the sticky photo holds, and separately the runway the name's
     // own wrapper (below) holds before it releases too.
     <section id="top" className="relative h-[208vh]">
-      <div className="sticky top-0 h-screen overflow-hidden bg-paper">
+      <div
+        className="sticky top-0 h-screen overflow-hidden"
+        // White at the top (where the meta row + photo card sit) fading
+        // down to black by the bottom (where the name lives) — the name
+        // is fixed white text now (no more color animation), and this
+        // gradient is what makes white-on-white at the top vs. white text
+        // reading cleanly lower down both work, with a soft transition
+        // between rather than a hard cut.
+        style={{
+          background:
+            "linear-gradient(to bottom, #fafafa 0%, #fafafa 55%, #0a0a0a 100%)",
+        }}
+      >
         {/* Meta row — the "Quick Links / Based in Tokyo, Art Director"
-            beat from the reference, adapted: disciplines on the left,
-            tagline on the right. Header already provides real nav, so
-            this row is atmosphere, not navigation. */}
+            beat from the reference, adapted into real, clickable nav
+            (each discipline links to its own page) rather than inert
+            decoration. */}
         <div className="absolute inset-x-0 top-0 z-20 flex items-center justify-between px-6 pt-8 text-[0.65rem] font-medium uppercase tracking-[0.2em] text-muted sm:px-10 sm:pt-10 sm:text-xs">
-          <span>Build · Design · Play · Discover · Write</span>
+          <ul className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            {categories.map((c, i) => (
+              <li key={c.id} className="flex items-center gap-2">
+                {i > 0 && <span aria-hidden="true">·</span>}
+                <Link href={`/${c.id}`} className="transition hover:text-ink">
+                  {c.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
           <span className="hidden max-w-xs text-right sm:block">
             {profile.tagline}
           </span>
         </div>
 
-        {/* Photo: a bounded, framed card in the upper right — replacing
-            the old full-bleed panel — with a soft blue/green glow behind
-            it for an "ocean, not literal" feel rather than a flat cutout
-            edge. Card + glow move together with the same parallax drift
-            the old full-bleed photo used. */}
+        {/* Photo: a bounded, framed card in the upper right, with a soft
+            blue/green glow behind it for an "ocean, not literal" feel
+            rather than a flat cutout edge. Card + glow move together with
+            the same parallax drift the old full-bleed photo used. */}
         <div
           className="absolute right-6 top-24 z-10 will-change-transform sm:right-10 sm:top-28"
           style={{ transform: `translateY(${photoOffset}px)` }}
@@ -124,13 +104,13 @@ export default function Hero() {
           threshold below (top-[60%] = 60vh) at scrollY≈10vh, where it
           locks. Plain live text, sized big enough that it runs off both
           edges of the screen — globals.css sets overflow-x:hidden so that
-          doesn't create a horizontal scrollbar. Stays locked and
-          untouched until Disciplines (below, -mt-[70vh]) starts arriving
-          around scroll≈38vh, then fully occludes it shortly after. */}
+          doesn't create a horizontal scrollbar. Fixed white, no color
+          animation — it sits in the black portion of the gradient above,
+          so it's legible without needing to shift color as Disciplines
+          (below, -mt-[70vh]) rises to cover it around scroll≈38-78vh. */}
       <div className="absolute inset-x-0 top-[70vh] z-10 h-[138vh]">
-        <h1 className="pointer-events-none sticky top-[60%] mx-auto w-fit whitespace-nowrap font-sans text-5xl font-semibold leading-none tracking-tight sm:text-[12rem] lg:text-[15rem]">
-          <span style={{ color: firstColor }}>{firstName}</span>{" "}
-          <span style={{ color: lastColor }}>{lastName}</span>
+        <h1 className="pointer-events-none sticky top-[60%] mx-auto w-fit whitespace-nowrap font-sans text-5xl font-semibold leading-none tracking-tight text-paper sm:text-[12rem] lg:text-[15rem]">
+          {profile.name}
         </h1>
       </div>
     </section>

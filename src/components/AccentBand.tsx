@@ -5,7 +5,7 @@ export default function AccentBand() {
   return (
     <div
       aria-hidden
-      className="relative h-24 w-full overflow-hidden border-y border-white/15 bg-ink sm:h-32"
+      className="relative h-24 w-full overflow-hidden border-y border-ink/10 bg-paper sm:h-32"
       style={{
         backgroundImage: [
           "radial-gradient(38% 70% at 12% 40%, rgba(200,255,61,0.85) 0%, rgba(200,255,61,0) 70%)",
