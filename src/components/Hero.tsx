@@ -42,19 +42,7 @@ export default function Hero() {
     // runway the sticky photo holds, and separately the runway the name's
     // own wrapper (below) holds before it releases too.
     <section id="top" className="relative h-[208vh]">
-      <div
-        className="sticky top-0 h-screen overflow-hidden"
-        // White at the top (where the meta row + photo card sit) fading
-        // down to black by the bottom (where the name lives) — the name
-        // is fixed white text now (no more color animation), and this
-        // gradient is what makes white-on-white at the top vs. white text
-        // reading cleanly lower down both work, with a soft transition
-        // between rather than a hard cut.
-        style={{
-          background:
-            "linear-gradient(to bottom, #fafafa 0%, #fafafa 55%, #0a0a0a 100%)",
-        }}
-      >
+      <div className="sticky top-0 h-screen overflow-hidden bg-paper">
         {/* Meta row — the "Quick Links / Based in Tokyo, Art Director"
             beat from the reference, adapted into real, clickable nav
             (each discipline links to its own page) rather than inert
@@ -104,12 +92,10 @@ export default function Hero() {
           threshold below (top-[60%] = 60vh) at scrollY≈10vh, where it
           locks. Plain live text, sized big enough that it runs off both
           edges of the screen — globals.css sets overflow-x:hidden so that
-          doesn't create a horizontal scrollbar. Fixed white, no color
-          animation — it sits in the black portion of the gradient above,
-          so it's legible without needing to shift color as Disciplines
-          (below, -mt-[70vh]) rises to cover it around scroll≈38-78vh. */}
+          doesn't create a horizontal scrollbar. Fixed black on the white
+          panel, no color animation. */}
       <div className="absolute inset-x-0 top-[70vh] z-10 h-[138vh]">
-        <h1 className="pointer-events-none sticky top-[60%] mx-auto w-fit whitespace-nowrap font-sans text-5xl font-semibold leading-none tracking-tight text-paper sm:text-[12rem] lg:text-[15rem]">
+        <h1 className="pointer-events-none sticky top-[60%] mx-auto w-fit whitespace-nowrap font-sans text-5xl font-semibold leading-none tracking-tight text-ink sm:text-[12rem] lg:text-[15rem]">
           {profile.name}
         </h1>
       </div>
