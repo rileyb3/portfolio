@@ -45,13 +45,13 @@ const starShapes = [
 // A clip-path shape like this doesn't play well with a CSS border (the
 // border box is rectangular and gets chopped at odd angles) — instead each
 // tile is two nested elements sharing its own clip-path: an outer one
-// filled solid white (the page background) and, via padding, a thick
-// visible margin, and an inset inner one filled with the tile's gradient.
-// Wherever two tiles overlap, that opaque white margin shows through as a
-// clean gap between them rather than the colors muddying — the padding
-// has to be chunky (not a hairline) for that gap to actually read at this
-// scale.
-const outlineColor = "#ffffff";
+// filled solid with the page background and, via padding, a thick visible
+// margin, and an inset inner one filled with the tile's gradient. Wherever
+// two tiles overlap, that opaque margin shows through as a clean gap
+// between them rather than the colors muddying — the padding has to be
+// chunky (not a hairline) for that gap to actually read at this scale.
+// Matches the page background (dark again, per the inverse-color flip).
+const outlineColor = "#0a0a0a";
 
 // Bright, non-uniform gradients per tile — genuinely different hues rather
 // than tints of the same accent, per "bright colors" + "gradient". rotate
@@ -122,12 +122,10 @@ export default function Disciplines() {
       // rides up over Hero via -mt-[40vh] (kept in sync with Hero's own
       // wrapper offset — see the comment there) and (at z-20, above Hero's
       // z-10) is what hides Hero's sticky name/photo once you scroll past
-      // it. bg-paper matches Hero above it — this and Hero are a deliberate
-      // light "opening chapter"; everything from AccentBand down now
-      // matches too (see those components), so the whole landing page reads
-      // as one consistent light theme, with only Header/About/Footer
-      // staying dark.
-      className="relative z-20 -mt-[40vh] min-h-[85vh] scroll-mt-6 rounded-t-[3rem] bg-paper px-6 pb-16 pt-10 text-center sm:pt-14"
+      // it. bg-ink matches Hero above it — the whole landing page is back
+      // to the original dark theme (inverse-color flip), consistent with
+      // every other route.
+      className="relative z-20 -mt-[40vh] min-h-[85vh] scroll-mt-6 rounded-t-[3rem] bg-ink px-6 pb-16 pt-10 text-center sm:pt-14"
     >
       <div className="mx-auto max-w-6xl">
         <h2 className="mb-6 text-sm font-medium uppercase tracking-widest text-muted">

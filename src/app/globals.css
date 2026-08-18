@@ -7,14 +7,12 @@ html {
 }
 
 body {
-  /* This is the homepage's default now — light theme. Every other route
-     (About, Experience, category pages, project pages) sets its own
-     explicit bg-ink on its <main>, so this only actually affects the
-     homepage sections that don't set their own background (Intro,
-     SelectedWorks, TechMarquee, Contact). Footer sets its own explicit
-     bg-ink too, so it stays dark everywhere, including under this. */
-  background-color: #fafafa;
-  color: #0a0a0a;
+  /* Back to dark — inverse of the white-theme experiment. Every route
+     already sets its own explicit bg-ink on its <main> anyway, so this
+     mainly matters for the homepage sections that don't set their own
+     background (Intro, SelectedWorks, TechMarquee, Contact). */
+  background-color: #0a0a0a;
+  color: #fafafa;
   /* The oversized hero name is allowed to bleed past the right edge on
      purpose (a visual scroll cue) — this keeps that from creating a
      horizontal scrollbar. */

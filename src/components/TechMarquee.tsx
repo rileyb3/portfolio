@@ -55,7 +55,7 @@ export default function TechMarquee() {
           {track.map((tool, i) => (
             <div
               key={`${tool.name}-${i}`}
-              className="flex shrink-0 items-center gap-3 rounded-full bg-ink px-6 py-4 text-base font-medium text-paper"
+              className="flex shrink-0 items-center gap-3 rounded-full bg-paper px-6 py-4 text-base font-medium text-ink"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img

@@ -4,14 +4,9 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { profile, categories } from "@/data/projects";
 
-// White-theme, Akihiko/Palmer-inspired redesign of the landing hero — this
-// (plus Disciplines.tsx below it) is deliberately scoped as its own light
-// "opening chapter": the rest of the site (Header, About, every other
-// section from AccentBand down) stays on the original dark theme
-// untouched, so this is a controlled experiment rather than a site-wide
-// re-theme. Header renders as an opaque dark bar regardless of what's
-// beneath it, so a light hero under a dark nav reads fine with no changes
-// there either.
+// Akihiko/Palmer-inspired redesign of the landing hero — inverse color
+// scheme again: dark panel, light name/text, white bar for contrast (the
+// white-theme experiment this started as has been flipped back to dark).
 export default function Hero() {
   // Photo drifts upward as you scroll, but slower than the page itself
   // (classic parallax). Uses a continuous rAF loop that eases the
@@ -42,7 +37,7 @@ export default function Hero() {
     // runway the sticky photo holds, and separately the runway the name's
     // own wrapper (below) holds before it releases too.
     <section id="top" className="relative h-[178vh]">
-      <div className="sticky top-0 h-screen overflow-hidden bg-paper">
+      <div className="sticky top-0 h-screen overflow-hidden bg-ink">
         {/* Meta row — the "Quick Links / Based in Tokyo, Art Director"
             beat from the reference, adapted into real, clickable nav
             (each discipline links to its own page) rather than inert
@@ -52,7 +47,7 @@ export default function Hero() {
             {categories.map((c, i) => (
               <li key={c.id} className="flex items-center gap-2">
                 {i > 0 && <span aria-hidden="true">·</span>}
-                <Link href={`/${c.id}`} className="transition hover:text-ink">
+                <Link href={`/${c.id}`} className="transition hover:text-paper">
                   {c.label}
                 </Link>
               </li>
@@ -63,7 +58,7 @@ export default function Hero() {
           </span>
         </div>
 
-        {/* Crisp black bar, true full viewport width, crossing the photo's
+        {/* Crisp bar, true full viewport width, crossing the photo's
             vertical center (with a slight downward nudge). This lives as a
             direct child of the sticky panel — not inside the small photo
             wrapper below — because an absolutely positioned element's
@@ -74,9 +69,11 @@ export default function Hero() {
             Sitting directly in the full-width sticky panel and using
             `inset-x-0` fixes that. z-0 keeps it below the photo (z-10) and
             above the plain background; it's static (no parallax) since a
-            full-bleed bar shouldn't jitter with the photo's own drift. */}
+            full-bleed bar shouldn't jitter with the photo's own drift.
+            White fill — the panel is dark now, so the bar needs to be the
+            light color to still read against it. */}
         <div
-          className="absolute inset-x-0 top-[225px] z-0 h-6 -translate-y-1/2 bg-ink sm:top-[312px] sm:h-8"
+          className="absolute inset-x-0 top-[225px] z-0 h-6 -translate-y-1/2 bg-paper sm:top-[312px] sm:h-8"
           aria-hidden="true"
         />
 
@@ -92,7 +89,7 @@ export default function Hero() {
             className="absolute -inset-10 -z-10 rounded-[3rem] bg-gradient-to-br from-accent2/50 via-accent/25 to-transparent blur-3xl"
             aria-hidden="true"
           />
-          <div className="absolute inset-0 overflow-hidden rounded-[2rem] shadow-2xl ring-1 ring-ink/10">
+          <div className="absolute inset-0 overflow-hidden rounded-[2rem] shadow-2xl ring-1 ring-white/10">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={profile.photoSrc}
@@ -112,9 +109,9 @@ export default function Hero() {
           138vh height), where it locks. Plain live text, sized big enough
           that it runs off both edges of the screen — globals.css sets
           overflow-x:hidden so that doesn't create a horizontal scrollbar.
-          Fixed black on the white panel, no color animation. */}
+          Fixed white on the dark panel, no color animation. */}
       <div className="absolute inset-x-0 top-[40vh] z-10 h-[138vh]">
-        <h1 className="pointer-events-none sticky top-[60%] mx-auto w-fit whitespace-nowrap font-sans text-5xl font-semibold leading-none tracking-tight text-ink sm:text-[12rem] lg:text-[15rem]">
+        <h1 className="pointer-events-none sticky top-[60%] mx-auto w-fit whitespace-nowrap font-sans text-5xl font-semibold leading-none tracking-tight text-paper sm:text-[12rem] lg:text-[15rem]">
           {profile.name}
         </h1>
       </div>
