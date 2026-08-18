@@ -36,9 +36,9 @@ const tiles = categories.map((c) => ({
 // color any given tile actually was.
 const blobStyle = [
   { gradient: "linear-gradient(135deg, #C8FF3D 0%, #C8FF3D 60%, #FFD23D 100%)" }, // build — chartreuse
-  { gradient: "linear-gradient(140deg, #FF6EC7 0%, #FF6EC7 60%, #C77DFF 100%)" }, // design — pink
+  { gradient: "linear-gradient(140deg, #E8A5C7 0%, #E8A5C7 60%, #FB923C 100%)" }, // design — muted pink, orange ombre
   { gradient: "linear-gradient(160deg, #2DD4BF 0%, #2DD4BF 60%, #7DD3FC 100%)" }, // play — teal
-  { gradient: "linear-gradient(180deg, #38BDF8 0%, #38BDF8 60%, #7DFFA3 100%)" }, // discover — blue
+  { gradient: "linear-gradient(180deg, #9CA3AF 0%, #9CA3AF 60%, #E5E7EB 100%)" }, // discover — grey
   { gradient: "linear-gradient(135deg, #FB923C 0%, #FB923C 60%, #FFD23D 100%)" }, // write — orange
 ];
 
