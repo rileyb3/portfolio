@@ -92,34 +92,48 @@ export default function Disciplines() {
             Explore my work by discipline
           </h2>
           {/* One row, fixed height, fixed per-tile layout width — nothing
-              ever actually reflows on hover anymore. The "grow" is a pure
-              CSS transform (scaleX) on the tile itself, which is what
-              guarantees genuinely symmetric growth around the tile's own
-              center: a transform is painted after layout and doesn't
-              push, pin, or get pinned by any neighbor or ancestor, unlike
-              a real width change (which is what was producing the
-              lopsided "grows left then right" — its right edge was
-              effectively anchored by the row's own alignment, so growth
-              could only really come from the left). The icon/label live
-              in a nested wrapper with the exact inverse scaleX, so they
-              render at their normal proportions instead of getting
-              horizontally stretched along with the tile's background. */}
+              ever actually reflows on hover; every bit of motion here is a
+              transform, on one of three stacked layers per tile, each with
+              its own independent transition so they don't have to share a
+              single duration:
+              1. This outer div — entrance only (translateY + scale, 1100ms).
+              2. The middle div below — the symmetric "shove" (translateX,
+                 500ms): every tile on the far side of the hovered one
+                 slides away by exactly half the hovered tile's growth, so
+                 neighbors genuinely get pushed apart instead of just
+                 sitting there while the hovered tile overlaps them.
+              3. The Link itself — the hovered tile's own growth (scaleX,
+                 500ms), centered via `origin-center` so it grows evenly in
+                 both directions from its own middle — which is exactly
+                 the amount of clearance the shove on layer 2 is making.
+              A transform-based shove like this (rather than a real width
+              change rippling through the row) is what makes the growth
+              symmetric in the first place — a real width change's growth
+              direction depends on the row's own alignment, not the tile's
+              center, which was the original "grows left then right" bug. */}
           <div className="flex h-56 items-stretch justify-center gap-3 sm:h-64 sm:justify-end sm:gap-4 lg:h-72">
             {tiles.map((tile, i) => {
               const Icon = iconMap[tile.id] ?? Images;
               const { gradient } = blobStyle[i % blobStyle.length];
-              const isActive = hoveredId === tile.id;
+              const hoveredIndex = tiles.findIndex((t) => t.id === hoveredId);
+              const isActive = i === hoveredIndex;
+              const isHovering = hoveredIndex !== -1;
               const entranceScale = visible ? 1 : 0.85;
               // Floats up from below into its resting spot on entrance —
               // combined with the per-tile stagger delay below, tiles
               // arrive one after another in sequence (build, design,
               // play...) so the reveal reads like a staircase rather than
-              // everything fading in at once. This wrapper only ever
-              // carries the entrance transform (translateY + scale) and
-              // opacity — the hover-driven scaleX lives one level down,
-              // on the tile itself, so the two animations don't have to
-              // share a single `transform` transition/duration.
+              // everything fading in at once.
               const entranceY = visible ? 0 : 180;
+              // Shove direction relative to whichever tile is hovered:
+              // half of the hovered tile's own growth (84px / 88px / 96px
+              // at base/sm/lg — half of 224-56, 256-80, 288-96), in
+              // whichever direction clears space for it.
+              const shoveClass = !isHovering || isActive
+                ? "translate-x-0"
+                : i < hoveredIndex
+                  ? "-translate-x-[84px] sm:-translate-x-[88px] lg:-translate-x-[96px]"
+                  : "translate-x-[84px] sm:translate-x-[88px] lg:translate-x-[96px]";
               return (
                 <div
                   key={tile.id}
@@ -131,41 +145,45 @@ export default function Disciplines() {
                     visible ? "opacity-100" : "opacity-0"
                   }`}
                 >
-                  <Link
-                    href={tile.href}
-                    onMouseEnter={() => setHoveredId(tile.id)}
-                    onMouseLeave={() => setHoveredId(null)}
-                    style={{ background: gradient }}
-                    className={`group relative flex h-56 w-14 origin-center transform-gpu flex-col items-center justify-center rounded-2xl p-3 text-center text-ink transition-transform duration-500 ease-out sm:h-64 sm:w-20 sm:rounded-3xl lg:h-72 lg:w-24 ${
-                      isActive
-                        ? "z-30 scale-x-[4] sm:scale-x-[3.2] lg:scale-x-[3]"
-                        : "z-0 scale-x-100"
-                    }`}
+                  <div
+                    className={`transform-gpu transition-transform duration-500 ease-out ${shoveClass}`}
                   >
-                    <div
-                      className={`flex origin-center transform-gpu flex-col items-center justify-center gap-2 transition-transform duration-500 ease-out sm:gap-3 ${
+                    <Link
+                      href={tile.href}
+                      onMouseEnter={() => setHoveredId(tile.id)}
+                      onMouseLeave={() => setHoveredId(null)}
+                      style={{ background: gradient }}
+                      className={`group relative flex h-56 w-14 origin-center transform-gpu flex-col items-center justify-center rounded-2xl p-3 text-center text-ink transition-transform duration-500 ease-out sm:h-64 sm:w-20 sm:rounded-3xl lg:h-72 lg:w-24 ${
                         isActive
-                          ? "scale-x-[0.25] sm:scale-x-[0.3125] lg:scale-x-[0.3333]"
-                          : "scale-x-100"
+                          ? "z-30 scale-x-[4] sm:scale-x-[3.2] lg:scale-x-[3]"
+                          : "z-0 scale-x-100"
                       }`}
                     >
-                      <Icon
-                        className={`shrink-0 transition-all duration-300 ${
-                          isActive ? "h-7 w-7 sm:h-12 sm:w-12" : "h-5 w-5 sm:h-6 sm:w-6"
-                        }`}
-                        strokeWidth={1.5}
-                      />
-                      <span
-                        className={`whitespace-nowrap font-semibold leading-snug transition-all duration-300 ${
+                      <div
+                        className={`flex origin-center transform-gpu flex-col items-center justify-center gap-2 transition-transform duration-500 ease-out sm:gap-3 ${
                           isActive
-                            ? "text-xs opacity-100 sm:text-lg"
-                            : "hidden text-[10px] opacity-0 sm:block"
+                            ? "scale-x-[0.25] sm:scale-x-[0.3125] lg:scale-x-[0.3333]"
+                            : "scale-x-100"
                         }`}
                       >
-                        {tile.label}
-                      </span>
-                    </div>
-                  </Link>
+                        <Icon
+                          className={`shrink-0 transition-all duration-300 ${
+                            isActive ? "h-7 w-7 sm:h-12 sm:w-12" : "h-5 w-5 sm:h-6 sm:w-6"
+                          }`}
+                          strokeWidth={1.5}
+                        />
+                        <span
+                          className={`whitespace-nowrap font-semibold leading-snug transition-all duration-300 ${
+                            isActive
+                              ? "text-xs opacity-100 sm:text-lg"
+                              : "hidden text-[10px] opacity-0 sm:block"
+                          }`}
+                        >
+                          {tile.label}
+                        </span>
+                      </div>
+                    </Link>
+                  </div>
                 </div>
               );
             })}
