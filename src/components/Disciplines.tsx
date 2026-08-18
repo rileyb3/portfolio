@@ -91,11 +91,19 @@ export default function Disciplines() {
           <h2 className="max-w-[11ch] text-4xl font-bold uppercase leading-tight tracking-wide text-paper sm:shrink-0 sm:text-left sm:text-5xl lg:text-6xl">
             Explore my work by discipline
           </h2>
-          {/* One row, fixed height. The active tile is as wide as it is
-              tall (a square); every other tile collapses to a narrow
-              rounded rectangle at the same height. Widths animate via
-              `transition-all` on plain Tailwind width classes, which is
-              just as animatable as an inline style here. */}
+          {/* One row, fixed height, fixed per-tile layout width — nothing
+              ever actually reflows on hover anymore. The "grow" is a pure
+              CSS transform (scaleX) on the tile itself, which is what
+              guarantees genuinely symmetric growth around the tile's own
+              center: a transform is painted after layout and doesn't
+              push, pin, or get pinned by any neighbor or ancestor, unlike
+              a real width change (which is what was producing the
+              lopsided "grows left then right" — its right edge was
+              effectively anchored by the row's own alignment, so growth
+              could only really come from the left). The icon/label live
+              in a nested wrapper with the exact inverse scaleX, so they
+              render at their normal proportions instead of getting
+              horizontally stretched along with the tile's background. */}
           <div className="flex h-56 items-stretch justify-center gap-3 sm:h-64 sm:justify-end sm:gap-4 lg:h-72">
             {tiles.map((tile, i) => {
               const Icon = iconMap[tile.id] ?? Images;
@@ -106,50 +114,59 @@ export default function Disciplines() {
               // combined with the per-tile stagger delay below, tiles
               // arrive one after another in sequence (build, design,
               // play...) so the reveal reads like a staircase rather than
-              // everything fading in at once. Distance is exaggerated
-              // further (now 180px, up from 96px) while duration/delay
-              // stay put (1100ms, 120ms per tile) — same speed, just a
-              // longer trip. Applied via an explicit `transition` list
-              // rather than Tailwind's `transition-all` — that keeps the
-              // hover expand/collapse (width/padding/gap) snappy at its
-              // own 500ms instead of also getting slowed down along with
-              // the entrance.
+              // everything fading in at once. This wrapper only ever
+              // carries the entrance transform (translateY + scale) and
+              // opacity — the hover-driven scaleX lives one level down,
+              // on the tile itself, so the two animations don't have to
+              // share a single `transform` transition/duration.
               const entranceY = visible ? 0 : 180;
               return (
-                <Link
+                <div
                   key={tile.id}
-                  href={tile.href}
-                  onMouseEnter={() => setHoveredId(tile.id)}
-                  onMouseLeave={() => setHoveredId(null)}
                   style={{
-                    background: gradient,
                     transitionDelay: visible ? `${i * 120}ms` : "0ms",
                     transform: `translateY(${entranceY}px) scale(${entranceScale})`,
-                    transition:
-                      "transform 1100ms ease-out, opacity 1100ms ease-out, width 500ms ease-out, padding 500ms ease-out, gap 500ms ease-out",
                   }}
-                  className={`group flex shrink-0 flex-col items-center justify-center gap-2 rounded-2xl p-3 text-center text-ink sm:rounded-3xl ${
-                    isActive
-                      ? "w-56 sm:w-64 sm:gap-3 sm:p-6 lg:w-72"
-                      : "w-14 sm:w-20 lg:w-24"
-                  } ${visible ? "opacity-100" : "opacity-0"}`}
+                  className={`shrink-0 transition duration-[1100ms] ease-out ${
+                    visible ? "opacity-100" : "opacity-0"
+                  }`}
                 >
-                  <Icon
-                    className={`shrink-0 transition-all duration-300 ${
-                      isActive ? "h-7 w-7 sm:h-12 sm:w-12" : "h-5 w-5 sm:h-6 sm:w-6"
-                    }`}
-                    strokeWidth={1.5}
-                  />
-                  <span
-                    className={`font-semibold leading-snug transition-all duration-300 ${
+                  <Link
+                    href={tile.href}
+                    onMouseEnter={() => setHoveredId(tile.id)}
+                    onMouseLeave={() => setHoveredId(null)}
+                    style={{ background: gradient }}
+                    className={`group relative flex h-56 w-14 origin-center transform-gpu flex-col items-center justify-center rounded-2xl p-3 text-center text-ink transition-transform duration-500 ease-out sm:h-64 sm:w-20 sm:rounded-3xl lg:h-72 lg:w-24 ${
                       isActive
-                        ? "text-xs opacity-100 sm:text-lg"
-                        : "hidden text-[10px] opacity-0 sm:block"
+                        ? "z-30 scale-x-[4] sm:scale-x-[3.2] lg:scale-x-[3]"
+                        : "z-0 scale-x-100"
                     }`}
                   >
-                    {tile.label}
-                  </span>
-                </Link>
+                    <div
+                      className={`flex origin-center transform-gpu flex-col items-center justify-center gap-2 transition-transform duration-500 ease-out sm:gap-3 ${
+                        isActive
+                          ? "scale-x-[0.25] sm:scale-x-[0.3125] lg:scale-x-[0.3333]"
+                          : "scale-x-100"
+                      }`}
+                    >
+                      <Icon
+                        className={`shrink-0 transition-all duration-300 ${
+                          isActive ? "h-7 w-7 sm:h-12 sm:w-12" : "h-5 w-5 sm:h-6 sm:w-6"
+                        }`}
+                        strokeWidth={1.5}
+                      />
+                      <span
+                        className={`whitespace-nowrap font-semibold leading-snug transition-all duration-300 ${
+                          isActive
+                            ? "text-xs opacity-100 sm:text-lg"
+                            : "hidden text-[10px] opacity-0 sm:block"
+                        }`}
+                      >
+                        {tile.label}
+                      </span>
+                    </div>
+                  </Link>
+                </div>
               );
             })}
           </div>
