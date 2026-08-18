@@ -2,9 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-html {
-  scroll-behavior: smooth;
-}
+/* No `scroll-behavior: smooth` here on purpose — Lenis (see
+   SmoothScroll.tsx) now owns all scroll easing, including anchor-link
+   jumps. Leaving the CSS version on too makes the two fight each other
+   and produces a stutter instead of one clean motion. */
 
 body {
   /* Back to dark — inverse of the white-theme experiment. Every route

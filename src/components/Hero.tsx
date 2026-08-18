@@ -51,8 +51,10 @@ export default function Hero() {
             discipline bar, on the left where the photo never reaches.
             Bold/chunky like the name below, just at a fraction of its
             size, with the quotation marks typed directly into the copy
-            rather than done as CSS-generated quotes. */}
-        <blockquote className="absolute inset-x-0 top-20 z-20 max-w-xs px-6 text-xl font-bold italic leading-snug text-paper sm:top-28 sm:max-w-sm sm:px-10 sm:text-2xl lg:max-w-lg lg:text-4xl">
+            rather than done as CSS-generated quotes. Upright (not
+            italic), with roomier letter/word/line spacing than normal
+            body copy for a more deliberate, spaced-out read. */}
+        <blockquote className="absolute inset-x-0 top-20 z-20 max-w-xs px-6 text-xl font-bold leading-loose tracking-wide text-paper [word-spacing:0.3em] sm:top-28 sm:max-w-sm sm:px-10 sm:text-2xl lg:max-w-lg lg:text-4xl">
           &ldquo;The only interesting answers are those which destroy the
           questions&rdquo;
         </blockquote>
