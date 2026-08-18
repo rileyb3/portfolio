@@ -102,6 +102,12 @@ export default function Disciplines() {
               const { gradient } = blobStyle[i % blobStyle.length];
               const isActive = hoveredId === tile.id;
               const entranceScale = visible ? 1 : 0.85;
+              // Floats up from below into its resting spot on entrance —
+              // combined with the per-tile stagger delay below, tiles
+              // arrive one after another in sequence (build, design,
+              // play...) so the reveal reads like a staircase rather than
+              // everything fading in at once.
+              const entranceY = visible ? 0 : 48;
               return (
                 <Link
                   key={tile.id}
@@ -110,8 +116,8 @@ export default function Disciplines() {
                   onMouseLeave={() => setHoveredId(null)}
                   style={{
                     background: gradient,
-                    transitionDelay: visible ? `${i * 60}ms` : "0ms",
-                    transform: `scale(${entranceScale})`,
+                    transitionDelay: visible ? `${i * 90}ms` : "0ms",
+                    transform: `translateY(${entranceY}px) scale(${entranceScale})`,
                   }}
                   className={`group flex shrink-0 flex-col items-center justify-center gap-2 rounded-2xl p-3 text-center text-ink transition-all duration-500 ease-out sm:rounded-3xl ${
                     isActive
