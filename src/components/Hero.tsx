@@ -54,9 +54,9 @@ export default function Hero() {
             rather than done as CSS-generated quotes. Upright (not
             italic), with roomier letter/word/line spacing than normal
             body copy for a more deliberate, spaced-out read. */}
-        <blockquote className="absolute inset-x-0 top-20 z-20 max-w-xs px-6 text-xl font-bold leading-loose tracking-wide text-paper [word-spacing:0.3em] sm:top-28 sm:max-w-sm sm:px-10 sm:text-2xl lg:max-w-lg lg:text-4xl">
-          &ldquo;The only interesting answers are those which destroy the
-          questions&rdquo;
+        <blockquote className="absolute inset-x-0 top-20 z-20 max-w-xs px-6 text-2xl font-bold leading-loose tracking-wide text-paper [word-spacing:0.3em] sm:top-28 sm:max-w-sm sm:px-10 sm:text-3xl lg:max-w-lg lg:text-5xl">
+          &ldquo;The Only Interesting Answers Are Those Which Destroy The
+          Questions&rdquo;
         </blockquote>
 
         {/* Crisp bar, true full viewport width, crossing the photo's
