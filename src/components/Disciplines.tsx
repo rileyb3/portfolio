@@ -45,11 +45,11 @@ const blobStyle = [
 export default function Disciplines() {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
-  // Accordion-style: one tile is expanded to full square size at a time,
-  // the rest sit collapsed as narrow rounded rectangles. Hovering a
-  // collapsed tile makes it the expanded one; it stays expanded (rather
-  // than snapping back on mouse-leave) until another tile is hovered.
-  const [activeId, setActiveId] = useState(tiles[0].id);
+  // Accordion-style: all tiles sit collapsed as narrow rounded rectangles
+  // by default. Hovering one expands it to full square size; moving the
+  // mouse off collapses it back, so nothing stays expanded once you're
+  // not actively hovering a tile.
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
 
   useEffect(() => {
     const el = ref.current;
@@ -100,13 +100,14 @@ export default function Disciplines() {
             {tiles.map((tile, i) => {
               const Icon = iconMap[tile.id] ?? Images;
               const { gradient } = blobStyle[i % blobStyle.length];
-              const isActive = activeId === tile.id;
+              const isActive = hoveredId === tile.id;
               const entranceScale = visible ? 1 : 0.85;
               return (
                 <Link
                   key={tile.id}
                   href={tile.href}
-                  onMouseEnter={() => setActiveId(tile.id)}
+                  onMouseEnter={() => setHoveredId(tile.id)}
+                  onMouseLeave={() => setHoveredId(null)}
                   style={{
                     background: gradient,
                     transitionDelay: visible ? `${i * 60}ms` : "0ms",
