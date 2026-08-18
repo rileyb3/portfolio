@@ -66,16 +66,33 @@ export default function Hero() {
         {/* Photo: a bounded, framed card in the upper right, with a soft
             blue/green glow behind it for an "ocean, not literal" feel
             rather than a flat cutout edge. Card + glow move together with
-            the same parallax drift the old full-bleed photo used. */}
+            the same parallax drift the old full-bleed photo used. The
+            wrapper itself now carries the card's aspect/width classes
+            (rather than just the inner image div) so percentage-based
+            positioning inside it — the crisp bar below — resolves against
+            a real height instead of collapsing to zero (an absolutely
+            positioned parent with only absolutely positioned children has
+            no intrinsic size otherwise). */}
         <div
-          className="absolute right-6 top-24 z-10 will-change-transform sm:right-10 sm:top-28"
+          className="absolute right-6 top-24 z-10 aspect-[4/5] w-[46vw] max-w-[220px] will-change-transform sm:right-10 sm:top-28 sm:w-72 sm:max-w-none"
           style={{ transform: `translateY(${photoOffset}px)` }}
         >
           <div
             className="absolute -inset-10 -z-10 rounded-[3rem] bg-gradient-to-br from-accent2/50 via-accent/25 to-transparent blur-3xl"
             aria-hidden="true"
           />
-          <div className="aspect-[4/5] w-[46vw] max-w-[220px] overflow-hidden rounded-[2rem] shadow-2xl ring-1 ring-ink/10 sm:w-72 sm:max-w-none">
+          {/* Crisp black bar, breaking out to the full viewport width and
+              crossing right through the photo's vertical center. Sits
+              behind the photo (z-index below the image's default stacking,
+              above the glow) so the photo reads as cutting through it —
+              the "bar running through the middle" beat from the reference,
+              applied to the current sticky-hero layout rather than as a
+              separate nav element. */}
+          <div
+            className="absolute left-1/2 top-1/2 -z-[5] h-14 w-screen -translate-x-1/2 -translate-y-1/2 bg-ink sm:h-20"
+            aria-hidden="true"
+          />
+          <div className="absolute inset-0 overflow-hidden rounded-[2rem] shadow-2xl ring-1 ring-ink/10">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={profile.photoSrc}
