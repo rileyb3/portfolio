@@ -1,23 +1,18 @@
-"use client";
-
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { profile } from "@/data/projects";
 
-// Global nav — sticky across every page except the homepage. On the
-// homepage the nav lives inside Hero's white bar instead (and Download CV
-// floats free at the top right), so this bar renders null there rather
-// than stacking a second bar on top of that treatment.
-export const navLinks = [
+// Global nav — sticky across every page (wired into layout.tsx). Kept
+// deliberately plain: text-only links, no icons or per-item pill
+// backgrounds — those were adding visual noise once the rest of the
+// homepage got busier. One accent-colored CTA (Download CV) is the only
+// strong visual element in the bar.
+const navLinks = [
   { label: "About", href: "/about" },
   { label: "Experience", href: "/experience" },
   { label: "Contact", href: "/#contact" },
 ];
 
 export default function Header() {
-  const pathname = usePathname();
-  if (pathname === "/") return null;
-
   return (
     <header className="sticky top-0 z-50">
       <nav className="flex items-center gap-8 border-b border-white/10 bg-ink px-4 py-1 shadow-lg sm:px-8">
