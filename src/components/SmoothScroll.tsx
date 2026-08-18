@@ -15,7 +15,17 @@ import Lenis from "lenis";
 export default function SmoothScroll() {
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 1.2, // higher = slower, heavier settle — the "weight"
+      // `duration`/`easing` mainly govern the programmatic `scrollTo()`
+      // jumps (the anchor-link handler below) — the feel of everyday
+      // wheel/trackpad scrolling is actually driven by `lerp`, which
+      // defaults to 0.1 (a fairly tight, quick catch-up) if left unset.
+      // That default is subtle enough to be nearly invisible layered on
+      // top of macOS's own already-smooth trackpad momentum, which is
+      // exactly why this felt like "nothing changed" at first. Lower
+      // lerp = slower catch-up = more visible lag/weight — same idea as
+      // Hero's own photo-parallax lerp (0.08 there, for reference).
+      lerp: 0.045,
+      duration: 1.2, // higher = slower, heavier settle for scrollTo jumps
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     });
 
