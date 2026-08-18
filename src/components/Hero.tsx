@@ -57,20 +57,23 @@ export default function Hero() {
             Now doubles as the site nav (moved here from the old top
             Header bar, which stays hidden on the homepage — see
             Header.tsx). Text is dark since it sits on the light bg-paper
-            fill, not the dark panel. */}
-        <div className="absolute inset-x-0 top-[225px] z-20 flex h-10 -translate-y-1/2 items-center gap-6 bg-paper px-6 sm:top-[312px] sm:h-12 sm:px-10">
+            fill, not the dark panel; kept at the bar's original thin
+            height, so nav text is sized down to fit. Hover states are
+            color/weight only — no background chip — to match the bar's
+            plain aesthetic and stay behind the photo (z-0) like before. */}
+        <div className="absolute inset-x-0 top-[225px] z-0 flex h-6 -translate-y-1/2 items-center gap-5 bg-paper px-6 text-xs sm:top-[312px] sm:h-8 sm:px-10 sm:text-sm">
           <Link
             href="/"
-            className="shrink-0 text-sm font-semibold tracking-wide text-ink transition hover:text-accent3"
+            className="shrink-0 font-semibold tracking-wide text-ink transition hover:text-accent3"
           >
             Riley Byers
           </Link>
-          <ul className="hidden items-center gap-1 text-sm sm:flex">
+          <ul className="hidden items-center gap-5 sm:flex">
             {navLinks.map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="inline-block px-2.5 py-1 text-ink/70 transition hover:bg-ink hover:text-paper"
+                  className="text-ink/70 transition hover:font-semibold hover:text-ink"
                 >
                   {link.label}
                 </Link>
