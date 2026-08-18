@@ -15,7 +15,7 @@ const navLinks = [
 export default function Header() {
   return (
     <header className="sticky top-0 z-50">
-      <nav className="flex items-center gap-8 border-b border-white/10 bg-surface/90 px-4 py-1 shadow-lg backdrop-blur sm:px-8">
+      <nav className="flex items-center gap-8 border-b border-white/10 bg-ink px-4 py-1 shadow-lg sm:px-8">
         <Link
           href="/"
           className="shrink-0 text-sm font-semibold tracking-wide text-paper transition hover:text-accent"

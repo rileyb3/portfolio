@@ -119,17 +119,15 @@ export default function Disciplines() {
       id="disciplines"
       ref={ref}
       // min-h-[85vh] is a safety floor, not the main mechanism: this section
-      // rides up over Hero via -mt-[70vh] and (at z-20, above Hero's z-10)
-      // is what hides Hero's sticky name/photo once you scroll past it. The
-      // canvas below (h-[60-70vh] depending on breakpoint) plus its own
-      // padding/heading already clears the required 70vh on its own — this
-      // floor only kicks in on unusually short viewports, so it shouldn't
-      // add visible extra empty space beyond what the content needs. bg-paper
-      // matches Hero above it — this and Hero are a deliberate light
-      // "opening chapter"; everything from AccentBand down now matches too
-      // (see those components), so the whole landing page reads as one
-      // consistent light theme, with only Header/About/Footer staying dark.
-      className="relative z-20 -mt-[70vh] min-h-[85vh] scroll-mt-6 rounded-t-[3rem] bg-paper px-6 pb-16 pt-10 text-center sm:pt-14"
+      // rides up over Hero via -mt-[40vh] (kept in sync with Hero's own
+      // wrapper offset — see the comment there) and (at z-20, above Hero's
+      // z-10) is what hides Hero's sticky name/photo once you scroll past
+      // it. bg-paper matches Hero above it — this and Hero are a deliberate
+      // light "opening chapter"; everything from AccentBand down now
+      // matches too (see those components), so the whole landing page reads
+      // as one consistent light theme, with only Header/About/Footer
+      // staying dark.
+      className="relative z-20 -mt-[40vh] min-h-[85vh] scroll-mt-6 rounded-t-[3rem] bg-paper px-6 pb-16 pt-10 text-center sm:pt-14"
     >
       <div className="mx-auto max-w-6xl">
         <h2 className="mb-6 text-sm font-medium uppercase tracking-widest text-muted">
