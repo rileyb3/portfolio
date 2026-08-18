@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { profile, categories } from "@/data/projects";
+import { profile } from "@/data/projects";
+import { navLinks } from "@/components/Header";
 
 // Akihiko/Palmer-inspired redesign of the landing hero — inverse color
 // scheme again: dark panel, light name/text, white bar for contrast (the
@@ -38,26 +39,6 @@ export default function Hero() {
     // own wrapper (below) holds before it releases too.
     <section id="top" className="relative h-[178vh]">
       <div className="sticky top-0 h-screen overflow-hidden bg-ink">
-        {/* Meta row — the "Quick Links / Based in Tokyo, Art Director"
-            beat from the reference, adapted into real, clickable nav
-            (each discipline links to its own page) rather than inert
-            decoration. */}
-        <div className="absolute inset-x-0 top-0 z-20 flex items-center justify-between px-6 pt-8 text-[0.65rem] font-medium uppercase tracking-[0.2em] text-muted sm:px-10 sm:pt-10 sm:text-xs">
-          <ul className="flex flex-wrap items-center gap-x-2 gap-y-1">
-            {categories.map((c, i) => (
-              <li key={c.id} className="flex items-center gap-2">
-                {i > 0 && <span aria-hidden="true">·</span>}
-                <Link href={`/${c.id}`} className="transition hover:text-paper">
-                  {c.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-          <span className="hidden max-w-xs text-right sm:block">
-            {profile.tagline}
-          </span>
-        </div>
-
         {/* Crisp bar, true full viewport width, crossing the photo's
             vertical center (with a slight downward nudge). This lives as a
             direct child of the sticky panel — not inside the small photo
@@ -71,11 +52,44 @@ export default function Hero() {
             above the plain background; it's static (no parallax) since a
             full-bleed bar shouldn't jitter with the photo's own drift.
             White fill — the panel is dark now, so the bar needs to be the
-            light color to still read against it. */}
-        <div
-          className="absolute inset-x-0 top-[225px] z-0 h-6 -translate-y-1/2 bg-paper sm:top-[312px] sm:h-8"
-          aria-hidden="true"
-        />
+            light color to still read against it.
+
+            Now doubles as the site nav (moved here from the old top
+            Header bar, which stays hidden on the homepage — see
+            Header.tsx). Text is dark since it sits on the light bg-paper
+            fill, not the dark panel. */}
+        <div className="absolute inset-x-0 top-[225px] z-20 flex h-10 -translate-y-1/2 items-center gap-6 bg-paper px-6 sm:top-[312px] sm:h-12 sm:px-10">
+          <Link
+            href="/"
+            className="shrink-0 text-sm font-semibold tracking-wide text-ink transition hover:text-accent3"
+          >
+            Riley Byers
+          </Link>
+          <ul className="hidden items-center gap-1 text-sm sm:flex">
+            {navLinks.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  className="inline-block px-2.5 py-1 text-ink/70 transition hover:bg-ink hover:text-paper"
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Download CV — kept at the top right like before, but now
+            floating free on the dark panel rather than living inside a
+            bar. Sits above the photo (which starts lower, at top-24/28),
+            so nothing overlaps it. */}
+        <Link
+          href={profile.cvHref}
+          download
+          className="absolute right-6 top-6 z-20 hidden text-sm font-medium text-accent transition hover:opacity-80 sm:right-10 sm:top-8 sm:inline-flex"
+        >
+          Download CV
+        </Link>
 
         {/* Photo: a bounded, framed card in the upper right, with a soft
             blue/green glow behind it for an "ocean, not literal" feel
