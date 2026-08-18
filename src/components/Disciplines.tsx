@@ -80,55 +80,63 @@ export default function Disciplines() {
       // every other route.
       className="relative z-20 -mt-[40vh] min-h-[85vh] scroll-mt-6 rounded-t-[3rem] bg-ink px-6 pb-16 pt-10 text-center sm:pt-14"
     >
-      <div className="mx-auto max-w-6xl">
-        <h2 className="mb-6 text-sm font-medium uppercase tracking-widest text-muted">
-          Explore my work by discipline
-        </h2>
-        {/* One row, fixed height. The active tile is as wide as it is
-            tall (a square); every other tile collapses to a narrow
-            rounded rectangle at the same height. Widths animate via
-            `transition-all` on plain Tailwind width classes, which is
-            just as animatable as an inline style here. */}
-        <div className="mx-auto flex h-56 items-stretch justify-center gap-3 sm:h-64 sm:gap-4 lg:h-72">
-          {tiles.map((tile, i) => {
-            const Icon = iconMap[tile.id] ?? Images;
-            const { gradient } = blobStyle[i % blobStyle.length];
-            const isActive = activeId === tile.id;
-            const entranceScale = visible ? 1 : 0.85;
-            return (
-              <Link
-                key={tile.id}
-                href={tile.href}
-                onMouseEnter={() => setActiveId(tile.id)}
-                style={{
-                  background: gradient,
-                  transitionDelay: visible ? `${i * 60}ms` : "0ms",
-                  transform: `scale(${entranceScale})`,
-                }}
-                className={`group flex shrink-0 flex-col items-center justify-center gap-2 rounded-2xl p-3 text-center text-ink transition-all duration-500 ease-out sm:rounded-3xl ${
-                  isActive
-                    ? "w-56 sm:w-64 sm:gap-3 sm:p-6 lg:w-72"
-                    : "w-14 sm:w-20 lg:w-24"
-                } ${visible ? "opacity-100" : "opacity-0"}`}
-              >
-                <Icon
-                  className={`shrink-0 transition-all duration-300 ${
-                    isActive ? "h-7 w-7 sm:h-12 sm:w-12" : "h-5 w-5 sm:h-6 sm:w-6"
-                  }`}
-                  strokeWidth={1.5}
-                />
-                <span
-                  className={`font-semibold leading-snug transition-all duration-300 ${
+      <div className="mx-auto w-full">
+        {/* Heading + tile row share one flex row on larger screens — label
+            on the left, tiles pushed to the right via justify-between —
+            so together they stretch edge to edge instead of sitting in a
+            narrow centered column. Stays stacked (label above, tiles
+            centered below) below sm, since there's no room for that on an
+            iOS-width screen. */}
+        <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-center sm:justify-between sm:gap-10">
+          <h2 className="text-sm font-medium uppercase tracking-widest text-paper sm:shrink-0 sm:text-left">
+            Explore my work by discipline
+          </h2>
+          {/* One row, fixed height. The active tile is as wide as it is
+              tall (a square); every other tile collapses to a narrow
+              rounded rectangle at the same height. Widths animate via
+              `transition-all` on plain Tailwind width classes, which is
+              just as animatable as an inline style here. */}
+          <div className="flex h-56 items-stretch justify-center gap-3 sm:h-64 sm:justify-end sm:gap-4 lg:h-72">
+            {tiles.map((tile, i) => {
+              const Icon = iconMap[tile.id] ?? Images;
+              const { gradient } = blobStyle[i % blobStyle.length];
+              const isActive = activeId === tile.id;
+              const entranceScale = visible ? 1 : 0.85;
+              return (
+                <Link
+                  key={tile.id}
+                  href={tile.href}
+                  onMouseEnter={() => setActiveId(tile.id)}
+                  style={{
+                    background: gradient,
+                    transitionDelay: visible ? `${i * 60}ms` : "0ms",
+                    transform: `scale(${entranceScale})`,
+                  }}
+                  className={`group flex shrink-0 flex-col items-center justify-center gap-2 rounded-2xl p-3 text-center text-ink transition-all duration-500 ease-out sm:rounded-3xl ${
                     isActive
-                      ? "text-xs opacity-100 sm:text-lg"
-                      : "hidden text-[10px] opacity-0 sm:block"
-                  }`}
+                      ? "w-56 sm:w-64 sm:gap-3 sm:p-6 lg:w-72"
+                      : "w-14 sm:w-20 lg:w-24"
+                  } ${visible ? "opacity-100" : "opacity-0"}`}
                 >
-                  {tile.label}
-                </span>
-              </Link>
-            );
-          })}
+                  <Icon
+                    className={`shrink-0 transition-all duration-300 ${
+                      isActive ? "h-7 w-7 sm:h-12 sm:w-12" : "h-5 w-5 sm:h-6 sm:w-6"
+                    }`}
+                    strokeWidth={1.5}
+                  />
+                  <span
+                    className={`font-semibold leading-snug transition-all duration-300 ${
+                      isActive
+                        ? "text-xs opacity-100 sm:text-lg"
+                        : "hidden text-[10px] opacity-0 sm:block"
+                    }`}
+                  >
+                    {tile.label}
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>
