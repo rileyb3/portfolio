@@ -38,16 +38,7 @@ export default function Hero() {
     // own wrapper (below) holds before it releases too.
     <section id="top" className="relative h-[178vh]">
       <div className="sticky top-0 h-screen overflow-hidden bg-ink">
-        {/* Meta row — now just the tagline (the discipline links moved
-            down into the white bar below, so it doubles as real nav
-            instead of sitting empty/decorative). */}
-        <div className="absolute inset-x-0 top-0 z-20 px-6 pt-8 text-right text-[0.65rem] font-medium uppercase tracking-[0.2em] text-muted sm:px-10 sm:pt-10 sm:text-xs">
-          <span className="hidden max-w-xs sm:inline-block">
-            {profile.tagline}
-          </span>
-        </div>
-
-        {/* Quote — fills the gap between the meta row and the white
+        {/* Quote — fills the gap between the top of the panel and the white
             discipline bar, on the left where the photo never reaches.
             Bold/chunky like the name below, just at a fraction of its
             size, with the quotation marks typed directly into the copy

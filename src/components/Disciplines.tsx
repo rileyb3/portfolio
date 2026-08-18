@@ -106,14 +106,15 @@ export default function Disciplines() {
               // combined with the per-tile stagger delay below, tiles
               // arrive one after another in sequence (build, design,
               // play...) so the reveal reads like a staircase rather than
-              // everything fading in at once. Distance and duration are
-              // both exaggerated (96px / 1100ms, vs. a plain 500ms
-              // transition-all) specifically for transform+opacity, via
-              // an explicit `transition` list rather than Tailwind's
-              // `transition-all` — that keeps the hover expand/collapse
-              // (width/padding/gap) snappy at its own 500ms instead of
-              // also getting slowed down along with the entrance.
-              const entranceY = visible ? 0 : 96;
+              // everything fading in at once. Distance is exaggerated
+              // further (now 180px, up from 96px) while duration/delay
+              // stay put (1100ms, 120ms per tile) — same speed, just a
+              // longer trip. Applied via an explicit `transition` list
+              // rather than Tailwind's `transition-all` — that keeps the
+              // hover expand/collapse (width/padding/gap) snappy at its
+              // own 500ms instead of also getting slowed down along with
+              // the entrance.
+              const entranceY = visible ? 0 : 180;
               return (
                 <Link
                   key={tile.id}
