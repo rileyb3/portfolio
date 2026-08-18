@@ -52,9 +52,16 @@ export default function Hero() {
             Bold/chunky like the name below, just at a fraction of its
             size, with the quotation marks typed directly into the copy
             rather than done as CSS-generated quotes. Upright (not
-            italic), with roomier letter/word/line spacing than normal
-            body copy for a more deliberate, spaced-out read. */}
-        <blockquote className="absolute inset-x-0 top-20 z-20 max-w-xs px-6 text-2xl font-bold leading-loose tracking-wide text-paper [word-spacing:0.3em] sm:top-28 sm:max-w-sm sm:px-10 sm:text-3xl lg:max-w-lg lg:text-5xl">
+            italic), with roomier letter/word spacing than normal body
+            copy for a more deliberate, spaced-out read — line-height is
+            kept to `leading-snug` rather than loose, though, since at
+            this size loose line-height is what was pushing the block
+            past the white bar below. Pulled up higher (there's clear
+            room above it) and widened at each breakpoint (there's room
+            toward the photo before the bar's right edge) so it needs
+            fewer wrapped lines in the first place, rather than relying on
+            line-height alone to make room. */}
+        <blockquote className="absolute inset-x-0 top-14 z-20 max-w-sm px-6 text-xl font-bold leading-snug tracking-wide text-paper [word-spacing:0.3em] sm:top-16 sm:max-w-lg sm:px-10 sm:text-2xl lg:max-w-xl lg:text-4xl">
           &ldquo;The Only Interesting Answers Are Those Which Destroy The
           Questions&rdquo;
         </blockquote>
