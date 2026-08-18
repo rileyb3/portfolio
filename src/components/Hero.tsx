@@ -63,33 +63,33 @@ export default function Hero() {
           </span>
         </div>
 
+        {/* Crisp black bar, true full viewport width, crossing the photo's
+            vertical center (with a slight downward nudge). This lives as a
+            direct child of the sticky panel — not inside the small photo
+            wrapper below — because an absolutely positioned element's
+            percentage/`inset` values resolve against its own containing
+            block. Nested inside the narrow photo wrapper, `w-screen` +
+            `left-1/2` centered on that small block's position, not the
+            actual viewport, so the bar came out short and off-center.
+            Sitting directly in the full-width sticky panel and using
+            `inset-x-0` fixes that. z-0 keeps it below the photo (z-10) and
+            above the plain background; it's static (no parallax) since a
+            full-bleed bar shouldn't jitter with the photo's own drift. */}
+        <div
+          className="absolute inset-x-0 top-[225px] z-0 h-6 -translate-y-1/2 bg-ink sm:top-[312px] sm:h-8"
+          aria-hidden="true"
+        />
+
         {/* Photo: a bounded, framed card in the upper right, with a soft
             blue/green glow behind it for an "ocean, not literal" feel
             rather than a flat cutout edge. Card + glow move together with
-            the same parallax drift the old full-bleed photo used. The
-            wrapper itself now carries the card's aspect/width classes
-            (rather than just the inner image div) so percentage-based
-            positioning inside it — the crisp bar below — resolves against
-            a real height instead of collapsing to zero (an absolutely
-            positioned parent with only absolutely positioned children has
-            no intrinsic size otherwise). */}
+            the same parallax drift the old full-bleed photo used. */}
         <div
           className="absolute right-6 top-24 z-10 aspect-[4/5] w-[46vw] max-w-[220px] will-change-transform sm:right-10 sm:top-28 sm:w-72 sm:max-w-none"
           style={{ transform: `translateY(${photoOffset}px)` }}
         >
           <div
             className="absolute -inset-10 -z-10 rounded-[3rem] bg-gradient-to-br from-accent2/50 via-accent/25 to-transparent blur-3xl"
-            aria-hidden="true"
-          />
-          {/* Crisp black bar, breaking out to the full viewport width and
-              crossing right through the photo's vertical center. Sits
-              behind the photo (z-index below the image's default stacking,
-              above the glow) so the photo reads as cutting through it —
-              the "bar running through the middle" beat from the reference,
-              applied to the current sticky-hero layout rather than as a
-              separate nav element. */}
-          <div
-            className="absolute left-1/2 top-1/2 -z-[5] h-14 w-screen -translate-x-1/2 -translate-y-1/2 bg-ink sm:h-20"
             aria-hidden="true"
           />
           <div className="absolute inset-0 overflow-hidden rounded-[2rem] shadow-2xl ring-1 ring-ink/10">
