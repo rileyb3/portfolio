@@ -28,14 +28,18 @@ const tiles = categories.map((c) => ({
   id: c.id,
 }));
 
-// Bright, non-uniform gradients per tile — genuinely different hues rather
-// than tints of the same accent, per "bright colors" + "gradient".
+// Each tile gets one clear, unique primary color that holds the first ~60%
+// of the tile solid (so the tile reads as "the green one" / "the pink one"
+// at a glance), then eases into a second accent hue for the last stretch —
+// the gradient flourish from before, just dialed back so it's a corner
+// accent rather than an even three-way blend that made it hard to say what
+// color any given tile actually was.
 const blobStyle = [
-  { gradient: "linear-gradient(135deg, #C8FF3D 0%, #FFD23D 55%, #FF6EC7 100%)" },
-  { gradient: "linear-gradient(140deg, #FF6EC7 0%, #FF9A3D 60%, #FFD23D 100%)" },
-  { gradient: "linear-gradient(160deg, #3DFFE0 0%, #7DFFA3 100%)" },
-  { gradient: "linear-gradient(180deg, #3DD1FF 0%, #7DD3FC 55%, #8FA89B 100%)" },
-  { gradient: "linear-gradient(135deg, #3DD1FF 0%, #7DD3FC 50%, #7DFFA3 100%)" },
+  { gradient: "linear-gradient(135deg, #C8FF3D 0%, #C8FF3D 60%, #FFD23D 100%)" }, // build — chartreuse
+  { gradient: "linear-gradient(140deg, #FF6EC7 0%, #FF6EC7 60%, #C77DFF 100%)" }, // design — pink
+  { gradient: "linear-gradient(160deg, #2DD4BF 0%, #2DD4BF 60%, #7DD3FC 100%)" }, // play — teal
+  { gradient: "linear-gradient(180deg, #38BDF8 0%, #38BDF8 60%, #7DFFA3 100%)" }, // discover — blue
+  { gradient: "linear-gradient(135deg, #FB923C 0%, #FB923C 60%, #FFD23D 100%)" }, // write — orange
 ];
 
 export default function Disciplines() {
