@@ -28,6 +28,17 @@ export default function SmoothScroll() {
       smoothWheel: true,
       duration: 1.6, // higher = slower, heavier settle for scrollTo jumps
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      // Lenis honors `prefers-reduced-motion` by default and silently
+      // forces lerp to 1 (i.e. no smoothing at all) when it's set — which
+      // is the right call for accessibility generally, but it's also
+      // almost certainly why the effect was reading as "nothing changed":
+      // Hero's own hand-rolled photo parallax doesn't check that setting
+      // at all, so it kept animating on its own while the rest of the
+      // page silently fell back to native scroll. Overriding it here so
+      // the effect always applies on this decorative, non-essential
+      // interaction — worth reconsidering if accessibility feedback ever
+      // says otherwise.
+      respectReducedMotion: false,
     });
 
     let rafId = 0;
