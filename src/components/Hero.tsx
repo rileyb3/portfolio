@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { Menu, X } from "lucide-react";
 import { profile } from "@/data/projects";
 import { navLinks } from "@/components/Header";
 
@@ -32,6 +33,25 @@ export default function Hero() {
     raf = requestAnimationFrame(frame);
     return () => cancelAnimationFrame(raf);
   }, []);
+
+  // Hamburger menu next to Download CV — the bar's About/Experience/Contact
+  // links and the CV link itself are both desktop-only (hidden below sm),
+  // so this is the only nav mobile visitors get. Kept on all breakpoints
+  // rather than sm:hidden since it's a harmless, always-available shortcut
+  // on desktop too.
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    function handleClick(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [menuOpen]);
 
   return (
     // Outer section is taller than one screen — that extra height is the
@@ -82,17 +102,62 @@ export default function Hero() {
           </ul>
         </div>
 
-        {/* Download CV — kept at the top right like before, but now
-            floating free on the dark panel rather than living inside a
-            bar. Sits above the photo (which starts lower, at top-24/28),
-            so nothing overlaps it. */}
-        <Link
-          href={profile.cvHref}
-          download
-          className="absolute right-6 top-6 z-20 hidden text-sm font-medium text-accent transition hover:opacity-80 sm:right-10 sm:top-8 sm:inline-flex"
+        {/* Download CV + menu — grouped together at the top right, floating
+            free on the dark panel rather than living inside a bar. Sits
+            above the photo (which starts lower, at top-24/28), so nothing
+            overlaps it. The menu button opens a small dropdown repeating
+            the bar's nav links plus Download CV — the only way to reach
+            them on mobile, where both the bar's links and this CV link are
+            hidden. */}
+        <div
+          ref={menuRef}
+          className="absolute right-6 top-6 z-20 flex items-center gap-4 sm:right-10 sm:top-8"
         >
-          Download CV
-        </Link>
+          <Link
+            href={profile.cvHref}
+            download
+            className="hidden text-sm font-medium text-accent transition hover:opacity-80 sm:inline-flex"
+          >
+            Download CV
+          </Link>
+
+          <button
+            type="button"
+            onClick={() => setMenuOpen((open) => !open)}
+            aria-expanded={menuOpen}
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            className="text-paper transition hover:text-accent"
+          >
+            {menuOpen ? (
+              <X className="h-5 w-5" strokeWidth={1.5} />
+            ) : (
+              <Menu className="h-5 w-5" strokeWidth={1.5} />
+            )}
+          </button>
+
+          {menuOpen && (
+            <div className="absolute right-0 top-full z-30 mt-3 flex w-40 flex-col gap-1 rounded-lg bg-paper py-2 shadow-xl">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setMenuOpen(false)}
+                  className="px-4 py-1.5 text-sm text-ink/70 transition hover:text-ink"
+                >
+                  {link.label}
+                </Link>
+              ))}
+              <Link
+                href={profile.cvHref}
+                download
+                onClick={() => setMenuOpen(false)}
+                className="px-4 py-1.5 text-sm font-medium text-accent3 transition hover:opacity-80"
+              >
+                Download CV
+              </Link>
+            </div>
+          )}
+        </div>
 
         {/* Photo: a bounded, framed card in the upper right, with a soft
             blue/green glow behind it for an "ocean, not literal" feel
