@@ -88,7 +88,7 @@ export default function Disciplines() {
             centered below) below sm, since there's no room for that on an
             iOS-width screen. */}
         <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-center sm:justify-between sm:gap-10">
-          <h2 className="text-sm font-medium uppercase tracking-widest text-paper sm:shrink-0 sm:text-left">
+          <h2 className="max-w-[16ch] text-2xl font-bold uppercase leading-tight tracking-wide text-paper sm:shrink-0 sm:text-left sm:text-3xl lg:text-4xl">
             Explore my work by discipline
           </h2>
           {/* One row, fixed height. The active tile is as wide as it is
