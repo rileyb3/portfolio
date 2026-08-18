@@ -78,7 +78,7 @@ export default function Disciplines() {
       // it. bg-ink matches Hero above it — the whole landing page is back
       // to the original dark theme (inverse-color flip), consistent with
       // every other route.
-      className="relative z-20 -mt-[40vh] min-h-[85vh] scroll-mt-6 rounded-t-[3rem] bg-ink px-6 pb-16 pt-10 text-center sm:px-12 sm:pt-14 lg:px-20 xl:px-28"
+      className="relative z-20 -mt-[40vh] min-h-[85vh] scroll-mt-6 rounded-t-[3rem] bg-ink px-6 pb-16 pt-10 text-center sm:pl-12 sm:pr-24 sm:pt-14 lg:pl-20 lg:pr-40 xl:pl-28 xl:pr-56"
     >
       <div className="mx-auto w-full">
         {/* Heading + tile row share one flex row on larger screens — label
@@ -88,7 +88,7 @@ export default function Disciplines() {
             centered below) below sm, since there's no room for that on an
             iOS-width screen. */}
         <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-center sm:justify-between sm:gap-10">
-          <h2 className="max-w-[16ch] text-4xl font-bold uppercase leading-tight tracking-wide text-paper sm:shrink-0 sm:text-left sm:text-5xl lg:text-6xl">
+          <h2 className="max-w-[11ch] text-4xl font-bold uppercase leading-tight tracking-wide text-paper sm:shrink-0 sm:text-left sm:text-5xl lg:text-6xl">
             Explore my work by discipline
           </h2>
           {/* One row, fixed height. The active tile is as wide as it is
