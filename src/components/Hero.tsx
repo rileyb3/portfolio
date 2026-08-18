@@ -38,34 +38,37 @@ export default function Hero() {
     // runway the sticky photo holds, and separately the runway the name's
     // own wrapper (below) holds before it releases too.
     <section id="top" className="relative h-[178vh]">
-      <div className="sticky top-0 h-screen bg-ink">
-        {/* Nav bar — the bar's the only in-flow content in this panel (the
-            CV link and photo below are both absolute, out of flow), so its
-            own margin-top is its full static offset: 213px / 296px, which
-            is where the old absolutely-positioned bar crossed the photo.
-            `sticky top-0` then takes it from there — at scroll=0 it
-            renders at that static spot, and scrolling up by that same
-            distance carries it to the viewport's top edge, where it
-            catches and rides along with the screen for the rest of the
-            panel's pin duration, rather than staying fixed mid-photo the
-            whole time. This only works because the panel lost its
-            `overflow-hidden` (that was clipping the sticky child's scroll
-            reference down to the panel's own non-scrolling box, which
-            never gave it anywhere to travel to). Staying a plain DOM child
-            here — same stacking context as the photo — is also what keeps
-            it simply behind the photo (z-0 vs the photo's z-10) wherever
-            they cross, without needing any cross-context z-index games.
-            Words are spread with justify-between plus a wide right padding
-            sized to stop just shy of the photo, so the last link lands
-            close to the image without sliding underneath it. */}
-        <div className="sticky top-0 z-0 mt-[213px] flex h-6 items-center justify-between bg-paper pl-6 pr-6 text-xs sm:mt-[296px] sm:h-8 sm:pl-10 sm:pr-[21rem] sm:text-sm">
+      <div className="sticky top-0 h-screen overflow-hidden bg-ink">
+        {/* Crisp bar, true full viewport width, crossing the photo's
+            vertical center (with a slight downward nudge). This lives as a
+            direct child of the sticky panel — not inside the small photo
+            wrapper below — because an absolutely positioned element's
+            percentage/`inset` values resolve against its own containing
+            block. Nested inside the narrow photo wrapper, `w-screen` +
+            `left-1/2` centered on that small block's position, not the
+            actual viewport, so the bar came out short and off-center.
+            Sitting directly in the full-width sticky panel and using
+            `inset-x-0` fixes that. z-0 keeps it below the photo (z-10) and
+            above the plain background; it's static (no parallax) since a
+            full-bleed bar shouldn't jitter with the photo's own drift.
+            White fill — the panel is dark now, so the bar needs to be the
+            light color to still read against it.
+
+            Now doubles as the site nav (moved here from the old top
+            Header bar, which stays hidden on the homepage — see
+            Header.tsx). Text is dark since it sits on the light bg-paper
+            fill, not the dark panel; kept at the bar's original thin
+            height, so nav text is sized down to fit. Hover states are
+            color/weight only — no background chip — to match the bar's
+            plain aesthetic and stay behind the photo (z-0) like before. */}
+        <div className="absolute inset-x-0 top-[225px] z-0 flex h-6 -translate-y-1/2 items-center gap-5 bg-paper px-6 text-xs sm:top-[312px] sm:h-8 sm:px-10 sm:text-sm">
           <Link
             href="/"
             className="shrink-0 font-semibold tracking-wide text-ink transition hover:text-accent3"
           >
             Riley Byers
           </Link>
-          <ul className="hidden items-center gap-10 sm:flex">
+          <ul className="hidden items-center gap-5 sm:flex">
             {navLinks.map((link) => (
               <li key={link.href}>
                 <Link
