@@ -24,8 +24,8 @@ export default function SmoothScroll() {
       // exactly why this felt like "nothing changed" at first. Lower
       // lerp = slower catch-up = more visible lag/weight — same idea as
       // Hero's own photo-parallax lerp (0.08 there, for reference).
-      lerp: 0.045,
-      duration: 1.2, // higher = slower, heavier settle for scrollTo jumps
+      lerp: 0.02,
+      duration: 1.6, // higher = slower, heavier settle for scrollTo jumps
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     });
 
