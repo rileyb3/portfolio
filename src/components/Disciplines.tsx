@@ -106,8 +106,14 @@ export default function Disciplines() {
               // combined with the per-tile stagger delay below, tiles
               // arrive one after another in sequence (build, design,
               // play...) so the reveal reads like a staircase rather than
-              // everything fading in at once.
-              const entranceY = visible ? 0 : 48;
+              // everything fading in at once. Distance and duration are
+              // both exaggerated (96px / 1100ms, vs. a plain 500ms
+              // transition-all) specifically for transform+opacity, via
+              // an explicit `transition` list rather than Tailwind's
+              // `transition-all` — that keeps the hover expand/collapse
+              // (width/padding/gap) snappy at its own 500ms instead of
+              // also getting slowed down along with the entrance.
+              const entranceY = visible ? 0 : 96;
               return (
                 <Link
                   key={tile.id}
@@ -116,10 +122,12 @@ export default function Disciplines() {
                   onMouseLeave={() => setHoveredId(null)}
                   style={{
                     background: gradient,
-                    transitionDelay: visible ? `${i * 90}ms` : "0ms",
+                    transitionDelay: visible ? `${i * 120}ms` : "0ms",
                     transform: `translateY(${entranceY}px) scale(${entranceScale})`,
+                    transition:
+                      "transform 1100ms ease-out, opacity 1100ms ease-out, width 500ms ease-out, padding 500ms ease-out, gap 500ms ease-out",
                   }}
-                  className={`group flex shrink-0 flex-col items-center justify-center gap-2 rounded-2xl p-3 text-center text-ink transition-all duration-500 ease-out sm:rounded-3xl ${
+                  className={`group flex shrink-0 flex-col items-center justify-center gap-2 rounded-2xl p-3 text-center text-ink sm:rounded-3xl ${
                     isActive
                       ? "w-56 sm:w-64 sm:gap-3 sm:p-6 lg:w-72"
                       : "w-14 sm:w-20 lg:w-24"
