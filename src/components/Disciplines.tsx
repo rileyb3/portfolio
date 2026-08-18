@@ -45,7 +45,11 @@ const blobStyle = [
 export default function Disciplines() {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
-  const [hoveredId, setHoveredId] = useState<string | null>(null);
+  // Accordion-style: one tile is expanded to full square size at a time,
+  // the rest sit collapsed as narrow rounded rectangles. Hovering a
+  // collapsed tile makes it the expanded one; it stays expanded (rather
+  // than snapping back on mouse-leave) until another tile is hovered.
+  const [activeId, setActiveId] = useState(tiles[0].id);
 
   useEffect(() => {
     const el = ref.current;
@@ -80,35 +84,46 @@ export default function Disciplines() {
         <h2 className="mb-6 text-sm font-medium uppercase tracking-widest text-muted">
           Explore my work by discipline
         </h2>
-        {/* One row, five equal-width columns — grid (not flex) so the
-            columns and the gaps between them both stay perfectly even
-            regardless of tile count. */}
-        <div className="mx-auto grid grid-cols-5 gap-3 sm:gap-6">
+        {/* One row, fixed height. The active tile is as wide as it is
+            tall (a square); every other tile collapses to a narrow
+            rounded rectangle at the same height. Widths animate via
+            `transition-all` on plain Tailwind width classes, which is
+            just as animatable as an inline style here. */}
+        <div className="mx-auto flex h-56 items-stretch justify-center gap-3 sm:h-64 sm:gap-4 lg:h-72">
           {tiles.map((tile, i) => {
             const Icon = iconMap[tile.id] ?? Images;
             const { gradient } = blobStyle[i % blobStyle.length];
+            const isActive = activeId === tile.id;
             const entranceScale = visible ? 1 : 0.85;
-            const hoverScale = hoveredId === tile.id ? 1.05 : 1;
             return (
               <Link
                 key={tile.id}
                 href={tile.href}
-                onMouseEnter={() => setHoveredId(tile.id)}
-                onMouseLeave={() => setHoveredId(null)}
+                onMouseEnter={() => setActiveId(tile.id)}
                 style={{
                   background: gradient,
                   transitionDelay: visible ? `${i * 60}ms` : "0ms",
-                  transform: `scale(${entranceScale * hoverScale})`,
+                  transform: `scale(${entranceScale})`,
                 }}
-                className={`group flex aspect-square w-full flex-col items-center justify-center gap-2 rounded-2xl p-3 text-center text-ink transition-all duration-500 ease-out sm:gap-3 sm:rounded-3xl sm:p-6 ${
-                  visible ? "opacity-100" : "opacity-0"
-                }`}
+                className={`group flex shrink-0 flex-col items-center justify-center gap-2 rounded-2xl p-3 text-center text-ink transition-all duration-500 ease-out sm:rounded-3xl ${
+                  isActive
+                    ? "w-56 sm:w-64 sm:gap-3 sm:p-6 lg:w-72"
+                    : "w-14 sm:w-20 lg:w-24"
+                } ${visible ? "opacity-100" : "opacity-0"}`}
               >
                 <Icon
-                  className="h-7 w-7 transition-transform duration-300 group-hover:scale-110 sm:h-12 sm:w-12"
+                  className={`shrink-0 transition-all duration-300 ${
+                    isActive ? "h-7 w-7 sm:h-12 sm:w-12" : "h-5 w-5 sm:h-6 sm:w-6"
+                  }`}
                   strokeWidth={1.5}
                 />
-                <span className="text-xs font-semibold leading-snug sm:text-lg">
+                <span
+                  className={`font-semibold leading-snug transition-all duration-300 ${
+                    isActive
+                      ? "text-xs opacity-100 sm:text-lg"
+                      : "hidden text-[10px] opacity-0 sm:block"
+                  }`}
+                >
                   {tile.label}
                 </span>
               </Link>
