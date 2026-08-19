@@ -78,7 +78,11 @@ export default function Disciplines() {
       // it. bg-paper — a one-off white card rising over the still-dark
       // Hero, rather than matching it — is a trial run per request; the
       // section below (Intro onward) stays on the normal dark theme.
-      className="relative z-20 -mt-[40vh] min-h-[85vh] scroll-mt-6 bg-paper px-6 pb-16 pt-10 text-center sm:pl-12 sm:pr-24 sm:pt-14 lg:pl-20 lg:pr-40 xl:pl-28 xl:pr-56"
+      // No pb-* here — the bottom of this section now ends in the ombre
+      // bars below rather than blank paper, so any bottom padding would
+      // just reopen a white gap between the last bar and Intro's dark
+      // background picking up right after it.
+      className="relative z-20 -mt-[40vh] min-h-[85vh] scroll-mt-6 bg-paper px-6 pt-10 text-center sm:pl-12 sm:pr-24 sm:pt-14 lg:pl-20 lg:pr-40 xl:pl-28 xl:pr-56"
     >
       <div className="mx-auto w-full">
         {/* Heading + tile row share one flex row on larger screens — label
@@ -189,6 +193,24 @@ export default function Disciplines() {
             })}
           </div>
         </div>
+      </div>
+
+      {/* Structured-ombre transition, mirroring the white bar crossing
+          Hero's dark photo — same idea in reverse: a couple of black bars
+          crossing this white section on the way down to Intro's dark
+          background, so the white-to-black handoff reads as a deliberate
+          rhythm instead of one hard cut. Same thickness as that bar
+          (h-6/h-8), full-bleed edge to edge regardless of the section's
+          own asymmetric side padding (the left-1/2/-ml-[50vw] pair breaks
+          out of the padded container the same way Hero's bar breaks out
+          of its own wrapper). This sits as the section's last child with
+          no bottom padding after it (moved off the section itself, see
+          the comment up top), so the second bar lands flush against the
+          very bottom edge — right where Intro's dark background picks up
+          — instead of leaving a stray white strip below it. */}
+      <div className="pt-24 sm:pt-28">
+        <div className="relative left-1/2 h-6 w-screen -translate-x-1/2 bg-ink sm:h-8" />
+        <div className="relative left-1/2 mt-10 h-6 w-screen -translate-x-1/2 bg-ink sm:mt-12 sm:h-8" />
       </div>
     </section>
   );
