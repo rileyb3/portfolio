@@ -1,6 +1,5 @@
 import Hero from "@/components/Hero";
 import Disciplines from "@/components/Disciplines";
-import AccentBand from "@/components/AccentBand";
 import Intro from "@/components/Intro";
 import SelectedWorks from "@/components/SelectedWorks";
 import TechMarquee from "@/components/TechMarquee";
@@ -13,7 +12,6 @@ export default function Home() {
       <main>
         <Hero />
         <Disciplines />
-        <AccentBand />
         <Intro />
         <SelectedWorks />
         <TechMarquee />
