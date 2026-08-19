@@ -34,12 +34,8 @@ export default function SmoothScroll() {
     // call for anchor-link jumps, further down in this file.
     const lenis = new Lenis({
       // Lower = slower catch-up = more visible lag/weight — same idea as
-      // Hero's own photo-parallax lerp (0.08 there, for reference). Every
-      // earlier attempt to tune this (up to an extreme 0.008) never
-      // actually took effect because of the duration/easing bug above —
-      // this is the first value that will genuinely be felt, so it's set
-      // deliberately heavy rather than conservative.
-      lerp: 0.035,
+      // Hero's own photo-parallax lerp (0.08 there, for reference).
+      lerp: 0.028,
       smoothWheel: true,
       // Lenis honors `prefers-reduced-motion` by default and silently
       // forces lerp to 1 (i.e. no smoothing at all) when it's set — which
