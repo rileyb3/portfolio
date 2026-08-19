@@ -78,7 +78,7 @@ export default function Disciplines() {
       // it. bg-paper — a one-off white card rising over the still-dark
       // Hero, rather than matching it — is a trial run per request; the
       // section below (Intro onward) stays on the normal dark theme.
-      className="relative z-20 -mt-[40vh] min-h-[85vh] scroll-mt-6 rounded-t-[3rem] bg-paper px-6 pb-16 pt-10 text-center sm:pl-12 sm:pr-24 sm:pt-14 lg:pl-20 lg:pr-40 xl:pl-28 xl:pr-56"
+      className="relative z-20 -mt-[40vh] min-h-[85vh] scroll-mt-6 bg-paper px-6 pb-16 pt-10 text-center sm:pl-12 sm:pr-24 sm:pt-14 lg:pl-20 lg:pr-40 xl:pl-28 xl:pr-56"
     >
       <div className="mx-auto w-full">
         {/* Heading + tile row share one flex row on larger screens — label
