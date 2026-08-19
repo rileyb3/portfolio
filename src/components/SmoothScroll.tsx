@@ -14,30 +14,37 @@ import Lenis from "lenis";
 // effect for as long as it's mounted (once, in the root layout).
 export default function SmoothScroll() {
   useEffect(() => {
+    // Root cause of "still feels the same" after every previous fix:
+    // Lenis's wheel handler (onVirtualScroll) passes lerp, duration, AND
+    // easing into every scrollTo() call it makes on your behalf. Its
+    // internal Animate.advance() checks `if (duration && easing)` BEFORE
+    // `else if (lerp)` — so as long as duration/easing are set at all
+    // (even just for the anchor-link jumps below), they silently win for
+    // EVERY wheel tick too, and lerp never actually runs. That duration/
+    // easing animation also gets restarted from scratch on every new
+    // wheel event (every ~16ms), and the expo-out easing rises so fast
+    // early on that it barely lags behind native scroll — which is
+    // exactly the "nothing changed" symptom. Confirmed by reading
+    // node_modules/lenis/dist/lenis.mjs directly (Animate class + the
+    // onVirtualScroll -> scrollTo call), not a guess.
+    //
+    // Fix: keep duration/easing OFF the instance options entirely, so
+    // everyday wheel/trackpad scroll falls through to the lerp branch.
+    // duration/easing are passed instead only at the specific scrollTo()
+    // call for anchor-link jumps, further down in this file.
     const lenis = new Lenis({
-      // `duration`/`easing` mainly govern the programmatic `scrollTo()`
-      // jumps (the anchor-link handler below) — the feel of everyday
-      // wheel/trackpad scrolling is actually driven by `lerp`, which
-      // defaults to 0.1 (a fairly tight, quick catch-up) if left unset.
-      // That default is subtle enough to be nearly invisible layered on
-      // top of macOS's own already-smooth trackpad momentum, which is
-      // exactly why this felt like "nothing changed" at first. Lower
-      // lerp = slower catch-up = more visible lag/weight — same idea as
+      // Lower = slower catch-up = more visible lag/weight — same idea as
       // Hero's own photo-parallax lerp (0.08 there, for reference).
-      lerp: 0.008,
+      lerp: 0.06,
       smoothWheel: true,
-      duration: 1.6, // higher = slower, heavier settle for scrollTo jumps
-      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       // Lenis honors `prefers-reduced-motion` by default and silently
       // forces lerp to 1 (i.e. no smoothing at all) when it's set — which
       // is the right call for accessibility generally, but it's also
-      // almost certainly why the effect was reading as "nothing changed":
-      // Hero's own hand-rolled photo parallax doesn't check that setting
-      // at all, so it kept animating on its own while the rest of the
-      // page silently fell back to native scroll. Overriding it here so
-      // the effect always applies on this decorative, non-essential
-      // interaction — worth reconsidering if accessibility feedback ever
-      // says otherwise.
+      // one of the earlier reasons this read as "nothing happening" for
+      // users with that OS setting on. Overriding it here so the effect
+      // always applies on this decorative, non-essential interaction —
+      // worth reconsidering if accessibility feedback ever says
+      // otherwise.
       respectReducedMotion: false,
     });
 
@@ -67,7 +74,13 @@ export default function SmoothScroll() {
       const target = document.getElementById(hash);
       if (!target) return;
       e.preventDefault();
-      lenis.scrollTo(target);
+      // duration/easing scoped to just this call (not the constructor
+      // options above) — see the big comment above for why putting them
+      // on the instance instead was silently breaking wheel-scroll lerp.
+      lenis.scrollTo(target, {
+        duration: 1.6,
+        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      });
     }
     document.addEventListener("click", handleClick);
 
