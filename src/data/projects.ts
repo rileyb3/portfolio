@@ -342,10 +342,7 @@ Deno.serve(async (req) => {
         body: [
           {
             type: "images",
-            images: [
-              "/projects/voices-meet-minds/logo.png",
-              "/projects/voices-meet-minds/research/ref-vmm-badge.png",
-            ],
+            images: ["/projects/voices-meet-minds/research/ref-vmm-badge.png"],
           },
           {
             type: "text",
