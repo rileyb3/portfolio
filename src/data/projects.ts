@@ -20,8 +20,20 @@ export type Project = {
   // detail (extra images, a longer writeup) to warrant its own page.
   slug?: string;
   // Longer writeup for the dedicated project page. Falls back to
-  // `description` if omitted.
+  // `description` if omitted. Ignored if `body` is set.
   details?: string;
+  // Ordered text/image sequence for the dedicated project page — use
+  // this instead of `details` when a project needs an image group to
+  // sit inline right after the paragraph that references it (e.g. "here
+  // are the references I pulled" followed immediately by those images),
+  // rather than every image being pushed into one gallery at the very
+  // bottom. When set, this replaces `details`/`description` on the
+  // project page entirely; `description` is still used for card blurbs
+  // elsewhere (category page, homepage).
+  body?: Array<
+    | { type: "text"; text: string }
+    | { type: "images"; images: string[] }
+  >;
   // Extra images shown in a gallery on the dedicated project page.
   gallery?: string[];
   // A representative code snippet shown on the dedicated project page.
@@ -327,22 +339,38 @@ Deno.serve(async (req) => {
         title: "Voices Meet Minds Branding",
         description:
           "Newsletter mascot design for Voices Meet Minds, developed alongside a broader branding and website cleanup I'm leading for the org.",
-        details:
-          "Voices Meet Minds' existing mark is a butterfly wordmark and logo — clean for the site itself, but not very expressive for a recurring newsletter that needs its own friendlier, more personality-driven face. I was asked to design a mascot to fill that gap as part of a larger branding and website refresh for the organization.\n\nA caterpillar was the natural answer: it's the same creature as the existing butterfly mark, just an earlier stage, so the newsletter still ties back to the org's branding rather than introducing an unrelated character. It's also a far easier shape to pose and animate than a static insect silhouette.\n\nBefore drawing, I pulled reference images searching \"cartoon caterpillar,\" \"caterpillar clip art,\" \"cute caterpillar,\" and \"swallowtail caterpillar\" — a mix of existing mascot styles and real caterpillar biology, shown in the research gallery below. That research narrowed down a handful of concrete decisions: how segmented to make the body (how many ridges, how distinct each one reads), how defined to make the feet, a default resting pose to draw from consistently, and how to organize the face (eye size and placement, a simple mouth) so the character reads as friendly rather than insect-accurate.\n\nThe ideation sheet above is where those decisions actually got tested against each other. Still an early stage — refining further as the rest of the branding and website work continues.",
+        body: [
+          {
+            type: "text",
+            text: "Voices Meet Minds' existing mark is a butterfly wordmark and logo — clean for the site itself, but not very expressive for a recurring newsletter that needs its own friendlier, more personality-driven face. I was asked to design a mascot to fill that gap as part of a larger branding and website refresh for the organization.\n\nA caterpillar was the natural answer: it's the same creature as the existing butterfly mark, just an earlier stage, so the newsletter still ties back to the org's branding rather than introducing an unrelated character. It's also a far easier shape to pose and animate than a static insect silhouette.\n\nBefore drawing, I pulled reference images searching \"cartoon caterpillar,\" \"caterpillar clip art,\" \"cute caterpillar,\" and \"swallowtail caterpillar\" — a mix of existing mascot styles and real caterpillar biology:",
+          },
+          {
+            type: "images",
+            images: [
+              "/projects/voices-meet-minds/research/ref-vmm-badge.png",
+              "/projects/voices-meet-minds/research/ref-leaf-caterpillar-eye-study.png",
+              "/projects/voices-meet-minds/research/ref-swallowtail-osmeterium.png",
+              "/projects/voices-meet-minds/research/ref-clipart-flat.png",
+              "/projects/voices-meet-minds/research/ref-3d-character.png",
+              "/projects/voices-meet-minds/research/ref-very-hungry-caterpillar.png",
+              "/projects/voices-meet-minds/research/ref-cartoon-round-antennae.png",
+              "/projects/voices-meet-minds/research/ref-clipart-googly-eyes.png",
+            ],
+          },
+          {
+            type: "text",
+            text: "That research narrowed down a handful of concrete decisions: how segmented to make the body (how many ridges, how distinct each one reads), how defined to make the feet, a default resting pose to draw from consistently, and how to organize the face (eye size and placement, a simple mouth) so the character reads as friendly rather than insect-accurate.\n\nThe ideation sheet below is where those decisions actually got tested against each other, alongside the org's current butterfly logo for reference. Still an early stage — refining further as the rest of the branding and website work continues.",
+          },
+          {
+            type: "images",
+            images: [
+              "/projects/voices-meet-minds/logo.png",
+              "/projects/voices-meet-minds/ideation.png",
+            ],
+          },
+        ],
         tags: ["Branding", "Character Design", "Mascot Design"],
         image: "/projects/voices-meet-minds/mascot.jpg",
-        gallery: [
-          "/projects/voices-meet-minds/logo.png",
-          "/projects/voices-meet-minds/ideation.png",
-          "/projects/voices-meet-minds/research/ref-vmm-badge.png",
-          "/projects/voices-meet-minds/research/ref-leaf-caterpillar-eye-study.png",
-          "/projects/voices-meet-minds/research/ref-swallowtail-osmeterium.png",
-          "/projects/voices-meet-minds/research/ref-clipart-flat.png",
-          "/projects/voices-meet-minds/research/ref-3d-character.png",
-          "/projects/voices-meet-minds/research/ref-very-hungry-caterpillar.png",
-          "/projects/voices-meet-minds/research/ref-cartoon-round-antennae.png",
-          "/projects/voices-meet-minds/research/ref-clipart-googly-eyes.png",
-        ],
         slug: "voices-meet-minds",
       },
     ],

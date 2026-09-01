@@ -17,7 +17,10 @@ export default function ProjectPage({
   const project = getProjectBySlug(params.slug);
   if (!project) notFound();
 
-  const body = (project.details ?? project.description).split("\n\n");
+  // `body` (ordered text/image blocks) takes priority when set, so an
+  // image group can sit inline right after the paragraph introducing it.
+  // Otherwise fall back to the plain paragraph split used everywhere else.
+  const paragraphs = (project.details ?? project.description).split("\n\n");
 
   return (
     <>
@@ -75,11 +78,42 @@ export default function ProjectPage({
             )
           )}
 
-          <div className="mt-6 space-y-4 text-sm leading-relaxed text-muted">
-            {body.map((para, i) => (
-              <p key={i}>{para}</p>
-            ))}
-          </div>
+          {project.body ? (
+            <div className="mt-6 space-y-6">
+              {project.body.map((block, i) =>
+                block.type === "text" ? (
+                  <div
+                    key={i}
+                    className="space-y-4 text-sm leading-relaxed text-muted"
+                  >
+                    {block.text.split("\n\n").map((para, j) => (
+                      <p key={j}>{para}</p>
+                    ))}
+                  </div>
+                ) : (
+                  <div
+                    key={i}
+                    className="columns-2 gap-4 sm:columns-3 [&>*]:mb-4"
+                  >
+                    {block.images.map((src) => (
+                      <div
+                        key={src}
+                        className="break-inside-avoid overflow-hidden rounded-2xl border border-white/10 bg-surface"
+                      >
+                        <ExpandableImage src={src} alt="" className="w-full" />
+                      </div>
+                    ))}
+                  </div>
+                )
+              )}
+            </div>
+          ) : (
+            <div className="mt-6 space-y-4 text-sm leading-relaxed text-muted">
+              {paragraphs.map((para, i) => (
+                <p key={i}>{para}</p>
+              ))}
+            </div>
+          )}
 
           {project.reflection && (
             <div className="mt-8 grid gap-4 rounded-2xl border border-white/10 bg-surface p-6 sm:grid-cols-3">
