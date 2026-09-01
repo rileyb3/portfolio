@@ -325,9 +325,16 @@ Deno.serve(async (req) => {
       },
       {
         title: "Voices Meet Minds Branding",
-        description: "Caterpillar mascot and logo design for Voices Meet Minds.",
-        tags: ["Branding", "Character Design"],
+        description:
+          "Newsletter mascot design for Voices Meet Minds, developed alongside a broader branding and website cleanup.",
+        details:
+          "Voices Meet Minds' existing mark is a butterfly, but a wordmark-and-butterfly logo isn't very expressive for a recurring newsletter. A caterpillar — the same creature, an earlier stage — gave the newsletter its own friendlier, more animatable face while still tying back to the site's butterfly branding. These are early ideation passes exploring pose and expression, done as part of a larger branding and website refresh I'm leading for the organization.",
+        tags: ["Branding", "Character Design", "Mascot Design"],
         image: "/projects/voices-meet-minds/icon.jpg",
+        gallery: [
+          "/projects/voices-meet-minds/logo.png",
+          "/projects/voices-meet-minds/ideation.png",
+        ],
         slug: "voices-meet-minds",
       },
     ],
