@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import SubpageHeader from "@/components/SubpageHeader";
 import Footer from "@/components/Footer";
 import ExpandableImage from "@/components/ExpandableImage";
+import RevealOnScroll from "@/components/RevealOnScroll";
+import BeforeAfterSlider from "@/components/BeforeAfterSlider";
 import { slugProjects, getProjectBySlug } from "@/data/projects";
 
 export function generateStaticParams() {
@@ -33,23 +35,23 @@ export default function ProjectPage({
           <div className="flex items-baseline justify-between gap-2">
             <Link
               href={`/${project.categoryId}`}
-              className="text-xs uppercase tracking-widest text-muted transition hover:text-accent hover:underline"
+              className="text-sm uppercase tracking-widest text-muted transition hover:text-accent hover:underline"
             >
               {project.tagLabel ?? project.categoryLabel}
             </Link>
             {project.year && (
-              <span className="text-xs text-muted">{project.year}</span>
+              <span className="text-sm text-muted">{project.year}</span>
             )}
           </div>
-          <h1 className="mt-2 text-3xl font-bold tracking-tight text-paper">
+          <h1 className="mt-2 text-4xl font-bold tracking-tight text-paper sm:text-5xl">
             {project.title}
           </h1>
 
-          <ul className="mt-3 flex flex-wrap gap-2">
+          <ul className="mt-4 flex flex-wrap gap-2">
             {project.tags.map((tag) => (
               <li
                 key={tag}
-                className="rounded-full bg-white/5 px-3 py-1 text-xs text-muted"
+                className="rounded-full bg-white/5 px-3 py-1 text-sm text-muted"
               >
                 {tag}
               </li>
@@ -57,27 +59,27 @@ export default function ProjectPage({
           </ul>
 
           {project.meta && project.meta.length > 0 && (
-            <div className="mt-6 grid grid-cols-2 gap-x-6 gap-y-4 border-y border-white/10 py-5 sm:grid-cols-4">
+            <RevealOnScroll className="mt-6 grid grid-cols-2 gap-x-6 gap-y-4 border-y border-white/10 py-5 sm:grid-cols-4">
               {project.meta.map((m) => (
                 <div key={m.label}>
-                  <h2 className="text-xs uppercase tracking-widest text-muted">
+                  <h2 className="text-sm uppercase tracking-widest text-muted">
                     {m.label}
                   </h2>
                   <div className="mt-1.5 space-y-0.5">
                     {m.values.map((v) => (
-                      <p key={v} className="text-sm text-paper">
+                      <p key={v} className="text-base text-paper">
                         {v}
                       </p>
                     ))}
                   </div>
                 </div>
               ))}
-            </div>
+            </RevealOnScroll>
           )}
 
           {project.palette && project.palette.length > 0 && (
-            <div className="mt-6">
-              <h2 className="text-xs uppercase tracking-widest text-muted">
+            <RevealOnScroll className="mt-6">
+              <h2 className="text-sm uppercase tracking-widest text-muted">
                 Palette
               </h2>
               <div className="mt-2 flex h-14 overflow-hidden rounded-full border border-white/10">
@@ -90,11 +92,11 @@ export default function ProjectPage({
                   />
                 ))}
               </div>
-            </div>
+            </RevealOnScroll>
           )}
 
           {project.video ? (
-            <div className="mt-6 overflow-hidden rounded-2xl border border-white/10 bg-surface2">
+            <RevealOnScroll className="mt-6 overflow-hidden rounded-2xl border border-white/10 bg-surface2">
               <video
                 src={project.video}
                 poster={project.image}
@@ -102,16 +104,16 @@ export default function ProjectPage({
                 playsInline
                 className="w-full"
               />
-            </div>
+            </RevealOnScroll>
           ) : (
             project.image && (
-              <div className="mt-6 overflow-hidden rounded-2xl border border-white/10 bg-surface2">
+              <RevealOnScroll className="mt-6 overflow-hidden rounded-2xl border border-white/10 bg-surface2">
                 <ExpandableImage
                   src={project.image}
                   alt={project.title}
                   className="w-full"
                 />
-              </div>
+              </RevealOnScroll>
             )
           )}
 
@@ -120,33 +122,59 @@ export default function ProjectPage({
               {project.body.map((block, i) => {
                 if (block.type === "heading") {
                   return (
-                    <h2
-                      key={i}
-                      className="text-xs font-semibold uppercase tracking-[0.2em] text-accent"
-                    >
-                      {block.text}
-                    </h2>
+                    <RevealOnScroll key={i}>
+                      <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">
+                        {block.text}
+                      </h2>
+                    </RevealOnScroll>
                   );
                 }
                 if (block.type === "text") {
                   return (
-                    <div
+                    <RevealOnScroll
                       key={i}
-                      className="space-y-4 text-sm leading-relaxed text-muted"
+                      className="space-y-4 text-base leading-relaxed text-muted"
                     >
                       {block.text.split("\n\n").map((para, j) => (
                         <p key={j}>{para}</p>
                       ))}
-                    </div>
+                    </RevealOnScroll>
+                  );
+                }
+                if (block.type === "full-image") {
+                  return (
+                    <RevealOnScroll
+                      key={i}
+                      className="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden bg-surface2 sm:max-h-[85vh]"
+                    >
+                      <ExpandableImage
+                        src={block.image}
+                        alt=""
+                        className="w-full sm:max-h-[85vh] sm:object-contain"
+                      />
+                    </RevealOnScroll>
+                  );
+                }
+                if (block.type === "before-after") {
+                  return (
+                    <RevealOnScroll
+                      key={i}
+                      className="relative left-1/2 w-screen -translate-x-1/2"
+                    >
+                      <BeforeAfterSlider
+                        before={block.before}
+                        after={block.after}
+                      />
+                    </RevealOnScroll>
                   );
                 }
                 if (block.type === "text-with-image") {
                   return (
-                    <div
+                    <RevealOnScroll
                       key={i}
                       className="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-6"
                     >
-                      <div className="space-y-4 text-sm leading-relaxed text-muted sm:flex-1">
+                      <div className="space-y-4 text-base leading-relaxed text-muted sm:flex-1">
                         {block.text.split("\n\n").map((para, j) => (
                           <p key={j}>{para}</p>
                         ))}
@@ -158,11 +186,11 @@ export default function ProjectPage({
                           className="w-full"
                         />
                       </div>
-                    </div>
+                    </RevealOnScroll>
                   );
                 }
                 return (
-                  <div
+                  <RevealOnScroll
                     key={i}
                     className="columns-2 gap-4 sm:columns-3 [&>*]:mb-4"
                   >
@@ -174,12 +202,12 @@ export default function ProjectPage({
                         <ExpandableImage src={src} alt="" className="w-full" />
                       </div>
                     ))}
-                  </div>
+                  </RevealOnScroll>
                 );
               })}
             </div>
           ) : (
-            <div className="mt-6 space-y-4 text-sm leading-relaxed text-muted">
+            <div className="mt-6 space-y-4 text-base leading-relaxed text-muted">
               {paragraphs.map((para, i) => (
                 <p key={i}>{para}</p>
               ))}
@@ -187,38 +215,38 @@ export default function ProjectPage({
           )}
 
           {project.reflection && (
-            <div className="mt-8 grid gap-4 rounded-2xl border border-white/10 bg-surface p-6 sm:grid-cols-3">
+            <RevealOnScroll className="mt-8 grid gap-4 rounded-2xl border border-white/10 bg-surface p-6 sm:grid-cols-3">
               {project.reflection.proudOf && (
                 <div>
-                  <h2 className="text-xs uppercase tracking-widest text-muted">
+                  <h2 className="text-sm uppercase tracking-widest text-muted">
                     Most proud of
                   </h2>
-                  <p className="mt-2 text-sm leading-relaxed text-paper">
+                  <p className="mt-2 text-base leading-relaxed text-paper">
                     {project.reflection.proudOf}
                   </p>
                 </div>
               )}
               {project.reflection.learned && (
                 <div>
-                  <h2 className="text-xs uppercase tracking-widest text-muted">
+                  <h2 className="text-sm uppercase tracking-widest text-muted">
                     What I learned
                   </h2>
-                  <p className="mt-2 text-sm leading-relaxed text-paper">
+                  <p className="mt-2 text-base leading-relaxed text-paper">
                     {project.reflection.learned}
                   </p>
                 </div>
               )}
               {project.reflection.redo && (
                 <div>
-                  <h2 className="text-xs uppercase tracking-widest text-muted">
+                  <h2 className="text-sm uppercase tracking-widest text-muted">
                     If I redid it
                   </h2>
-                  <p className="mt-2 text-sm leading-relaxed text-paper">
+                  <p className="mt-2 text-base leading-relaxed text-paper">
                     {project.reflection.redo}
                   </p>
                 </div>
               )}
-            </div>
+            </RevealOnScroll>
           )}
 
           {project.link && project.link !== "#" && (
@@ -226,15 +254,15 @@ export default function ProjectPage({
               href={project.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-6 inline-block text-sm text-accent hover:underline"
+              className="mt-6 inline-block text-base text-accent hover:underline"
             >
               {project.linkLabel ?? "View project"} →
             </a>
           )}
 
           {project.gallery && project.gallery.length > 0 && (
-            <div className="mt-10">
-              <h2 className="text-sm font-semibold text-paper">
+            <RevealOnScroll className="mt-10">
+              <h2 className="text-base font-semibold text-paper">
                 More from this project
               </h2>
               <div className="mt-4 columns-2 gap-4 sm:columns-3 [&>*]:mb-4">
@@ -247,18 +275,18 @@ export default function ProjectPage({
                   </div>
                 ))}
               </div>
-            </div>
+            </RevealOnScroll>
           )}
 
           {project.codeSnippet && (
-            <div className="mt-10">
-              <h2 className="text-sm font-semibold text-paper">
+            <RevealOnScroll className="mt-10">
+              <h2 className="text-base font-semibold text-paper">
                 {project.codeSnippet.label}
               </h2>
-              <pre className="mt-4 overflow-x-auto rounded-2xl border border-white/10 bg-surface2 p-4 text-xs leading-relaxed text-muted">
+              <pre className="mt-4 overflow-x-auto rounded-2xl border border-white/10 bg-surface2 p-4 text-sm leading-relaxed text-muted">
                 <code>{project.codeSnippet.code}</code>
               </pre>
-            </div>
+            </RevealOnScroll>
           )}
         </article>
       </main>

@@ -41,6 +41,12 @@ export type Project = {
     // (e.g. "THE PROCESS") — case-study style, modeled after
     // angelechendesigns.com's project pages.
     | { type: "heading"; text: string }
+    // Breaks out of the article's max-w-3xl column to render near
+    // full-viewport-width — for a single reveal/hero-ish image that
+    // should read as a bigger moment than the inline gallery grid.
+    | { type: "full-image"; image: string }
+    // Full-bleed draggable before/after comparison slider.
+    | { type: "before-after"; before: string; after: string }
   >;
   // Short label/value pairs shown in a row near the top of the project
   // page (e.g. TIME, TOOLS, ROLE) — same idea as the meta row on
@@ -411,10 +417,6 @@ Deno.serve(async (req) => {
             image: "/projects/childhood-bedroom/before-room-wide.jpg",
           },
           {
-            type: "images",
-            images: ["/projects/childhood-bedroom/before-desk.jpg"],
-          },
-          {
             type: "heading",
             text: "The Palette",
           },
@@ -427,9 +429,12 @@ Deno.serve(async (req) => {
             text: "The Process",
           },
           {
-            type: "text-with-image",
+            type: "text",
             text: "I set up a projector to get the placement and linework of my reference image right before painting anything freehand — tracing the birds and the sun directly onto the wall. Budget was small: two gallons of paint (the green and the white) plus a handful of sample pots for the detail colors on the birds.",
-            image: "/projects/childhood-bedroom/mural-outline.jpg",
+          },
+          {
+            type: "images",
+            images: ["/projects/childhood-bedroom/mural-outline.jpg"],
           },
           {
             type: "heading",
@@ -444,8 +449,9 @@ Deno.serve(async (req) => {
             text: "The Result",
           },
           {
-            type: "images",
-            images: ["/projects/childhood-bedroom/after-reveal.jpg"],
+            type: "before-after",
+            before: "/projects/childhood-bedroom/before-desk.jpg",
+            after: "/projects/childhood-bedroom/after-reveal.jpg",
           },
         ],
         tags: ["Interior Design", "Mural", "Painting"],
