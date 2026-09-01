@@ -416,13 +416,13 @@ Deno.serve(async (req) => {
           },
           {
             type: "text-with-image",
-            text: "This was my childhood bedroom — bright blue walls, whatever furniture layout had accumulated over the years. Freshman summer of college, over about two months, I wanted it to feel calmer and more adult before I left for school, not like a room I'd outgrown.",
+            text: "This was my childhood bedroom. I grew up with bright blue walls, an accumulation of practical furniture, and an eclectic layout that always felt cluttered. The summer after my freshman year of college I decided this was not a room I could return to — it was ready for an upgrade.",
             image: "/projects/childhood-bedroom/before-room-wide.jpg",
           },
           {
             type: "pills",
             label: "Goals",
-            items: ["Low Budget", "Wall Mural", "Calm, Mature Vibe"],
+            items: ["Low Budget", "Wall Mural", "Calm", "Mature Vibe", "2 Months"],
           },
           {
             type: "heading",
