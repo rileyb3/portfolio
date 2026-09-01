@@ -359,13 +359,16 @@ Deno.serve(async (req) => {
           },
           {
             type: "text",
-            text: "That research narrowed down a handful of concrete decisions: how segmented to make the body (how many ridges, how distinct each one reads), how defined to make the feet, a default resting pose to draw from consistently, and how to organize the face (eye size and placement, a simple mouth) so the character reads as friendly rather than insect-accurate.\n\nThe ideation sheet below is where those decisions actually got tested against each other, alongside the org's current butterfly logo for reference. Still an early stage — refining further as the rest of the branding and website work continues.",
+            text: "That research narrowed down a handful of concrete decisions: how segmented to make the body (how many ridges, how distinct each one reads), how defined to make the feet, a default resting pose to draw from consistently, and how to organize the face (eye size and placement, a simple mouth) so the character reads as friendly rather than insect-accurate.\n\nThese iterations are where those decisions actually got tested against each other, alongside the org's current butterfly logo for reference. Still an early stage — refining further as the rest of the branding and website work continues.",
           },
           {
             type: "images",
             images: [
               "/projects/voices-meet-minds/logo.png",
-              "/projects/voices-meet-minds/ideation.png",
+              "/projects/voices-meet-minds/iteration-1.png",
+              "/projects/voices-meet-minds/iteration-2.png",
+              "/projects/voices-meet-minds/iteration-3.png",
+              "/projects/voices-meet-minds/iteration-4.png",
             ],
           },
         ],
