@@ -6,7 +6,7 @@ import { profile } from "@/data/projects";
 // backgrounds — those were adding visual noise once the rest of the
 // homepage got busier. One accent-colored CTA (Download CV) is the only
 // strong visual element in the bar.
-const navLinks = [
+export const navLinks = [
   { label: "About", href: "/about" },
   { label: "Experience", href: "/experience" },
   { label: "Contact", href: "/#contact" },

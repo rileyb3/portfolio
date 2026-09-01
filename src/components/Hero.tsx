@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { profile, categories } from "@/data/projects";
+import { profile } from "@/data/projects";
+import { navLinks } from "@/components/Header";
 
 // Akihiko/Palmer-inspired redesign of the landing hero — inverse color
 // scheme again: dark panel, light name/text, white bar for contrast (the
@@ -70,15 +71,17 @@ export default function Hero() {
             White fill — the panel is dark now, so the bar needs to be the
             light color to still read against it.
 
-            Now carries the discipline links (moved down from the meta
-            row above), styled dark since they sit on the light fill. */}
+            Carries the same three links as the top bar (About/Experience/
+            Contact) rather than the old build/design/play/discover/write
+            discipline list — one nav vocabulary instead of two, styled
+            dark since they sit on the light fill. */}
         <div className="absolute inset-x-0 top-[225px] z-0 flex h-6 -translate-y-1/2 items-center bg-paper px-6 text-[0.65rem] font-medium uppercase tracking-[0.2em] text-ink/70 sm:top-[312px] sm:h-8 sm:px-10 sm:text-xs">
           <ul className="flex flex-wrap items-center gap-x-2 gap-y-1">
-            {categories.map((c, i) => (
-              <li key={c.id} className="flex items-center gap-2">
+            {navLinks.map((link, i) => (
+              <li key={link.href} className="flex items-center gap-2">
                 {i > 0 && <span aria-hidden="true" className="text-ink/30">·</span>}
-                <Link href={`/${c.id}`} className="transition hover:text-ink">
-                  {c.label}
+                <Link href={link.href} className="transition hover:text-ink">
+                  {link.label}
                 </Link>
               </li>
             ))}
