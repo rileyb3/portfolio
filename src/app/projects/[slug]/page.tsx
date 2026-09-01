@@ -75,6 +75,24 @@ export default function ProjectPage({
             </div>
           )}
 
+          {project.palette && project.palette.length > 0 && (
+            <div className="mt-6">
+              <h2 className="text-xs uppercase tracking-widest text-muted">
+                Palette
+              </h2>
+              <div className="mt-2 flex h-14 overflow-hidden rounded-full border border-white/10">
+                {project.palette.map((hex) => (
+                  <div
+                    key={hex}
+                    className="flex-1"
+                    style={{ backgroundColor: hex }}
+                    title={hex}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
           {project.video ? (
             <div className="mt-6 overflow-hidden rounded-2xl border border-white/10 bg-surface2">
               <video
