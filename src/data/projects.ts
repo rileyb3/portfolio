@@ -416,6 +416,10 @@ Deno.serve(async (req) => {
             image: "/projects/childhood-bedroom/before-room-wide.jpg",
           },
           {
+            type: "images",
+            images: ["/projects/childhood-bedroom/before-desk.jpg"],
+          },
+          {
             type: "heading",
             text: "The Palette",
           },
@@ -428,8 +432,9 @@ Deno.serve(async (req) => {
             text: "The Process",
           },
           {
-            type: "text",
+            type: "text-with-image",
             text: "I set up a projector to get the placement and linework of my reference image right before painting anything freehand — tracing the birds and the sun directly onto the wall. Budget was small: two gallons of paint (the green and the white) plus a handful of sample pots for the detail colors on the birds.",
+            image: "/projects/childhood-bedroom/mural-outline.jpg",
           },
           {
             type: "heading",
@@ -438,6 +443,14 @@ Deno.serve(async (req) => {
           {
             type: "text",
             text: "Beyond the walls, I reoriented the room's furniture to make it feel more spacious, and deconstructed and rebuilt the bed frame lower to the ground with hinged wooden flaps for access to under-bed storage.",
+          },
+          {
+            type: "heading",
+            text: "The Result",
+          },
+          {
+            type: "images",
+            images: ["/projects/childhood-bedroom/after-reveal.jpg"],
           },
         ],
         tags: ["Interior Design", "Mural", "Painting"],
