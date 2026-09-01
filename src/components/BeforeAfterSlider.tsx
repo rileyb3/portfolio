@@ -49,7 +49,15 @@ export default function BeforeAfterSlider({
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
       onPointerLeave={onPointerUp}
-      className="relative aspect-[4/3] w-full cursor-ew-resize select-none overflow-hidden bg-surface2 sm:aspect-video"
+      // Lenis (site-wide smooth scroll) hijacks wheel/touch input on the
+      // whole page by default, so a drag that starts on this slider was
+      // also getting read as a page-scroll gesture and yanking you past
+      // the section. `data-lenis-prevent` is Lenis's own escape hatch for
+      // nested interactive widgets exactly like this one; `touch-none`
+      // stops the browser's native touch-scroll from competing with the
+      // pointer-drag handlers below on mobile.
+      data-lenis-prevent
+      className="relative aspect-[4/3] w-full touch-none select-none overflow-hidden bg-surface2 sm:aspect-video sm:cursor-ew-resize"
     >
       {/* Base layer: after */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
