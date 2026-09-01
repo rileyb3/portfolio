@@ -401,7 +401,7 @@ Deno.serve(async (req) => {
           "Repainting my childhood bedroom and hand-painting a heron-and-sun mural directly onto the wall, freshman summer of college.",
         palette: ["#425348", "#ACA589", "#D6D2D2", "#4E2A0E", "#B27858"],
         meta: [
-          { label: "Time", values: ["Started freshman summer of college", "Ongoing"] },
+          { label: "Time", values: ["Freshman summer of college"] },
           { label: "Materials", values: ["2 gal wall paint (green + white)", "Sample pots for detail colors"] },
           { label: "Tools", values: ["Projector, for placement + linework"] },
         ],
@@ -411,8 +411,9 @@ Deno.serve(async (req) => {
             text: "The Goal",
           },
           {
-            type: "text",
+            type: "text-with-image",
             text: "This was my childhood bedroom — bright blue walls, whatever furniture layout had accumulated over the years. Freshman summer of college, I wanted it to feel calmer and more adult before I left for school, not like a room I'd outgrown.",
+            image: "/projects/childhood-bedroom/before-room-wide.jpg",
           },
           {
             type: "heading",
