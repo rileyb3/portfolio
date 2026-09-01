@@ -9,9 +9,11 @@ import { useEffect, useRef, useState } from "react";
 export default function RevealOnScroll({
   children,
   className,
+  style,
 }: {
   children: React.ReactNode;
   className?: string;
+  style?: React.CSSProperties;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
@@ -36,6 +38,7 @@ export default function RevealOnScroll({
   return (
     <div
       ref={ref}
+      style={style}
       className={`transition-all duration-700 ease-out ${
         visible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
       } ${className ?? ""}`}

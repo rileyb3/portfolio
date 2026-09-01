@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import ExpandableImage from "@/components/ExpandableImage";
 import RevealOnScroll from "@/components/RevealOnScroll";
 import BeforeAfterSlider from "@/components/BeforeAfterSlider";
+import ImageSlideshow from "@/components/ImageSlideshow";
 import { slugProjects, getProjectBySlug } from "@/data/projects";
 
 export function generateStaticParams() {
@@ -156,6 +157,16 @@ export default function ProjectPage({
                         alt=""
                         className="w-full sm:max-h-[85vh] sm:object-contain"
                       />
+                    </RevealOnScroll>
+                  );
+                }
+                if (block.type === "slideshow") {
+                  return (
+                    <RevealOnScroll
+                      key={i}
+                      className="relative left-1/2 w-screen -translate-x-1/2"
+                    >
+                      <ImageSlideshow images={block.images} />
                     </RevealOnScroll>
                   );
                 }

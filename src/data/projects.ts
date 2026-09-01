@@ -55,6 +55,10 @@ export type Project = {
     // that actually talks about the palette, instead of always pinned
     // near the top of the page regardless of what the writeup says.
     | { type: "palette" }
+    // Full-bleed, continuously auto-scrolling strip of progress photos —
+    // same looping-marquee technique as the homepage's TechMarquee, just
+    // images instead of logo pills.
+    | { type: "slideshow"; images: string[] }
   >;
   // Short label/value pairs shown in a row near the top of the project
   // page (e.g. TIME, TOOLS, ROLE) — same idea as the meta row on
@@ -449,8 +453,13 @@ Deno.serve(async (req) => {
             text: "I set up a projector to get the placement and linework of my reference image right before painting anything freehand — tracing the birds and the sun directly onto the wall. Budget was small: two gallons of paint (the green and the white) plus a handful of sample pots for the detail colors on the birds.",
           },
           {
-            type: "full-image",
-            image: "/projects/childhood-bedroom/mural-outline.jpg",
+            type: "slideshow",
+            images: [
+              "/projects/childhood-bedroom/paint-swatches.jpg",
+              "/projects/childhood-bedroom/mural-outline.jpg",
+              "/projects/childhood-bedroom/mural-outline-2.jpg",
+              "/projects/childhood-bedroom/green-wall-wide.jpg",
+            ],
           },
           {
             type: "heading",
