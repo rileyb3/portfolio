@@ -31,7 +31,12 @@ export default function ExpandableImage({
       <img
         src={src}
         alt={alt}
-        className={`cursor-zoom-in ${className ?? ""}`}
+        // `block` matters here, not just decorative: img is inline by
+        // default, which leaves a few px gap below it (baseline spacing
+        // for descenders like "g"/"y") inside its rounded/bordered
+        // container — read as a sliver of the container's dark
+        // background peeking out under every image on the site.
+        className={`block cursor-zoom-in ${className ?? ""}`}
         onClick={() => setOpen(true)}
       />
       {open && (
