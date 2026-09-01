@@ -49,7 +49,7 @@ export default function BeforeAfterSlider({
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
       onPointerLeave={onPointerUp}
-      className="relative aspect-[4/3] w-full cursor-ew-resize select-none overflow-hidden bg-surface2 sm:aspect-video"
+      className="relative aspect-[4/3] max-h-[70vh] w-full cursor-ew-resize select-none overflow-hidden bg-surface2 sm:aspect-video"
     >
       {/* Base layer: after */}
       {/* eslint-disable-next-line @next/next/no-img-element */}

@@ -27,7 +27,7 @@ export default function ImageSlideshow({
   }, [images.length, intervalMs]);
 
   return (
-    <div className="relative aspect-[4/3] w-full overflow-hidden bg-surface2 sm:aspect-video">
+    <div className="relative aspect-[4/3] max-h-[70vh] w-full overflow-hidden bg-surface2 sm:aspect-video">
       <div
         className="flex h-full transition-transform duration-700 ease-in-out"
         style={{
