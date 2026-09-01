@@ -50,6 +50,11 @@ export type Project = {
     // Labeled row of pill chips (e.g. "Goals: Low Budget, Wall Mural...")
     // for calling out a short list without a full paragraph.
     | { type: "pills"; label: string; items: string[] }
+    // Renders the project's top-level `palette` swatch strip inline,
+    // wherever it's placed in the body — e.g. right under the paragraph
+    // that actually talks about the palette, instead of always pinned
+    // near the top of the page regardless of what the writeup says.
+    | { type: "palette" }
   >;
   // Short label/value pairs shown in a row near the top of the project
   // page (e.g. TIME, TOOLS, ROLE) — same idea as the meta row on
@@ -433,6 +438,9 @@ Deno.serve(async (req) => {
             text: "I researched color palettes and general vibes on Pinterest and Google before touching any paint, and landed on sage green, a terracotta orange, a few shades of cream, and brown — calm and warm rather than the bright blue it was.",
           },
           {
+            type: "palette",
+          },
+          {
             type: "heading",
             text: "The Process",
           },
@@ -441,8 +449,8 @@ Deno.serve(async (req) => {
             text: "I set up a projector to get the placement and linework of my reference image right before painting anything freehand — tracing the birds and the sun directly onto the wall. Budget was small: two gallons of paint (the green and the white) plus a handful of sample pots for the detail colors on the birds.",
           },
           {
-            type: "images",
-            images: ["/projects/childhood-bedroom/mural-outline.jpg"],
+            type: "full-image",
+            image: "/projects/childhood-bedroom/mural-outline.jpg",
           },
           {
             type: "heading",

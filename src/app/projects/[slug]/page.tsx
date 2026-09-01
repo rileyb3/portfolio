@@ -77,7 +77,11 @@ export default function ProjectPage({
             </RevealOnScroll>
           )}
 
-          {project.palette && project.palette.length > 0 && (
+          {/* Body-driven projects place the palette explicitly via a
+              `{ type: "palette" }` block wherever the writeup actually
+              talks about it; only the legacy flat-paragraph path (no
+              `body`) falls back to always showing it up here. */}
+          {!project.body && project.palette && project.palette.length > 0 && (
             <RevealOnScroll className="mt-6">
               <h2 className="text-sm uppercase tracking-widest text-muted">
                 Palette
@@ -152,6 +156,24 @@ export default function ProjectPage({
                         alt=""
                         className="w-full sm:max-h-[85vh] sm:object-contain"
                       />
+                    </RevealOnScroll>
+                  );
+                }
+                if (block.type === "palette") {
+                  if (!project.palette || project.palette.length === 0)
+                    return null;
+                  return (
+                    <RevealOnScroll key={i}>
+                      <div className="flex h-14 overflow-hidden rounded-full border border-white/10">
+                        {project.palette.map((hex) => (
+                          <div
+                            key={hex}
+                            className="flex-1"
+                            style={{ backgroundColor: hex }}
+                            title={hex}
+                          />
+                        ))}
+                      </div>
                     </RevealOnScroll>
                   );
                 }
