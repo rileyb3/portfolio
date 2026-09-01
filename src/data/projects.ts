@@ -383,6 +383,32 @@ Deno.serve(async (req) => {
         image: "/projects/voices-meet-minds/card.jpg",
         slug: "voices-meet-minds",
       },
+      {
+        title: "Interior Design",
+        description:
+          "Before and after of my childhood bedroom — repainted, and a heron-and-sun mural I'm hand-painting directly onto the wall.",
+        body: [
+          {
+            type: "text",
+            text: "My childhood bedroom, mid-repaint: out with the bright blue and the clutter, in with a calmer white wall and a heron-and-sun mural I'm painting directly onto it by hand rather than using wallpaper or a decal.",
+          },
+          {
+            type: "images",
+            images: [
+              "/projects/childhood-bedroom/before.jpg",
+              "/projects/childhood-bedroom/after.jpg",
+            ],
+          },
+          {
+            type: "text",
+            text: "Still in progress — the sun and the linework are in, and I'm filling in the birds' color in stages rather than all at once.",
+          },
+        ],
+        tags: ["Interior Design", "Mural", "Painting"],
+        tagLabel: "Interior Design",
+        image: "/projects/childhood-bedroom/after.jpg",
+        slug: "childhood-bedroom",
+      },
     ],
   },
   {
