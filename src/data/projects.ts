@@ -270,6 +270,8 @@ Deno.serve(async (req) => {
           { src: "/art/abstract-blue-yellow.jpg" },
           { src: "/art/abstract-bw.jpg" },
           { src: "/art/abstract-green.jpg" },
+          { src: "/art/abstract-rainbow-swirl.jpg" },
+          { src: "/art/abstract-bw-stripes.jpg" },
         ],
       },
       {
