@@ -74,8 +74,10 @@ export default function Hero() {
             Carries the same three links as the top bar (About/Experience/
             Contact) rather than the old build/design/play/discover/write
             discipline list — one nav vocabulary instead of two, styled
-            dark since they sit on the light fill. */}
-        <div className="absolute inset-x-0 top-[225px] z-0 flex h-6 -translate-y-1/2 items-center bg-paper px-6 text-[0.65rem] font-medium uppercase tracking-[0.2em] text-ink/70 sm:top-[312px] sm:h-8 sm:px-10 sm:text-xs">
+            dark since they sit on the light fill. z-30 — above the quote
+            (z-20) and photo/name (z-10) — so nothing can ever sit on top
+            of it and swallow the click, regardless of viewport height. */}
+        <div className="absolute inset-x-0 top-[225px] z-30 flex h-6 -translate-y-1/2 items-center bg-paper px-6 text-[0.65rem] font-medium uppercase tracking-[0.2em] text-ink/70 sm:top-[312px] sm:h-8 sm:px-10 sm:text-xs">
           <ul className="flex flex-wrap items-center gap-x-2 gap-y-1">
             {navLinks.map((link, i) => (
               <li key={link.href} className="flex items-center gap-2">
@@ -121,8 +123,8 @@ export default function Hero() {
           that it runs off both edges of the screen — globals.css sets
           overflow-x:hidden so that doesn't create a horizontal scrollbar.
           Fixed white on the dark panel, no color animation. */}
-      <div className="absolute inset-x-0 top-[40vh] z-10 h-[138vh]">
-        <h1 className="pointer-events-none sticky top-[60%] mx-auto w-fit whitespace-nowrap font-sans text-5xl font-semibold leading-none tracking-tight text-paper sm:text-[12rem] lg:text-[15rem]">
+      <div className="pointer-events-none absolute inset-x-0 top-[40vh] z-10 h-[138vh]">
+        <h1 className="sticky top-[60%] mx-auto w-fit whitespace-nowrap font-sans text-5xl font-semibold leading-none tracking-tight text-paper sm:text-[12rem] lg:text-[15rem]">
           {profile.name}
         </h1>
       </div>
