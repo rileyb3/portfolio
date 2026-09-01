@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { profile } from "@/data/projects";
 
-// Global nav — sticky across every page (wired into layout.tsx). Kept
-// deliberately plain: text-only links, no icons or per-item pill
-// backgrounds — those were adding visual noise once the rest of the
-// homepage got busier. One accent-colored CTA (Download CV) is the only
-// strong visual element in the bar.
+// Global nav — sticky across every page (wired into layout.tsx). The
+// About/Experience/Contact links used to render here too; now they only
+// live in Hero's white bar on the homepage, so this bar is just the
+// brand + CTA. navLinks stays exported/defined here since Hero still
+// imports it for that bar.
 export const navLinks = [
   { label: "About", href: "/about" },
   { label: "Experience", href: "/experience" },
@@ -22,19 +22,6 @@ export default function Header() {
         >
           Riley Byers
         </Link>
-
-        <ul className="hidden items-center gap-1 text-sm sm:flex">
-          {navLinks.map((link) => (
-            <li key={link.href}>
-              <Link
-                href={link.href}
-                className="inline-block px-2.5 py-1 text-muted transition hover:bg-accent hover:text-ink"
-              >
-                {link.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
 
         <Link
           href={profile.cvHref}
