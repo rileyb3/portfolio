@@ -33,6 +33,10 @@ export type Project = {
   body?: Array<
     | { type: "text"; text: string }
     | { type: "images"; images: string[] }
+    // Text and a single image side by side (image on the right, text
+    // filling the remaining width) on sm+ screens; stacks image-above-
+    // text on mobile where there's no room for a row.
+    | { type: "text-with-image"; text: string; image: string }
   >;
   // Extra images shown in a gallery on the dedicated project page.
   gallery?: string[];
@@ -341,12 +345,9 @@ Deno.serve(async (req) => {
           "Newsletter mascot design for Voices Meet Minds, developed alongside a broader branding and website cleanup I'm leading for the org.",
         body: [
           {
-            type: "images",
-            images: ["/projects/voices-meet-minds/research/ref-vmm-badge.png"],
-          },
-          {
-            type: "text",
+            type: "text-with-image",
             text: "Voices Meet Minds' existing mark is a butterfly wordmark and logo — clean for the site itself, but not very expressive for a recurring newsletter that needs its own friendlier, more personality-driven face. I was asked to design a mascot to fill that gap as part of a larger branding and website refresh for the organization.\n\nA caterpillar was the natural answer: it's the same creature as the existing butterfly mark, just an earlier stage, so the newsletter still ties back to the org's branding rather than introducing an unrelated character. It's also a far easier shape to pose and animate than a static insect silhouette.\n\nBefore drawing, I pulled reference images searching \"cartoon caterpillar,\" \"caterpillar clip art,\" \"cute caterpillar,\" and \"swallowtail caterpillar\" — a mix of existing mascot styles and real caterpillar biology:",
+            image: "/projects/voices-meet-minds/research/ref-vmm-badge.png",
           },
           {
             type: "images",
@@ -375,7 +376,11 @@ Deno.serve(async (req) => {
           },
         ],
         tags: ["Branding", "Character Design", "Mascot Design"],
-        image: "/projects/voices-meet-minds/mascot.jpg",
+        // 16:9 so the card thumbnail's aspect-video/object-cover box (see
+        // ProjectCard.tsx) shows the whole character instead of cropping
+        // his feet off — mascot.jpg is closer to square and was getting
+        // cut on the card, even though it looked fine on this detail page.
+        image: "/projects/voices-meet-minds/card.jpg",
         slug: "voices-meet-minds",
       },
     ],

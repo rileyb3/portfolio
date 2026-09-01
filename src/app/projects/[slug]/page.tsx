@@ -80,17 +80,41 @@ export default function ProjectPage({
 
           {project.body ? (
             <div className="mt-6 space-y-6">
-              {project.body.map((block, i) =>
-                block.type === "text" ? (
-                  <div
-                    key={i}
-                    className="space-y-4 text-sm leading-relaxed text-muted"
-                  >
-                    {block.text.split("\n\n").map((para, j) => (
-                      <p key={j}>{para}</p>
-                    ))}
-                  </div>
-                ) : (
+              {project.body.map((block, i) => {
+                if (block.type === "text") {
+                  return (
+                    <div
+                      key={i}
+                      className="space-y-4 text-sm leading-relaxed text-muted"
+                    >
+                      {block.text.split("\n\n").map((para, j) => (
+                        <p key={j}>{para}</p>
+                      ))}
+                    </div>
+                  );
+                }
+                if (block.type === "text-with-image") {
+                  return (
+                    <div
+                      key={i}
+                      className="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-6"
+                    >
+                      <div className="space-y-4 text-sm leading-relaxed text-muted sm:flex-1">
+                        {block.text.split("\n\n").map((para, j) => (
+                          <p key={j}>{para}</p>
+                        ))}
+                      </div>
+                      <div className="w-40 shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-surface sm:w-56">
+                        <ExpandableImage
+                          src={block.image}
+                          alt=""
+                          className="w-full"
+                        />
+                      </div>
+                    </div>
+                  );
+                }
+                return (
                   <div
                     key={i}
                     className="columns-2 gap-4 sm:columns-3 [&>*]:mb-4"
@@ -104,8 +128,8 @@ export default function ProjectPage({
                       </div>
                     ))}
                   </div>
-                )
-              )}
+                );
+              })}
             </div>
           ) : (
             <div className="mt-6 space-y-4 text-sm leading-relaxed text-muted">
