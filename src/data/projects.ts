@@ -272,6 +272,7 @@ Deno.serve(async (req) => {
           { src: "/art/abstract-green.jpg" },
           { src: "/art/abstract-rainbow-swirl.jpg" },
           { src: "/art/abstract-bw-stripes.jpg" },
+          { src: "/art/mural-herons-wip.jpg" },
         ],
       },
       {
@@ -321,6 +322,13 @@ Deno.serve(async (req) => {
           "The movement design behind my climbing routes — full story under Build.",
         tags: ["Routesetting"],
         slug: "routesetting",
+      },
+      {
+        title: "Voices Meet Minds Branding",
+        description: "Caterpillar mascot and logo design for Voices Meet Minds.",
+        tags: ["Branding", "Character Design"],
+        image: "/projects/voices-meet-minds/icon.jpg",
+        slug: "voices-meet-minds",
       },
     ],
   },
