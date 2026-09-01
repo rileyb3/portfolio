@@ -1,62 +1,37 @@
-"use client";
-
-import { useState } from "react";
 import { profile } from "@/data/projects";
+import { ArrowUpRight } from "lucide-react";
 
+// Reduced to just two links — LinkedIn and email, pinned to opposite
+// bottom corners with a diagonal arrow — replacing the old "Let's work
+// together" box (heading, blurb, Download CV, GitHub). Kept the
+// id="contact" anchor since both the top bar and Hero's white bar still
+// link to /#contact.
 export default function Contact() {
-  const [copied, setCopied] = useState(false);
-
-  async function copyEmail() {
-    try {
-      await navigator.clipboard.writeText(profile.email);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1800);
-    } catch {
-      // Clipboard API unavailable (e.g. insecure context) — mailto below
-      // still works as a fallback via the link semantics of the button
-      // itself failing gracefully into nothing; not worth extra UI for
-      // such a rare case.
-    }
-  }
+  const linkedin = profile.socials.find((s) => s.label === "LinkedIn");
 
   return (
-    <section id="contact" className="mx-auto max-w-4xl px-6 py-20">
-      <div className="rounded-2xl border border-white/10 bg-surface p-10 text-center">
-        <h2 className="text-2xl font-bold tracking-tight text-paper">
-          Let&apos;s work together
-        </h2>
-        <p className="mx-auto mt-3 max-w-md text-muted">
-          Open to roles across software, design, games, research, and
-          writing. Reach out any time.
-        </p>
-        <div className="mt-6 flex flex-wrap justify-center gap-4">
-          <button
-            type="button"
-            onClick={copyEmail}
-            className="rounded-full bg-accent2 px-5 py-2.5 text-sm font-medium text-ink transition hover:opacity-80"
-          >
-            {copied ? "Copied!" : profile.email}
-          </button>
-          <a
-            href={profile.cvHref}
-            download
-            className="rounded-full border border-white/20 px-5 py-2.5 text-sm font-medium text-paper transition hover:border-white/40"
-          >
-            Download CV
-          </a>
-          {profile.socials.map((s) => (
-            <a
-              key={s.label}
-              href={s.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-full border border-white/20 px-5 py-2.5 text-sm font-medium text-paper transition hover:border-white/40"
-            >
-              {s.label}
-            </a>
-          ))}
-        </div>
-      </div>
+    <section
+      id="contact"
+      className="flex min-h-[40vh] items-end justify-between px-6 py-12 sm:min-h-[50vh] sm:px-10"
+    >
+      {linkedin && (
+        <a
+          href={linkedin.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 text-sm font-bold uppercase tracking-wide text-paper transition hover:text-accent"
+        >
+          LNKDN
+          <ArrowUpRight className="h-4 w-4" strokeWidth={2.5} />
+        </a>
+      )}
+      <a
+        href={`mailto:${profile.email}`}
+        className="inline-flex items-center gap-1 text-sm font-bold uppercase tracking-wide text-paper transition hover:text-accent"
+      >
+        {profile.email}
+        <ArrowUpRight className="h-4 w-4" strokeWidth={2.5} />
+      </a>
     </section>
   );
 }
