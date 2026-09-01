@@ -37,7 +37,15 @@ export type Project = {
     // filling the remaining width) on sm+ screens; stacks image-above-
     // text on mobile where there's no room for a row.
     | { type: "text-with-image"; text: string; image: string }
+    // Small-caps section label breaking the writeup into named chunks
+    // (e.g. "THE PROCESS") — case-study style, modeled after
+    // angelechendesigns.com's project pages.
+    | { type: "heading"; text: string }
   >;
+  // Short label/value pairs shown in a row near the top of the project
+  // page (e.g. TIME, TOOLS, ROLE) — same idea as the meta row on
+  // angelechendesigns.com's case studies.
+  meta?: { label: string; values: string[] }[];
   // Extra images shown in a gallery on the dedicated project page.
   gallery?: string[];
   // A representative code snippet shown on the dedicated project page.
@@ -386,22 +394,45 @@ Deno.serve(async (req) => {
       {
         title: "Interior Design",
         description:
-          "Before and after of my childhood bedroom — repainted, and a heron-and-sun mural I'm hand-painting directly onto the wall.",
+          "Repainting my childhood bedroom and hand-painting a heron-and-sun mural directly onto the wall, freshman summer of college.",
+        meta: [
+          { label: "Time", values: ["Started freshman summer of college", "Ongoing"] },
+          { label: "Palette", values: ["Sage green", "Terracotta orange", "Cream", "Brown"] },
+          { label: "Materials", values: ["2 gal wall paint (green + white)", "Sample pots for detail colors"] },
+          { label: "Tools", values: ["Projector, for placement + linework"] },
+        ],
         body: [
           {
-            type: "text",
-            text: "My childhood bedroom, mid-repaint: out with the bright blue and the clutter, in with a calmer white wall and a heron-and-sun mural I'm painting directly onto it by hand rather than using wallpaper or a decal.",
-          },
-          {
-            type: "images",
-            images: [
-              "/projects/childhood-bedroom/before.jpg",
-              "/projects/childhood-bedroom/after.jpg",
-            ],
+            type: "heading",
+            text: "The Goal",
           },
           {
             type: "text",
-            text: "Still in progress — the sun and the linework are in, and I'm filling in the birds' color in stages rather than all at once.",
+            text: "This was my childhood bedroom — bright blue walls, whatever furniture layout had accumulated over the years. Freshman summer of college, I wanted it to feel calmer and more adult before I left for school, not like a room I'd outgrown.",
+          },
+          {
+            type: "heading",
+            text: "The Palette",
+          },
+          {
+            type: "text",
+            text: "I researched color palettes and general vibes on Pinterest and Google before touching any paint, and landed on sage green, a terracotta orange, a few shades of cream, and brown — calm and warm rather than the bright blue it was.",
+          },
+          {
+            type: "heading",
+            text: "The Process",
+          },
+          {
+            type: "text",
+            text: "I set up a projector to get the placement and linework of my reference image right before painting anything freehand — tracing the birds and the sun directly onto the wall. Budget was small: two gallons of paint (the green and the white) plus a handful of sample pots for the detail colors on the birds.",
+          },
+          {
+            type: "heading",
+            text: "The Furniture",
+          },
+          {
+            type: "text",
+            text: "Beyond the walls, I reoriented the room's furniture to make it feel more spacious, and deconstructed and rebuilt the bed frame lower to the ground with hinged wooden flaps for access to under-bed storage.",
           },
         ],
         tags: ["Interior Design", "Mural", "Painting"],

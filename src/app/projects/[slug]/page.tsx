@@ -56,6 +56,25 @@ export default function ProjectPage({
             ))}
           </ul>
 
+          {project.meta && project.meta.length > 0 && (
+            <div className="mt-6 grid grid-cols-2 gap-x-6 gap-y-4 border-y border-white/10 py-5 sm:grid-cols-4">
+              {project.meta.map((m) => (
+                <div key={m.label}>
+                  <h2 className="text-xs uppercase tracking-widest text-muted">
+                    {m.label}
+                  </h2>
+                  <div className="mt-1.5 space-y-0.5">
+                    {m.values.map((v) => (
+                      <p key={v} className="text-sm text-paper">
+                        {v}
+                      </p>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
           {project.video ? (
             <div className="mt-6 overflow-hidden rounded-2xl border border-white/10 bg-surface2">
               <video
@@ -81,6 +100,16 @@ export default function ProjectPage({
           {project.body ? (
             <div className="mt-6 space-y-6">
               {project.body.map((block, i) => {
+                if (block.type === "heading") {
+                  return (
+                    <h2
+                      key={i}
+                      className="text-xs font-semibold uppercase tracking-[0.2em] text-accent"
+                    >
+                      {block.text}
+                    </h2>
+                  );
+                }
                 if (block.type === "text") {
                   return (
                     <div
