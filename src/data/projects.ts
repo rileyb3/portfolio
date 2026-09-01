@@ -47,6 +47,9 @@ export type Project = {
     | { type: "full-image"; image: string }
     // Full-bleed draggable before/after comparison slider.
     | { type: "before-after"; before: string; after: string }
+    // Labeled row of pill chips (e.g. "Goals: Low Budget, Wall Mural...")
+    // for calling out a short list without a full paragraph.
+    | { type: "pills"; label: string; items: string[] }
   >;
   // Short label/value pairs shown in a row near the top of the project
   // page (e.g. TIME, TOOLS, ROLE) — same idea as the meta row on
@@ -415,6 +418,11 @@ Deno.serve(async (req) => {
             type: "text-with-image",
             text: "This was my childhood bedroom — bright blue walls, whatever furniture layout had accumulated over the years. Freshman summer of college, over about two months, I wanted it to feel calmer and more adult before I left for school, not like a room I'd outgrown.",
             image: "/projects/childhood-bedroom/before-room-wide.jpg",
+          },
+          {
+            type: "pills",
+            label: "Goals",
+            items: ["Low Budget", "Wall Mural", "Calm, Mature Vibe"],
           },
           {
             type: "heading",

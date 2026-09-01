@@ -155,6 +155,26 @@ export default function ProjectPage({
                     </RevealOnScroll>
                   );
                 }
+                if (block.type === "pills") {
+                  return (
+                    <RevealOnScroll
+                      key={i}
+                      className="flex flex-wrap items-center gap-2"
+                    >
+                      <span className="text-sm uppercase tracking-widest text-muted">
+                        {block.label}:
+                      </span>
+                      {block.items.map((item) => (
+                        <span
+                          key={item}
+                          className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-sm text-paper"
+                        >
+                          {item}
+                        </span>
+                      ))}
+                    </RevealOnScroll>
+                  );
+                }
                 if (block.type === "before-after") {
                   return (
                     <RevealOnScroll
