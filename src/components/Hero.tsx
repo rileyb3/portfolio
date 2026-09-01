@@ -74,10 +74,14 @@ export default function Hero() {
             Carries the same three links as the top bar (About/Experience/
             Contact) rather than the old build/design/play/discover/write
             discipline list — one nav vocabulary instead of two, styled
-            dark since they sit on the light fill. z-30 — above the quote
-            (z-20) and photo/name (z-10) — so nothing can ever sit on top
-            of it and swallow the click, regardless of viewport height. */}
-        <div className="absolute inset-x-0 top-[225px] z-30 flex h-6 -translate-y-1/2 items-center bg-paper px-6 text-[0.65rem] font-medium uppercase tracking-[0.2em] text-ink/70 sm:top-[312px] sm:h-8 sm:px-10 sm:text-xs">
+            dark since they sit on the light fill. Back to z-0, under the
+            photo (z-10) — the photo is meant to visually sit in front of
+            this bar. The links themselves live on the left, away from
+            the photo's position on the right, so they were never
+            actually blocked by it; the real click-blocking bug was the
+            name wrapper below (fixed via pointer-events-none there
+            instead), so the bar doesn't need to out-rank the photo. */}
+        <div className="absolute inset-x-0 top-[225px] z-0 flex h-6 -translate-y-1/2 items-center bg-paper px-6 text-[0.65rem] font-medium uppercase tracking-[0.2em] text-ink/70 sm:top-[312px] sm:h-8 sm:px-10 sm:text-xs">
           <ul className="flex flex-wrap items-center gap-x-2 gap-y-1">
             {navLinks.map((link, i) => (
               <li key={link.href} className="flex items-center gap-2">
