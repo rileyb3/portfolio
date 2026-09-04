@@ -99,7 +99,7 @@ export default function Disciplines() {
       // bars below rather than blank paper, so any bottom padding would
       // just reopen a white gap between the last bar and Intro's dark
       // background picking up right after it.
-      className="relative z-20 flex -mt-[40vh] min-h-[85vh] flex-col scroll-mt-6 bg-paper px-6 pt-10 text-center sm:pl-12 sm:pr-24 sm:pt-14 lg:pl-20 lg:pr-40 xl:pl-28 xl:pr-56"
+      className="relative z-20 flex -mt-[40vh] min-h-[60vh] flex-col scroll-mt-6 bg-paper px-6 pt-10 text-center sm:pl-12 sm:pr-24 sm:pt-14 lg:pl-20 lg:pr-40 xl:pl-28 xl:pr-56"
     >
       <div className="mx-auto w-full">
         {/* Heading + tile row share one flex row on larger screens — label
