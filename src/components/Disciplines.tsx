@@ -60,18 +60,28 @@ export default function Disciplines() {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setVisible(true);
-          setActiveId("design");
+          // Let the tiles finish floating into place first — last tile's
+          // entrance is `(tiles.length - 1) * 120ms` delay + 1100ms of its
+          // own transition — then expand Design as a distinct second beat
+          // rather than both animations firing at once.
+          timeoutId = setTimeout(() => {
+            setActiveId("design");
+          }, (tiles.length - 1) * 120 + 1100 + 150);
           observer.disconnect();
         }
       },
       { threshold: 0.2 }
     );
     observer.observe(el);
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      if (timeoutId) clearTimeout(timeoutId);
+    };
   }, []);
 
   return (
