@@ -12,7 +12,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="flex min-h-[40vh] items-end justify-between px-6 py-12 sm:min-h-[50vh] sm:px-10"
+      className="flex min-h-[160px] items-end justify-between px-6 py-12 sm:min-h-[220px] sm:px-10"
     >
       {linkedin && (
         <a
