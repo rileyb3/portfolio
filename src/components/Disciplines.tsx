@@ -99,7 +99,7 @@ export default function Disciplines() {
       // bars below rather than blank paper, so any bottom padding would
       // just reopen a white gap between the last bar and Intro's dark
       // background picking up right after it.
-      className="relative z-20 -mt-[40vh] min-h-[85vh] scroll-mt-6 bg-paper px-6 pt-10 text-center sm:pl-12 sm:pr-24 sm:pt-14 lg:pl-20 lg:pr-40 xl:pl-28 xl:pr-56"
+      className="relative z-20 flex -mt-[40vh] min-h-[85vh] flex-col scroll-mt-6 bg-paper px-6 pt-10 text-center sm:pl-12 sm:pr-24 sm:pt-14 lg:pl-20 lg:pr-40 xl:pl-28 xl:pr-56"
     >
       <div className="mx-auto w-full">
         {/* Heading + tile row share one flex row on larger screens — label
@@ -216,17 +216,18 @@ export default function Disciplines() {
           crossing this white section on the way down to Intro's dark
           background, so the white-to-black handoff reads as a deliberate
           rhythm instead of one hard cut. Same thickness as that bar
-          (h-6/h-8), full-bleed edge to edge regardless of the section's
-          own asymmetric side padding (the left-1/2/-ml-[50vw] pair breaks
-          out of the padded container the same way Hero's bar breaks out
-          of its own wrapper). This sits as the section's last child with
-          no bottom padding after it (moved off the section itself, see
-          the comment up top), so the second bar lands flush against the
-          very bottom edge — right where Intro's dark background picks up
-          — instead of leaving a stray white strip below it. */}
-      <div className="pt-24 sm:pt-28">
-        <div className="relative left-1/2 h-6 w-screen -translate-x-1/2 bg-ink sm:h-8" />
-        <div className="relative left-1/2 mt-10 h-6 w-screen -translate-x-1/2 bg-ink sm:mt-12 sm:h-8" />
+          (h-6/h-8). Full-bleed via negative margins that exactly cancel
+          this section's own (asymmetric) side padding at every breakpoint
+          — the earlier left-1/2/-translate-x-1/2/w-screen trick resolves
+          "50%" against the padded content box, not the true viewport, so
+          it undershot the right edge whenever left/right padding differ
+          (as they do here). mt-auto pushes this to the actual bottom of
+          the section regardless of how much the min-h-[85vh] floor above
+          exceeds the tile row's own height, so no stray white gap opens
+          up between the tiles and the first bar. */}
+      <div className="-ml-6 -mr-6 mt-auto pt-10 sm:-ml-12 sm:-mr-24 sm:pt-12 lg:-ml-20 lg:-mr-40 xl:-ml-28 xl:-mr-56">
+        <div className="h-6 w-full bg-ink sm:h-8" />
+        <div className="mt-10 h-6 w-full bg-ink sm:mt-12 sm:h-8" />
       </div>
     </section>
   );
