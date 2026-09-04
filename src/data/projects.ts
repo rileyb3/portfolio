@@ -455,8 +455,8 @@ Deno.serve(async (req) => {
           {
             type: "slideshow",
             images: [
-              "/projects/childhood-bedroom/mural-wide-v2.jpg",
-              "/projects/childhood-bedroom/mural-close-v2.jpg",
+              "/projects/childhood-bedroom/mural-wide-final.jpg",
+              "/projects/childhood-bedroom/mural-close-final.jpg",
               "/projects/childhood-bedroom/green-wall-final.jpg",
             ],
           },
