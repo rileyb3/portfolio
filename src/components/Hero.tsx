@@ -50,10 +50,18 @@ export default function Hero() {
             higher (there's clear room above it) and widened at each
             breakpoint (there's room toward the photo before the bar's
             right edge) so it needs fewer wrapped lines in the first
-            place, keeping it clear of the white bar below. */}
-        <blockquote className="absolute inset-x-0 top-14 z-20 max-w-sm px-6 text-xl font-bold leading-snug text-paper sm:top-16 sm:max-w-lg sm:px-10 sm:text-2xl lg:max-w-xl lg:text-4xl">
+            place, keeping it clear of the white bar below. `group`
+            here scopes the hover-attribution span below to just this
+            block, not the whole panel. */}
+        <blockquote className="group absolute inset-x-0 top-14 z-20 max-w-sm px-6 text-xl font-bold leading-snug text-paper sm:top-16 sm:max-w-lg sm:px-10 sm:text-2xl lg:max-w-xl lg:text-4xl">
           &ldquo;The Only Interesting Answers Are Those Which Destroy The
           Questions&rdquo;
+          {/* Attribution — hidden until hover, fades/slides in just below
+              the quote. cite (not a plain span) is the semantically
+              correct element for naming a quote's source. */}
+          <cite className="pointer-events-none absolute left-6 top-full mt-1 block translate-y-1 text-sm font-normal not-italic text-paper/70 opacity-0 transition duration-200 group-hover:translate-y-0 group-hover:opacity-100 sm:left-10 sm:text-base">
+            — Susan Sontag
+          </cite>
         </blockquote>
 
         {/* Crisp bar, true full viewport width, crossing the photo's
