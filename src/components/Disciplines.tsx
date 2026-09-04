@@ -46,10 +46,16 @@ export default function Disciplines() {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   // Accordion-style: all tiles sit collapsed as narrow rounded rectangles
-  // by default. Hovering one expands it to full square size; moving the
-  // mouse off collapses it back, so nothing stays expanded once you're
-  // not actively hovering a tile.
-  const [hoveredId, setHoveredId] = useState<string | null>(null);
+  // except whichever one is "active". Hovering a tile makes it active;
+  // moving the mouse off does NOT collapse it back — the last tile you
+  // hovered just stays expanded, so there's always exactly one open tile
+  // rather than everything snapping shut the instant your cursor leaves.
+  // "design" is the default active tile before any hover happens, and it
+  // only actually switches to active once the section scrolls into view
+  // (see the observer below) so its expansion animates in alongside the
+  // rest of the entrance, instead of already being expanded before you
+  // even see it.
+  const [activeId, setActiveId] = useState<string | null>(null);
 
   useEffect(() => {
     const el = ref.current;
@@ -58,6 +64,7 @@ export default function Disciplines() {
       ([entry]) => {
         if (entry.isIntersecting) {
           setVisible(true);
+          setActiveId("design");
           observer.disconnect();
         }
       },
@@ -119,9 +126,9 @@ export default function Disciplines() {
             {tiles.map((tile, i) => {
               const Icon = iconMap[tile.id] ?? Images;
               const { gradient } = blobStyle[i % blobStyle.length];
-              const hoveredIndex = tiles.findIndex((t) => t.id === hoveredId);
-              const isActive = i === hoveredIndex;
-              const isHovering = hoveredIndex !== -1;
+              const activeIndex = tiles.findIndex((t) => t.id === activeId);
+              const isActive = i === activeIndex;
+              const isHovering = activeIndex !== -1;
               const entranceScale = visible ? 1 : 0.85;
               // Floats up from below into its resting spot on entrance —
               // combined with the per-tile stagger delay below, tiles
@@ -135,7 +142,7 @@ export default function Disciplines() {
               // whichever direction clears space for it.
               const shoveClass = !isHovering || isActive
                 ? "translate-x-0"
-                : i < hoveredIndex
+                : i < activeIndex
                   ? "-translate-x-[84px] sm:-translate-x-[88px] lg:-translate-x-[96px]"
                   : "translate-x-[84px] sm:translate-x-[88px] lg:translate-x-[96px]";
               return (
@@ -154,8 +161,7 @@ export default function Disciplines() {
                   >
                     <Link
                       href={tile.href}
-                      onMouseEnter={() => setHoveredId(tile.id)}
-                      onMouseLeave={() => setHoveredId(null)}
+                      onMouseEnter={() => setActiveId(tile.id)}
                       style={{ background: gradient }}
                       className={`group relative flex h-56 w-14 origin-center transform-gpu flex-col items-center justify-center rounded-2xl p-3 text-center text-ink transition-transform duration-500 ease-out sm:h-64 sm:w-20 sm:rounded-3xl lg:h-72 lg:w-24 ${
                         isActive
