@@ -340,39 +340,16 @@ Deno.serve(async (req) => {
         ],
       },
     ],
+    // Projects with a cover image sort above the plain cross-reference
+    // stubs (Pete Assets, UI/UX Design, Branding, Route Design) below,
+    // which have no image of their own — see CategorySection, which
+    // renders this array in the order given, no separate sort.
     projects: [
-      {
-        title: "Pete Assets",
-        description:
-          "The character art and sprites behind Pete the Snail, painted in Krita — full story under Play.",
-        tags: ["Krita", "Character Design"],
-        slug: "pete-the-snail",
-      },
-      {
-        title: "UI/UX Design",
-        description:
-          "The interface behind AllTrees — full story under Build.",
-        tags: ["UI/UX"],
-        slug: "alltrees",
-      },
-      {
-        title: "Branding",
-        description:
-          "The icon and logo behind AllTrees — full story under Build.",
-        tags: ["Branding"],
-        slug: "alltrees",
-      },
-      {
-        title: "Route Design",
-        description:
-          "The movement design behind my climbing routes — full story under Build.",
-        tags: ["Routesetting"],
-        slug: "routesetting",
-      },
       {
         title: "Voices Meet Minds Branding",
         description:
           "Newsletter mascot design for Voices Meet Minds, developed alongside a broader branding and website cleanup I'm leading for the org.",
+        year: "2026",
         body: [
           {
             type: "text-with-image",
@@ -417,6 +394,7 @@ Deno.serve(async (req) => {
         title: "Interior Design",
         description:
           "Repainting my childhood bedroom and hand-painting a heron-and-sun mural directly onto the wall, freshman summer of college.",
+        year: "2022",
         palette: ["#425348", "#ACA589", "#D6D2D2", "#4E2A0E", "#B27858"],
         body: [
           {
@@ -482,6 +460,34 @@ Deno.serve(async (req) => {
         tagLabel: "Interior Design",
         image: "/projects/childhood-bedroom/after.jpg",
         slug: "childhood-bedroom",
+      },
+      {
+        title: "Pete Assets",
+        description:
+          "The character art and sprites behind Pete the Snail, painted in Krita — full story under Play.",
+        tags: ["Krita", "Character Design"],
+        slug: "pete-the-snail",
+      },
+      {
+        title: "UI/UX Design",
+        description:
+          "The interface behind AllTrees — full story under Build.",
+        tags: ["UI/UX"],
+        slug: "alltrees",
+      },
+      {
+        title: "Branding",
+        description:
+          "The icon and logo behind AllTrees — full story under Build.",
+        tags: ["Branding"],
+        slug: "alltrees",
+      },
+      {
+        title: "Route Design",
+        description:
+          "The movement design behind my climbing routes — full story under Build.",
+        tags: ["Routesetting"],
+        slug: "routesetting",
       },
     ],
   },
