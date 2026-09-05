@@ -169,8 +169,70 @@ export const categories: Category[] = [
           "Think Mountain Project, but for trees. A community map where climbers discover, log, and review climbable trees — currently in first-round beta.",
         tagLabel: "iOS Build",
         featured: true,
-        details:
-          "AllTrees is a cross-platform (iOS-first) social mapping app where a community of climbers crowdsources a live map of climbable trees. Users drop pins for trees they find, add photos and difficulty ratings, log ascents, write reviews, and flag conditions like private property or dead limbs. Reports past a threshold trigger automatic verification, and community moderation keeps the map trustworthy without a human reviewing every pin. It's built around the same idea as a climbing route database like Mountain Project, applied to trees: every tree gets its own page with a star rating, a leaf-icon difficulty scale, who logged the first ascent, live-reported conditions, and a review thread.\n\nBeyond the core map, the app leans into discovery and community: an AI species ID feature suggests the most likely species from a photo, weighted by GPS location; a \"For You\" recommendation feed scores trees by species affinity, difficulty, and geography; and a profile system assigns a \"climber archetype\" and tracks stats like farthest trees apart and total ascents. Sign-in works via email, Google, or Apple, with a guest-browsing mode for anyone who just wants to look around, and a premium tier (\"Treemium\") unlocks personalization and cosmetic features via RevenueCat.\n\nStill in first-round beta, so there's no usage data yet — but the core map, tree pages, ascent logging, search/filtering, and profile system are all built and working.",
+        // Vertical-story treatment, same pattern as Voices Meet Minds and
+        // Interior Design: heroImageFirst opens full-bleed on the app icon
+        // (a single clean graphic mark, same role the finished mascot/room
+        // photo played on those pages), then every named section below is
+        // a StoryBeat. Screenshots throughout are real app screens, not
+        // mockups — some carry obvious placeholder/test data (e.g. "(test)
+        // :0" as a tree name) since this is still first-round beta.
+        heroImageFirst: true,
+        body: [
+          {
+            type: "beat",
+            kicker: "The Problem",
+            heading:
+              "Climbers have Mountain Project. Trees don't have anything like it.",
+            text: "I climb trees recreationally, and there was no way to find one, rate it, or see what other climbers already knew about it.",
+          },
+          {
+            type: "beat",
+            kicker: "The Solution",
+            heading:
+              "AllTrees — a community map where climbers discover, log, and review climbable trees.",
+            image: "/projects/alltrees/map.jpg",
+            imageRatio: 700 / 1387,
+          },
+          {
+            type: "beat",
+            kicker: "The Tree Page",
+            heading:
+              "Every tree gets its own page: a star rating, a leaf-icon difficulty scale, who claimed the first ascent, and live-reported conditions.",
+            image: "/projects/alltrees/tree-detail.jpg",
+            imageRatio: 700 / 1387,
+          },
+          {
+            type: "beat",
+            kicker: "The Discovery",
+            heading:
+              "An AI species ID feature and a \"For You\" feed help climbers find their next tree, not just revisit ones they already know.",
+            text: "Species ID runs on the Claude API, weighted by GPS location, so a single photo can suggest the most likely species nearby.",
+            image: "/projects/alltrees/explore-feed.jpg",
+            imageRatio: 700 / 1387,
+          },
+          {
+            type: "images",
+            images: [
+              "/projects/alltrees/search-filters.jpg",
+              "/projects/alltrees/search-radius.jpg",
+            ],
+          },
+          {
+            type: "beat",
+            kicker: "The Profile",
+            heading:
+              "A profile system tracks real climbing stats and assigns every climber an archetype — mine's currently \"The Treecreeper.\"",
+            image: "/projects/alltrees/stats.jpg",
+            imageRatio: 700 / 1387,
+          },
+          {
+            type: "beat",
+            kicker: "The Result",
+            heading:
+              "Still in first-round beta — the map, tree pages, ascent logging, search, and profile system are all built and live.",
+            text: "No usage data yet, but the foundation works end to end.",
+          },
+        ],
         tags: [
           "React Native",
           "Expo",
@@ -184,15 +246,6 @@ export const categories: Category[] = [
         year: "2026",
         slug: "alltrees",
         image: "/projects/alltrees/icon.jpg",
-        gallery: [
-          "/projects/alltrees/tree-detail.jpg",
-          "/projects/alltrees/map.jpg",
-          "/projects/alltrees/search-filters.jpg",
-          "/projects/alltrees/search-radius.jpg",
-          "/projects/alltrees/profile.jpg",
-          "/projects/alltrees/stats.jpg",
-          "/projects/alltrees/explore-feed.jpg",
-        ],
         codeSnippet: {
           label: "Supabase Edge Function — keeping the Claude API key server-side",
           code: `// Species ID runs through an Edge Function instead of calling the
