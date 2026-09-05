@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ChevronDown } from "lucide-react";
 import SubpageHeader from "@/components/SubpageHeader";
 import Footer from "@/components/Footer";
 import ExpandableImage from "@/components/ExpandableImage";
@@ -57,6 +58,14 @@ export default function ProjectPage({
                   className="max-h-[88vh] w-full object-cover"
                 />
               )}
+              {/* Nothing on this opening image says "keep scrolling" on
+                  its own, so a small bouncing chevron does that job —
+                  the only text-free way to signal there's more below. */}
+              <ChevronDown
+                className="pointer-events-none absolute bottom-5 left-1/2 h-8 w-8 -translate-x-1/2 animate-bounce text-paper drop-shadow-lg"
+                strokeWidth={2}
+                aria-hidden="true"
+              />
             </RevealOnScroll>
           )}
           <div className="flex items-baseline justify-between gap-2">
@@ -209,6 +218,7 @@ export default function ProjectPage({
                         text={block.text}
                         image={block.image}
                         imageRatio={block.imageRatio}
+                        invert={block.invert}
                       />
                     </RevealOnScroll>
                   );

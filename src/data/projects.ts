@@ -70,6 +70,7 @@ export type Project = {
         text?: string;
         image?: string;
         imageRatio?: number;
+        invert?: boolean;
       }
     // Reference images landing in a loose, overlapping pile rather than a
     // tidy grid — for a "gathering research" moment. See ImagePile.tsx.
@@ -369,13 +370,21 @@ Deno.serve(async (req) => {
       {
         title: "Voices Meet Minds Branding",
         description:
-          "Newsletter mascot design for Voices Meet Minds, developed alongside a broader branding and website cleanup I'm leading for the org.",
+          "A caterpillar mascot for Voices Meet Minds' newsletter, part of a branding and website refresh I'm leading for the org.",
         year: "2026",
-        // Vertical-story layout, first pass — card.jpg opens full-bleed
-        // with no text on it at all (see heroImageFirst below), then the
-        // title/tags, then a one-line orientation, then the THE PROBLEM /
-        // THE SOLUTION beats, then research as a pile instead of a grid.
-        // Loosely modeled on angelechendesigns.com/bink's structure.
+        // Vertical-story layout — card.jpg (the finished mascot) opens
+        // full-bleed with no text on it and a bouncing down-arrow cue
+        // (see heroImageFirst + the ChevronDown in page.tsx), then title/
+        // tags, then every section below uses the same StoryBeat kicker+
+        // heading typography (no more mixing that with the old small-caps
+        // `heading` block type — that inconsistency was the actual bug in
+        // the first pass, not a rendering failure).
+        //
+        // The finished character (card.jpg / mascot.jpg) only appears at
+        // the very top and in the closing "Result" beat — iteration-4,
+        // which is essentially the final design, is deliberately left out
+        // of the mid-page grid so it doesn't show up a third time.
+        //
         // TODO(riley): no TIME/TOOLS/ROLE meta row yet — didn't want to
         // guess at facts. Give me those three and it's a one-line add via
         // the `meta` field above.
@@ -383,31 +392,21 @@ Deno.serve(async (req) => {
         body: [
           {
             type: "text",
-            text: "Voices Meet Minds (VMM) is the organization I'm doing this branding and website work for. This piece was a newsletter mascot, designed as one part of a broader visual refresh I'm leading for them.",
+            text: "Voices Meet Minds (VMM) is an organization focused on community building, storytelling and education of mental health topics. I'm leading a branding and website refresh for them — this is the first piece: a caterpillar mascot for their newsletter.",
           },
           {
             type: "beat",
-            kicker: "The Problem",
+            kicker: "The Approach",
             heading:
-              "VMM's existing mark is a butterfly wordmark and logo — clean for the site itself, but not built for a recurring newsletter that needs its own friendlier, more personal face.",
+              "VMM's existing mark is a butterfly. A caterpillar is the same creature, one stage earlier — it stays on-brand instead of introducing a new character.",
             image: "/projects/voices-meet-minds/logo.png",
             imageRatio: 2332 / 1118,
           },
           {
             type: "beat",
-            kicker: "The Solution",
+            kicker: "The Research",
             heading:
-              "A caterpillar mascot — the same creature as the existing butterfly, just an earlier stage, so the newsletter still ties back to VMM's branding instead of introducing something unrelated.",
-            image: "/projects/voices-meet-minds/mascot.jpg",
-            imageRatio: 678 / 640,
-          },
-          {
-            type: "heading",
-            text: "The Research",
-          },
-          {
-            type: "text",
-            text: "Before drawing, I pulled reference images searching \"cartoon caterpillar,\" \"caterpillar clip art,\" \"cute caterpillar,\" and \"swallowtail caterpillar\" — a mix of existing mascot styles and real caterpillar biology.",
+              "I gathered reference across mascot styles and real caterpillar anatomy to nail down the shape, face, and personality.",
           },
           {
             type: "image-pile",
@@ -423,12 +422,10 @@ Deno.serve(async (req) => {
             ],
           },
           {
-            type: "heading",
-            text: "The Decisions",
-          },
-          {
-            type: "text",
-            text: "That research narrowed down a handful of concrete decisions: how segmented to make the body (how many ridges, how distinct each one reads), how defined to make the feet, a default resting pose to draw from consistently, and how to organize the face (eye size and placement, a simple mouth) so the character reads as friendly rather than insect-accurate.\n\nThese iterations are where those decisions actually got tested against each other. Still an early stage — refining further as the rest of the branding and website work continues.",
+            type: "beat",
+            kicker: "The Iterations",
+            heading:
+              "Body segments, feet, resting pose, and face — I tested each decision through several passes before locking in the final character.",
           },
           {
             type: "images",
@@ -436,8 +433,16 @@ Deno.serve(async (req) => {
               "/projects/voices-meet-minds/iteration-1.png",
               "/projects/voices-meet-minds/iteration-2.png",
               "/projects/voices-meet-minds/iteration-3.png",
-              "/projects/voices-meet-minds/iteration-4.png",
             ],
+          },
+          {
+            type: "beat",
+            kicker: "The Result",
+            heading:
+              "A friendly, on-brand mascot, ready for VMM's newsletter.",
+            text: "Next up: a refresh of VMM's website.",
+            image: "/projects/voices-meet-minds/mascot.jpg",
+            imageRatio: 678 / 640,
           },
         ],
         tags: ["Branding", "Character Design", "Mascot Design"],

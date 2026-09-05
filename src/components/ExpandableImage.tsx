@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // A thumbnail that opens into a full-screen lightbox on click — used
 // anywhere a project image might be too small/detailed to read at
@@ -33,6 +33,7 @@ export default function ExpandableImage({
 }) {
   const [open, setOpen] = useState(false);
   const [loaded, setLoaded] = useState(false);
+  const imgRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     if (!open) return;
@@ -43,10 +44,24 @@ export default function ExpandableImage({
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
+  // The actual root cause of the "nothing shows up" bug: React's onLoad
+  // only fires for the browser's native `load` event, which does NOT
+  // re-fire for an image the browser already has cached (e.g. card.jpg
+  // here, already loaded once as this same project's card thumbnail on
+  // the /design page). For a cached image, `img.complete` is already
+  // true the instant this element mounts, no `load` event ever comes,
+  // and `loaded` was staying false forever — stuck at opacity-0. Checking
+  // `.complete` on mount catches that case; onLoad still handles the
+  // normal not-yet-cached case.
+  useEffect(() => {
+    if (imgRef.current?.complete) setLoaded(true);
+  }, []);
+
   return (
     <>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
+        ref={imgRef}
         src={src}
         alt={alt}
         style={ratio && !fill ? { aspectRatio: ratio } : undefined}
