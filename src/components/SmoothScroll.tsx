@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import Lenis from "lenis";
 
 // Site-wide inertial scroll — the same "chase the target" idea as Hero's
@@ -13,6 +14,24 @@ import Lenis from "lenis";
 // does the same thing under the hood. Renders nothing; it just runs the
 // effect for as long as it's mounted (once, in the root layout).
 export default function SmoothScroll() {
+  const pathname = usePathname();
+  const lenisRef = useRef<Lenis | null>(null);
+
+  // Root cause of the "deposited in the middle of the page" glitch when
+  // clicking into a project: Lenis keeps its own internal scroll target
+  // separate from the real window.scrollY, and this component only ever
+  // mounts once (it lives in the root layout, which doesn't remount on
+  // client-side navigation). So when Next.js swaps in a new page, the
+  // browser's native scroll resets to 0, but Lenis's internal state is
+  // still wherever the OLD page had scrolled to — its next animation
+  // frame then eases the page back toward that stale target, which reads
+  // as an unexplained jump to some random spot mid-page. Forcing an
+  // immediate (non-eased) scrollTo(0) every time the route changes keeps
+  // Lenis's internal state in sync with the fresh page.
+  useEffect(() => {
+    lenisRef.current?.scrollTo(0, { immediate: true });
+  }, [pathname]);
+
   useEffect(() => {
     // Root cause of "still feels the same" after every previous fix:
     // Lenis's wheel handler (onVirtualScroll) passes lerp, duration, AND
@@ -47,6 +66,7 @@ export default function SmoothScroll() {
       // otherwise.
       respectReducedMotion: false,
     });
+    lenisRef.current = lenis;
 
     let rafId = 0;
     function raf(time: number) {
@@ -88,6 +108,7 @@ export default function SmoothScroll() {
       document.removeEventListener("click", handleClick);
       cancelAnimationFrame(rafId);
       lenis.destroy();
+      lenisRef.current = null;
     };
   }, []);
 

@@ -6,6 +6,8 @@ import ExpandableImage from "@/components/ExpandableImage";
 import RevealOnScroll from "@/components/RevealOnScroll";
 import BeforeAfterSlider from "@/components/BeforeAfterSlider";
 import ImageSlideshow from "@/components/ImageSlideshow";
+import StoryBeat from "@/components/StoryBeat";
+import ImagePile from "@/components/ImagePile";
 import { slugProjects, getProjectBySlug } from "@/data/projects";
 
 export function generateStaticParams() {
@@ -33,6 +35,30 @@ export default function ProjectPage({
           backLabel={`Back to ${project.categoryLabel}`}
         />
         <article className="mx-auto max-w-3xl px-6 py-10">
+          {/* Opt-in "big picture first" opening (see `heroImageFirst` on
+              Project) — one full-bleed, near-full-screen image/video with
+              no text on it at all, before the title even shows up. Pulled
+              up over the article's own top padding so it sits right under
+              SubpageHeader's back-link row instead of leaving a gap. */}
+          {project.heroImageFirst && (project.video || project.image) && (
+            <RevealOnScroll className="relative left-1/2 -mt-10 mb-8 w-screen -translate-x-1/2 overflow-hidden bg-surface2">
+              {project.video ? (
+                <video
+                  src={project.video}
+                  poster={project.image}
+                  controls
+                  playsInline
+                  className="max-h-[88vh] w-full object-cover"
+                />
+              ) : (
+                <ExpandableImage
+                  src={project.image!}
+                  alt={project.title}
+                  className="max-h-[88vh] w-full object-cover"
+                />
+              )}
+            </RevealOnScroll>
+          )}
           <div className="flex items-baseline justify-between gap-2">
             <Link
               href={`/${project.categoryId}`}
@@ -100,27 +126,28 @@ export default function ProjectPage({
             </RevealOnScroll>
           )}
 
-          {project.video ? (
-            <RevealOnScroll className="mt-6 overflow-hidden rounded-2xl border border-white/10 bg-surface2">
-              <video
-                src={project.video}
-                poster={project.image}
-                controls
-                playsInline
-                className="w-full"
-              />
-            </RevealOnScroll>
-          ) : (
-            project.image && (
+          {!project.heroImageFirst &&
+            (project.video ? (
               <RevealOnScroll className="mt-6 overflow-hidden rounded-2xl border border-white/10 bg-surface2">
-                <ExpandableImage
-                  src={project.image}
-                  alt={project.title}
+                <video
+                  src={project.video}
+                  poster={project.image}
+                  controls
+                  playsInline
                   className="w-full"
                 />
               </RevealOnScroll>
-            )
-          )}
+            ) : (
+              project.image && (
+                <RevealOnScroll className="mt-6 overflow-hidden rounded-2xl border border-white/10 bg-surface2">
+                  <ExpandableImage
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full"
+                  />
+                </RevealOnScroll>
+              )
+            ))}
 
           {project.body ? (
             <div className="mt-6 space-y-6">
@@ -167,6 +194,32 @@ export default function ProjectPage({
                       className="relative left-1/2 w-screen -translate-x-1/2"
                     >
                       <ImageSlideshow images={block.images} />
+                    </RevealOnScroll>
+                  );
+                }
+                if (block.type === "beat") {
+                  return (
+                    <RevealOnScroll
+                      key={i}
+                      className="relative left-1/2 w-screen -translate-x-1/2"
+                    >
+                      <StoryBeat
+                        kicker={block.kicker}
+                        heading={block.heading}
+                        text={block.text}
+                        image={block.image}
+                        imageRatio={block.imageRatio}
+                      />
+                    </RevealOnScroll>
+                  );
+                }
+                if (block.type === "image-pile") {
+                  return (
+                    <RevealOnScroll
+                      key={i}
+                      className="relative left-1/2 w-screen -translate-x-1/2"
+                    >
+                      <ImagePile images={block.images} />
                     </RevealOnScroll>
                   );
                 }

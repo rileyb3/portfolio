@@ -59,7 +59,28 @@ export type Project = {
     // same looping-marquee technique as the homepage's TechMarquee, just
     // images instead of logo pills.
     | { type: "slideshow"; images: string[] }
+    // A named "beat" (kicker + big statement, optional image) that
+    // inverts to the light theme as a deliberate rhythm-break — the
+    // "THE PROBLEM" / "THE SOLUTION" moments from a case-study page like
+    // angelechendesigns.com/bink. See StoryBeat.tsx.
+    | {
+        type: "beat";
+        kicker: string;
+        heading: string;
+        text?: string;
+        image?: string;
+        imageRatio?: number;
+      }
+    // Reference images landing in a loose, overlapping pile rather than a
+    // tidy grid — for a "gathering research" moment. See ImagePile.tsx.
+    | { type: "image-pile"; images: string[] }
   >;
+  // When true, the project's cover `image` renders full-bleed ABOVE the
+  // title/tags/meta block instead of below it — "one big, simple picture
+  // first, then scroll for the quick description" per angelechendesigns
+  // .com/bink's opening beat. Opt-in per project so every other page
+  // keeps its current title-first layout.
+  heroImageFirst?: boolean;
   // Short label/value pairs shown in a row near the top of the project
   // page (e.g. TIME, TOOLS, ROLE) — same idea as the meta row on
   // angelechendesigns.com's case studies.
@@ -350,15 +371,48 @@ Deno.serve(async (req) => {
         description:
           "Newsletter mascot design for Voices Meet Minds, developed alongside a broader branding and website cleanup I'm leading for the org.",
         year: "2026",
+        // Vertical-story layout, first pass — card.jpg opens full-bleed
+        // with no text on it at all (see heroImageFirst below), then the
+        // title/tags, then a one-line orientation, then the THE PROBLEM /
+        // THE SOLUTION beats, then research as a pile instead of a grid.
+        // Loosely modeled on angelechendesigns.com/bink's structure.
+        // TODO(riley): no TIME/TOOLS/ROLE meta row yet — didn't want to
+        // guess at facts. Give me those three and it's a one-line add via
+        // the `meta` field above.
+        heroImageFirst: true,
         body: [
           {
-            type: "text-with-image",
-            text: "Voices Meet Minds' existing mark is a butterfly wordmark and logo — clean for the site itself, but not very expressive for a recurring newsletter that needs its own friendlier, more personality-driven face. I was asked to design a mascot to fill that gap as part of a larger branding and website refresh for the organization.\n\nA caterpillar was the natural answer: it's the same creature as the existing butterfly mark, just an earlier stage, so the newsletter still ties back to the org's branding rather than introducing an unrelated character. It's also a far easier shape to pose and animate than a static insect silhouette.\n\nBefore drawing, I pulled reference images searching \"cartoon caterpillar,\" \"caterpillar clip art,\" \"cute caterpillar,\" and \"swallowtail caterpillar\" — a mix of existing mascot styles and real caterpillar biology:",
-            image: "/projects/voices-meet-minds/research/ref-vmm-badge.png",
+            type: "text",
+            text: "Voices Meet Minds (VMM) is the organization I'm doing this branding and website work for. This piece was a newsletter mascot, designed as one part of a broader visual refresh I'm leading for them.",
           },
           {
-            type: "images",
+            type: "beat",
+            kicker: "The Problem",
+            heading:
+              "VMM's existing mark is a butterfly wordmark and logo — clean for the site itself, but not built for a recurring newsletter that needs its own friendlier, more personal face.",
+            image: "/projects/voices-meet-minds/logo.png",
+            imageRatio: 2332 / 1118,
+          },
+          {
+            type: "beat",
+            kicker: "The Solution",
+            heading:
+              "A caterpillar mascot — the same creature as the existing butterfly, just an earlier stage, so the newsletter still ties back to VMM's branding instead of introducing something unrelated.",
+            image: "/projects/voices-meet-minds/mascot.jpg",
+            imageRatio: 678 / 640,
+          },
+          {
+            type: "heading",
+            text: "The Research",
+          },
+          {
+            type: "text",
+            text: "Before drawing, I pulled reference images searching \"cartoon caterpillar,\" \"caterpillar clip art,\" \"cute caterpillar,\" and \"swallowtail caterpillar\" — a mix of existing mascot styles and real caterpillar biology.",
+          },
+          {
+            type: "image-pile",
             images: [
+              "/projects/voices-meet-minds/research/ref-vmm-badge.png",
               "/projects/voices-meet-minds/research/ref-leaf-caterpillar-eye-study.png",
               "/projects/voices-meet-minds/research/ref-swallowtail-osmeterium.png",
               "/projects/voices-meet-minds/research/ref-clipart-flat.png",
@@ -367,6 +421,10 @@ Deno.serve(async (req) => {
               "/projects/voices-meet-minds/research/ref-cartoon-round-antennae.png",
               "/projects/voices-meet-minds/research/ref-clipart-googly-eyes.png",
             ],
+          },
+          {
+            type: "heading",
+            text: "The Decisions",
           },
           {
             type: "text",
@@ -387,6 +445,7 @@ Deno.serve(async (req) => {
         // ProjectCard.tsx) shows the whole character instead of cropping
         // his feet off — mascot.jpg is closer to square and was getting
         // cut on the card, even though it looked fine on this detail page.
+        // Also doubles as the opening full-bleed hero via heroImageFirst.
         image: "/projects/voices-meet-minds/card.jpg",
         slug: "voices-meet-minds",
       },
