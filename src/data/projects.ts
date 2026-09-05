@@ -511,18 +511,17 @@ Deno.serve(async (req) => {
             type: "beat",
             kicker: "The Solution",
             heading:
-              "A calmer palette, a hand-painted mural, and furniture that actually fits the room — on a low budget, in two months.",
+              "A calmer palette, a hand-painted mural, and furniture that actually fits the room.",
           },
           {
             type: "pills",
             label: "Goals",
-            items: ["Low Budget", "Wall Mural", "Calm", "Mature Vibe", "2 Months"],
+            items: ["<$100", "2 Months"],
           },
           {
             type: "beat",
             kicker: "The Palette",
-            heading:
-              "Sage green, terracotta, cream, and brown — calm and warm, replacing the bright blue.",
+            heading: "Calm and warm, replacing the bright blue.",
             text: "Sourced from Pinterest and Google before touching any paint.",
           },
           {
@@ -547,7 +546,7 @@ Deno.serve(async (req) => {
             type: "beat",
             kicker: "The Furniture",
             heading:
-              "Reoriented the layout for more space, and rebuilt the bed frame lower to the ground with hinged flaps for under-bed storage.",
+              "Reoriented the layout for more space, and deconstructed the box spring — reinforced it and added hinged flaps for under-bed storage.",
             text: "White sheer curtains in, an old bookcase out. The bed's storage flaps run on spare wood planks and hinges, and the rest of the furniture is repurposed from other rooms rather than bought new.",
           },
           {
