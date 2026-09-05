@@ -75,6 +75,9 @@ export type Project = {
     // Reference images landing in a loose, overlapping pile rather than a
     // tidy grid — for a "gathering research" moment. See ImagePile.tsx.
     | { type: "image-pile"; images: string[] }
+    // Full-bleed video with playback controls — e.g. real screen-recorded
+    // process footage, not just a finished-product demo.
+    | { type: "video"; src: string; poster?: string }
   >;
   // When true, the project's cover `image` renders full-bleed ABOVE the
   // title/tags/meta block instead of below it — "one big, simple picture
@@ -396,6 +399,11 @@ Deno.serve(async (req) => {
           },
           {
             type: "beat",
+            kicker: "The Task",
+            heading: "Create a caterpillar mascot for their newsletter.",
+          },
+          {
+            type: "beat",
             kicker: "The Approach",
             heading:
               "VMM's existing mark is a butterfly. A caterpillar is the same creature, one stage earlier — it stays on-brand instead of introducing a new character.",
@@ -423,9 +431,19 @@ Deno.serve(async (req) => {
           },
           {
             type: "beat",
+            kicker: "The Ideation",
+            heading:
+              "From that reference, a full page of quick Procreate sketches to find the right silhouette before touching Figma.",
+          },
+          {
+            type: "full-image",
+            image: "/projects/voices-meet-minds/ideation/procreate-sketches.jpg",
+          },
+          {
+            type: "beat",
             kicker: "The Iterations",
             heading:
-              "Body segments, feet, resting pose, and face — I tested each decision through several passes before locking in the final character.",
+              "Body segments, feet, resting pose, and face — I tested each decision through several passes in Figma before locking in the final character.",
           },
           {
             type: "images",
@@ -434,6 +452,11 @@ Deno.serve(async (req) => {
               "/projects/voices-meet-minds/iteration-2.png",
               "/projects/voices-meet-minds/iteration-3.png",
             ],
+          },
+          {
+            type: "video",
+            src: "/projects/voices-meet-minds/process/figma-edit.mp4",
+            poster: "/projects/voices-meet-minds/process/figma-edit-poster.jpg",
           },
           {
             type: "beat",

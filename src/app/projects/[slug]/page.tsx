@@ -233,6 +233,22 @@ export default function ProjectPage({
                     </RevealOnScroll>
                   );
                 }
+                if (block.type === "video") {
+                  return (
+                    <RevealOnScroll
+                      key={i}
+                      className="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden bg-surface2"
+                    >
+                      <video
+                        src={block.src}
+                        poster={block.poster}
+                        controls
+                        playsInline
+                        className="max-h-[85vh] w-full"
+                      />
+                    </RevealOnScroll>
+                  );
+                }
                 if (block.type === "palette") {
                   if (!project.palette || project.palette.length === 0)
                     return null;
