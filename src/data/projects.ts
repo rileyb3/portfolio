@@ -500,20 +500,23 @@ Deno.serve(async (req) => {
         heroImageFirst: true,
         body: [
           {
-            type: "text-with-image",
+            type: "beat",
+            kicker: "The Problem",
+            heading: "A room I didn't want to come back to.",
             text: "This was my childhood bedroom — bright blue walls, mismatched furniture, a cluttered layout. The summer after my freshman year of college, I decided it needed a full reset.",
             image: "/projects/childhood-bedroom/before-room-wide.jpg",
+            imageRatio: 1600 / 2133,
+          },
+          {
+            type: "beat",
+            kicker: "The Solution",
+            heading:
+              "A calmer palette, a hand-painted mural, and furniture that actually fits the room — on a low budget, in two months.",
           },
           {
             type: "pills",
             label: "Goals",
             items: ["Low Budget", "Wall Mural", "Calm", "Mature Vibe", "2 Months"],
-          },
-          {
-            type: "beat",
-            kicker: "The Goal",
-            heading:
-              "Repaint it into somewhere calm and mature, hand-paint a mural, on a low budget, in two months.",
           },
           {
             type: "beat",
@@ -545,6 +548,7 @@ Deno.serve(async (req) => {
             kicker: "The Furniture",
             heading:
               "Reoriented the layout for more space, and rebuilt the bed frame lower to the ground with hinged flaps for under-bed storage.",
+            text: "White sheer curtains in, an old bookcase out. The bed's storage flaps run on spare wood planks and hinges, and the rest of the furniture is repurposed from other rooms rather than bought new.",
           },
           {
             type: "beat",
