@@ -31,10 +31,7 @@ export default function ProjectPage({
   return (
     <>
       <main className="min-h-screen bg-ink pb-20">
-        <SubpageHeader
-          backHref={`/${project.categoryId}`}
-          backLabel={`Back to ${project.categoryLabel}`}
-        />
+        <SubpageHeader backHref={`/${project.categoryId}`} />
         <article className="mx-auto max-w-3xl px-6 py-10">
           {/* Opt-in "big picture first" opening (see `heroImageFirst` on
               Project) — one full-bleed, near-full-screen image/video with
