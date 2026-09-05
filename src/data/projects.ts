@@ -454,9 +454,14 @@ Deno.serve(async (req) => {
             ],
           },
           {
-            type: "video",
-            src: "/projects/voices-meet-minds/process/figma-edit.mp4",
-            poster: "/projects/voices-meet-minds/process/figma-edit-poster.jpg",
+            // Autoplaying GIF, not a <video> — a GIF just plays on its own
+            // as a plain image with zero JS/controls, which is simpler and
+            // more reliable than fighting browser autoplay-with-sound
+            // restrictions on a real <video> element. Trimmed to the 5
+            // seconds (10s-15s) of the original recording that's actually
+            // worth looping.
+            type: "full-image",
+            image: "/projects/voices-meet-minds/process/figma-edit.gif",
           },
           {
             type: "beat",
@@ -464,17 +469,19 @@ Deno.serve(async (req) => {
             heading:
               "A friendly, on-brand mascot, ready for VMM's newsletter.",
             text: "Next up: a refresh of VMM's website.",
-            image: "/projects/voices-meet-minds/mascot.jpg",
-            imageRatio: 678 / 640,
+            image: "/projects/voices-meet-minds/mascot-final-blue.png",
+            imageRatio: 1222 / 1156,
           },
         ],
         tags: ["Branding", "Character Design", "Mascot Design"],
-        // 16:9 so the card thumbnail's aspect-video/object-cover box (see
-        // ProjectCard.tsx) shows the whole character instead of cropping
-        // his feet off — mascot.jpg is closer to square and was getting
-        // cut on the card, even though it looked fine on this detail page.
-        // Also doubles as the opening full-bleed hero via heroImageFirst.
-        image: "/projects/voices-meet-minds/card.jpg",
+        // 16:9 (padded with the character art's own near-black background,
+        // not cropped) so the card thumbnail's aspect-video/object-cover
+        // box (see ProjectCard.tsx) shows the whole character instead of
+        // cutting off his feet. Also doubles as the opening full-bleed
+        // hero via heroImageFirst. mascot-final-blue.png is the source —
+        // this blue colorway is the actual final pick, replacing the
+        // earlier green version (which only remains as an iteration).
+        image: "/projects/voices-meet-minds/card-final-blue.jpg",
         slug: "voices-meet-minds",
       },
       {
