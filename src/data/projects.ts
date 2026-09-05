@@ -559,8 +559,11 @@ Deno.serve(async (req) => {
         ],
         tags: ["Interior Design", "Mural", "Painting"],
         tagLabel: "Interior Design",
-        // Also doubles as the opening full-bleed hero via heroImageFirst.
-        image: "/projects/childhood-bedroom/after.jpg",
+        // The staged reveal shot, not the in-progress mural — this is the
+        // "finished result" image, so it's what should represent the
+        // project both as the category-page thumbnail and (via
+        // heroImageFirst) the opening hero.
+        image: "/projects/childhood-bedroom/after-reveal.jpg",
         slug: "childhood-bedroom",
       },
       {
