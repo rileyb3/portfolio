@@ -490,14 +490,18 @@ Deno.serve(async (req) => {
           "Repainting my childhood bedroom and hand-painting a heron-and-sun mural directly onto the wall, freshman summer of college.",
         year: "2022",
         palette: ["#425348", "#ACA589", "#D6D2D2", "#4E2A0E", "#B27858"],
+        // Vertical-story pass #2, same pattern as Voices Meet Minds:
+        // heroImageFirst opens on the room itself (no text, down-arrow
+        // cue from page.tsx), then every named section below is a
+        // StoryBeat (kicker + one-line heading, optional short text) —
+        // no more of the old small-caps `heading` + full paragraph
+        // pairing, which is exactly the "mixing styles"/too-much-text
+        // bug from the first VMM pass.
+        heroImageFirst: true,
         body: [
           {
-            type: "heading",
-            text: "The Goal",
-          },
-          {
             type: "text-with-image",
-            text: "This was my childhood bedroom. I grew up with bright blue walls, an accumulation of practical furniture, and an eclectic layout that always felt cluttered. The summer after my freshman year of college I decided this was not a room I could return to — it was ready for an upgrade.",
+            text: "This was my childhood bedroom — bright blue walls, mismatched furniture, a cluttered layout. The summer after my freshman year of college, I decided it needed a full reset.",
             image: "/projects/childhood-bedroom/before-room-wide.jpg",
           },
           {
@@ -506,23 +510,27 @@ Deno.serve(async (req) => {
             items: ["Low Budget", "Wall Mural", "Calm", "Mature Vibe", "2 Months"],
           },
           {
-            type: "heading",
-            text: "The Palette",
+            type: "beat",
+            kicker: "The Goal",
+            heading:
+              "Repaint it into somewhere calm and mature, hand-paint a mural, on a low budget, in two months.",
           },
           {
-            type: "text",
-            text: "I researched color palettes and general vibes on Pinterest and Google before touching any paint, and landed on sage green, a terracotta orange, a few shades of cream, and brown — calm and warm rather than the bright blue it was.",
+            type: "beat",
+            kicker: "The Palette",
+            heading:
+              "Sage green, terracotta, cream, and brown — calm and warm, replacing the bright blue.",
+            text: "Sourced from Pinterest and Google before touching any paint.",
           },
           {
             type: "palette",
           },
           {
-            type: "heading",
-            text: "The Process",
-          },
-          {
-            type: "text",
-            text: "I set up a projector to get the placement and linework of my reference image right before painting anything freehand — tracing the birds and the sun directly onto the wall. Budget was small: two gallons of paint (the green and the white) plus a handful of sample pots for the detail colors on the birds.",
+            type: "beat",
+            kicker: "The Process",
+            heading:
+              "I projected my reference onto the wall to trace the linework before painting anything freehand.",
+            text: "Two gallons of paint plus a handful of sample pots for the birds' detail colors — the whole budget.",
           },
           {
             type: "slideshow",
@@ -533,16 +541,15 @@ Deno.serve(async (req) => {
             ],
           },
           {
-            type: "heading",
-            text: "The Furniture",
+            type: "beat",
+            kicker: "The Furniture",
+            heading:
+              "Reoriented the layout for more space, and rebuilt the bed frame lower to the ground with hinged flaps for under-bed storage.",
           },
           {
-            type: "text",
-            text: "Beyond the walls, I reoriented the room's furniture to make it feel more spacious, and deconstructed and rebuilt the bed frame lower to the ground with hinged wooden flaps for access to under-bed storage.",
-          },
-          {
-            type: "heading",
-            text: "The Result",
+            type: "beat",
+            kicker: "The Result",
+            heading: "A calmer room I actually want to come back to.",
           },
           {
             type: "before-after",
@@ -552,6 +559,7 @@ Deno.serve(async (req) => {
         ],
         tags: ["Interior Design", "Mural", "Painting"],
         tagLabel: "Interior Design",
+        // Also doubles as the opening full-bleed hero via heroImageFirst.
         image: "/projects/childhood-bedroom/after.jpg",
         slug: "childhood-bedroom",
       },
