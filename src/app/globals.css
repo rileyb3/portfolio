@@ -35,6 +35,39 @@ body {
   animation: marquee 30s linear infinite;
 }
 
+/* Used by SeaScene.tsx — "Riley" in the homepage title carries a short
+   intro card, and needs to look touchable without an underline. A slow
+   breathing glow reads as "this one is alive" against static type; hover
+   swaps to the steady, brighter version below. */
+@keyframes name-pulse {
+  0%,
+  100% {
+    text-shadow: 0 0 10px rgba(250, 250, 250, 0.16),
+      0 0 24px rgba(125, 211, 252, 0.1);
+  }
+  50% {
+    text-shadow: 0 0 16px rgba(250, 250, 250, 0.4),
+      0 0 36px rgba(125, 211, 252, 0.26);
+  }
+}
+
+.name-glow {
+  animation: name-pulse 3.6s ease-in-out infinite;
+}
+
+.name-glow-active {
+  text-shadow: 0 0 14px rgba(200, 255, 61, 0.55),
+    0 0 34px rgba(200, 255, 61, 0.3);
+}
+
+/* A pulsing word is exactly the kind of motion this setting is for. */
+@media (prefers-reduced-motion: reduce) {
+  .name-glow {
+    animation: none;
+    text-shadow: 0 0 14px rgba(250, 250, 250, 0.3);
+  }
+}
+
 /* Used by SeaScene.tsx — connector lines from a discipline card down to
    its wave crests draw themselves in rather than appearing all at once.
    The dash array is set inline (it has to exceed the longest path length),

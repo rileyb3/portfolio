@@ -296,10 +296,12 @@ export default function SeaScene() {
               onMouseLeave={() => setNameOpen(false)}
               onClick={() => setNameOpen((o) => !o)}
               aria-expanded={nameOpen}
-              className={`border-b border-dashed pb-0.5 transition ${
-                nameOpen
-                  ? "border-accent text-accent"
-                  : "border-paper/30 hover:border-accent hover:text-accent"
+              // No underline: the glow is the affordance. It breathes
+              // slowly at rest so the word reads as interactive next to
+              // static type, then settles into a brighter steady state on
+              // hover (see .name-glow / .name-glow-active in globals.css).
+              className={`transition-colors ${
+                nameOpen ? "name-glow-active text-accent" : "name-glow"
               }`}
             >
               Riley
