@@ -289,16 +289,26 @@ export default function SeaScene() {
               place, so it's what carries the short introduction. The
               wrapper above is pointer-events-none (it sits over the water
               and must not eat wave hovers), so this opts itself back in. */}
-          <span className="pointer-events-auto relative inline-block">
+          {/* Hover lives on this wrapper, not the word: the card is a
+              sibling of the button, so leaving the word to reach the card
+              was closing the card out from under the cursor. */}
+          <span
+            className="pointer-events-auto relative inline-block"
+            onMouseEnter={() => setNameOpen(true)}
+            onMouseLeave={() => setNameOpen(false)}
+          >
             <button
               type="button"
-              onMouseEnter={() => setNameOpen(true)}
-              onMouseLeave={() => setNameOpen(false)}
-              onClick={() => setNameOpen((o) => !o)}
+              // Same escalation the discipline cards use: the card opens
+              // first, then clicking goes to the full page. On a desktop
+              // the hover has already opened it, so one click travels.
+              onClick={() => {
+                if (nameOpen) router.push("/about");
+                else setNameOpen(true);
+              }}
               aria-expanded={nameOpen}
-              // No underline: the glow is the affordance. It breathes
-              // slowly at rest so the word reads as interactive next to
-              // static type, then settles into a brighter steady state on
+              // No underline: the glow is the affordance. It blooms once on
+              // arrival and then holds steady, brightening to accent on
               // hover (see .name-glow / .name-glow-active in globals.css).
               className={`transition-colors ${
                 nameOpen ? "name-glow-active text-accent" : "name-glow"
@@ -307,26 +317,29 @@ export default function SeaScene() {
               Riley
             </button>
 
+            {/* The gap between word and card is padding on this outer
+                wrapper rather than a margin on the card, so the cursor
+                crosses a continuous hover surface instead of a dead zone
+                that closes it mid-journey. */}
             <span
               aria-hidden={!nameOpen}
-              className={`absolute left-1/2 top-full z-50 mt-3 block w-72 -translate-x-1/2 rounded-2xl border border-white/10 bg-surface/95 p-4 text-left font-sans shadow-2xl backdrop-blur-md transition ${
+              className={`absolute left-1/2 top-full z-50 block w-72 -translate-x-1/2 pt-3 transition ${
                 nameOpen
                   ? "pointer-events-auto opacity-100"
                   : "pointer-events-none opacity-0"
               }`}
             >
-              <span className="block text-sm font-normal leading-relaxed text-paper">
-                {profile.tagline}
+              <span className="block rounded-2xl border border-white/10 bg-surface/95 p-4 text-left font-sans shadow-2xl backdrop-blur-md">
+                <span className="block text-sm font-normal leading-relaxed text-paper">
+                  {profile.tagline}
+                </span>
+                <span className="mt-2 block text-xs font-normal uppercase tracking-[0.18em] text-muted">
+                  {profile.workYears}
+                </span>
+                <span className="mt-3 block text-sm font-normal text-accent">
+                  Click again to learn more about me →
+                </span>
               </span>
-              <span className="mt-2 block text-xs font-normal uppercase tracking-[0.18em] text-muted">
-                {profile.workYears}
-              </span>
-              <Link
-                href="/about"
-                className="mt-3 block text-sm font-normal text-accent transition hover:underline"
-              >
-                More about me →
-              </Link>
             </span>
           </span>
         </h1>

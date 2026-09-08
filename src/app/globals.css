@@ -36,23 +36,35 @@ body {
 }
 
 /* Used by SeaScene.tsx — "Riley" in the homepage title carries a short
-   intro card, and needs to look touchable without an underline. A slow
-   breathing glow reads as "this one is alive" against static type; hover
-   swaps to the steady, brighter version below. */
-@keyframes name-pulse {
-  0%,
-  100% {
-    text-shadow: 0 0 10px rgba(250, 250, 250, 0.16),
-      0 0 24px rgba(125, 211, 252, 0.1);
+   intro card, and needs to look touchable without an underline. It arrives
+   once, glow blooming up and settling, then holds a steady glow: a word
+   that pulses forever turns into a nag, but one that lights up on arrival
+   still marks itself as the live thing in the sentence. The final keyframe
+   matches the resting values exactly so the end of the animation and the
+   static state are indistinguishable. */
+@keyframes name-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+    text-shadow: 0 0 0 rgba(250, 250, 250, 0);
   }
-  50% {
-    text-shadow: 0 0 16px rgba(250, 250, 250, 0.4),
-      0 0 36px rgba(125, 211, 252, 0.26);
+  55% {
+    opacity: 1;
+    text-shadow: 0 0 26px rgba(250, 250, 250, 0.6),
+      0 0 52px rgba(125, 211, 252, 0.42);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    text-shadow: 0 0 14px rgba(250, 250, 250, 0.26),
+      0 0 30px rgba(125, 211, 252, 0.16);
   }
 }
 
 .name-glow {
-  animation: name-pulse 3.6s ease-in-out infinite;
+  text-shadow: 0 0 14px rgba(250, 250, 250, 0.26),
+    0 0 30px rgba(125, 211, 252, 0.16);
+  animation: name-arrive 1200ms ease-out both;
 }
 
 .name-glow-active {
@@ -60,11 +72,9 @@ body {
     0 0 34px rgba(200, 255, 61, 0.3);
 }
 
-/* A pulsing word is exactly the kind of motion this setting is for. */
 @media (prefers-reduced-motion: reduce) {
   .name-glow {
     animation: none;
-    text-shadow: 0 0 14px rgba(250, 250, 250, 0.3);
   }
 }
 
