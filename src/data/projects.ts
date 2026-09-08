@@ -291,6 +291,29 @@ Deno.serve(async (req) => {
         description:
           "The site you're looking at right now — hand-built in Next.js, with everything you're browsing pulled from one typed data file.",
         tagLabel: "Web Build",
+        // Cover is the current homepage; the body images are the earlier
+        // versions it passed through on the way here.
+        heroImageFirst: true,
+        image: "/projects/portfolio/cover.jpg",
+        body: [
+          {
+            type: "text",
+            text: "The site you're looking at right now — hand-built in Next.js, with everything you're browsing pulled from one typed data file.",
+          },
+          {
+            type: "text",
+            text: "Earlier versions, in the order they happened.",
+          },
+          {
+            type: "images",
+            images: [
+              "/projects/portfolio/01-hero-photo.jpg",
+              "/projects/portfolio/02-hero-quote.jpg",
+              "/projects/portfolio/03-discipline-stars.jpg",
+              "/projects/portfolio/04-discipline-pills.jpg",
+            ],
+          },
+        ],
         tags: ["TypeScript", "Next.js", "Tailwind CSS"],
         link: "#",
       },
