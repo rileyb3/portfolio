@@ -1,115 +1,66 @@
 "use client";
 
-import { SEA_VIEWBOX, bands, curlPath } from "./seaData";
+import { waveAngle, waveGradient, waves } from "./seaData";
 
-// The sea: five overlapping swells, back to front, each lit from its own
-// angle so the water has dimension rather than one flat gradient wash.
-// Every project owns one crest peak, marked by a small breaking curl that
-// lights up when its discipline is picked.
+// The sea. Each wave is Riley's own drawing used as a CSS mask over a
+// gradient — see the note in seaData.ts for why mask rather than <img>:
+// it's what lets one flat PNG be steel-blue at rest, its discipline's
+// color when selected, and dimmed when some other discipline is.
 //
-// `focusId` is the discipline currently hovered or selected — its peaks
-// take on its color and everything else recedes, the same way the
-// reference site's unselected districts drop back when you choose one.
+// `focusId` is the discipline currently hovered or selected. Its waves
+// light up and glow; the rest of the sea recedes, the same way the
+// reference site's unselected districts drop back.
 export default function Sea({
   focusId,
   focusColor,
-  svgRef,
+  waveRefs,
 }: {
   focusId: string | null;
   focusColor: string | null;
-  svgRef: React.Ref<SVGSVGElement>;
+  waveRefs: React.MutableRefObject<Record<string, HTMLDivElement | null>>;
 }) {
   return (
-    <svg
-      ref={svgRef}
-      viewBox={`0 0 ${SEA_VIEWBOX.w} ${SEA_VIEWBOX.h}`}
-      preserveAspectRatio="xMidYMax slice"
-      className="pointer-events-none absolute inset-x-0 bottom-0 h-[68vh] w-full sm:h-[72vh]"
+    <div
+      className="pointer-events-none absolute inset-x-0 bottom-0 h-[62vh] sm:h-[68vh]"
       aria-hidden="true"
     >
-      <defs>
-        {bands.map((b) => {
-          const rad = (b.angle * Math.PI) / 180;
-          return (
-            <linearGradient
-              key={b.index}
-              id={`sea-band-${b.index}`}
-              x1={`${50 + Math.cos(rad) * 50}%`}
-              y1={`${50 + Math.sin(rad) * 50}%`}
-              x2={`${50 - Math.cos(rad) * 50}%`}
-              y2={`${50 - Math.sin(rad) * 50}%`}
-            >
-              <stop offset="0%" stopColor={b.color} stopOpacity={0.34} />
-              <stop offset="42%" stopColor={b.color2} stopOpacity={0.14} />
-              {/* Fading to the page's own base at the trough is what makes
-                  overlapping bands read as depth instead of flat cutouts. */}
-              <stop offset="100%" stopColor="#0a0a0a" stopOpacity={0.97} />
-            </linearGradient>
-          );
-        })}
-      </defs>
-
-      {bands.map((b) => {
-        // A band dims only when the focused discipline has no peaks in it.
-        const hasFocus = focusId
-          ? b.peaks.some((p) => p.disciplineIds.includes(focusId))
-          : true;
+      {waves.map((w, i) => {
+        const lit = focusId ? w.disciplineIds.includes(focusId) : false;
+        const dimmed = focusId !== null && !lit;
+        const angle = waveAngle(i);
         return (
-          <g
-            key={b.index}
-            style={{
-              opacity: focusId && !hasFocus ? b.opacity * 0.35 : b.opacity,
-              transition: "opacity 600ms ease-out",
+          <div
+            key={`${w.slug}-${i}`}
+            ref={(el) => {
+              waveRefs.current[w.slug] = el;
             }}
-          >
-            <path d={b.body} fill={`url(#sea-band-${b.index})`} />
-            <path
-              d={b.edge}
-              fill="none"
-              stroke={b.color}
-              strokeOpacity={0.75}
-              strokeWidth={b.strokeWidth}
-              strokeLinecap="round"
-            />
-          </g>
+            style={{
+              left: `${w.left}%`,
+              bottom: `${w.bottom}%`,
+              width: `${w.width}%`,
+              aspectRatio: `${w.aspect}`,
+              zIndex: w.depth,
+              // The drawing contributes silhouette only; all color comes
+              // from this gradient showing through the mask.
+              WebkitMaskImage: `url(${w.src})`,
+              maskImage: `url(${w.src})`,
+              WebkitMaskSize: "100% 100%",
+              maskSize: "100% 100%",
+              WebkitMaskRepeat: "no-repeat",
+              maskRepeat: "no-repeat",
+              backgroundImage: waveGradient(w, i, angle, lit ? focusColor : null),
+              transform: w.flip ? "scaleX(-1)" : undefined,
+              opacity: dimmed ? 0.22 : 1,
+              filter: lit
+                ? `drop-shadow(0 0 22px ${focusColor}66) drop-shadow(0 0 6px ${focusColor}99)`
+                : undefined,
+              transition:
+                "opacity 550ms ease-out, background-image 450ms ease-out, filter 450ms ease-out",
+            }}
+            className="absolute"
+          />
         );
       })}
-
-      {/* Per-project markers, drawn above every band so a front swell never
-          buries the marker for a project behind it. At rest each project is
-          just a faint nub on the water; picking its discipline breaks that
-          crest into a lit curl. */}
-      {bands.flatMap((b) =>
-        b.peaks.map((p) => {
-          const lit = focusId ? p.disciplineIds.includes(focusId) : false;
-          return (
-            <g key={p.slug}>
-              <circle
-                cx={p.x}
-                cy={p.y}
-                r={lit ? 0 : 2.6}
-                fill="#fafafa"
-                opacity={focusId ? 0.08 : 0.3}
-                style={{ transition: "opacity 400ms ease-out, r 400ms ease-out" }}
-              />
-              <path
-                d={curlPath(p)}
-                fill="none"
-                stroke={focusColor ?? "#fafafa"}
-                strokeOpacity={lit ? 0.95 : 0}
-                strokeWidth={2.4}
-                strokeLinecap="round"
-                style={{
-                  filter: lit
-                    ? `drop-shadow(0 0 7px ${focusColor ?? "#fafafa"})`
-                    : undefined,
-                  transition: "stroke-opacity 450ms ease-out, stroke 450ms ease-out",
-                }}
-              />
-            </g>
-          );
-        })
-      )}
-    </svg>
+    </div>
   );
 }

@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import Sea from "./sea/Sea";
-import { allPeaks, disciplines, panelEntries } from "./sea/seaData";
+import { disciplines, panelEntries, waves } from "./sea/seaData";
 
 const iconMap: Record<string, LucideIcon> = {
   build: Code2,
@@ -44,20 +44,21 @@ export default function SeaScene() {
   const focus = disciplines.find((d) => d.id === focusId) ?? null;
 
   const sceneRef = useRef<HTMLDivElement>(null);
-  const svgRef = useRef<SVGSVGElement>(null);
+  const waveRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const cardRefs = useRef<Record<string, HTMLElement | null>>({});
   const [lines, setLines] = useState<string[]>([]);
 
-  // Lines are measured in real DOM pixels rather than authored in the sea's
-  // viewBox coordinates: the cards live in normal flow/absolute layout and
-  // the sea is a `slice`-scaled SVG, so the only way the two reliably meet
-  // is to measure both after layout. getScreenCTM() maps a crest's tip out
-  // of viewBox space into screen space; everything is then rebased onto the
-  // scene box so the overlay SVG can use plain pixel coordinates.
+  // Lines are measured in real DOM pixels rather than authored in any fixed
+  // coordinate space: the cards are laid out by flow/absolute rules and the
+  // waves are percentage-positioned masked divs, so the only way the two
+  // reliably meet at every viewport size is to measure both after layout.
+  // A wave's landing point is the crest of the drawing — `tip` is the
+  // x-fraction of its topmost opaque pixel, measured off the PNG itself,
+  // because the bounding-box center would leave lines hanging in open water
+  // for the shapes whose curl sits far to one side.
   const measure = useCallback(() => {
     const scene = sceneRef.current;
-    const svg = svgRef.current;
-    if (!scene || !svg || !focusId) {
+    if (!scene || !focusId) {
       setLines([]);
       return;
     }
@@ -69,15 +70,16 @@ export default function SeaScene() {
     const startX = cardRect.left + cardRect.width / 2 - sceneRect.left;
     const startY = cardRect.bottom - sceneRect.top;
 
-    const ctm = svg.getScreenCTM();
-    if (!ctm) return;
-
     const next: string[] = [];
-    for (const p of allPeaks) {
-      if (!p.disciplineIds.includes(focusId)) continue;
-      const pt = new DOMPoint(p.x, p.y).matrixTransform(ctm);
-      const endX = pt.x - sceneRect.left;
-      const endY = pt.y - sceneRect.top;
+    for (const w of waves) {
+      if (!w.disciplineIds.includes(focusId)) continue;
+      const el = waveRefs.current[w.slug];
+      if (!el) continue;
+      const r = el.getBoundingClientRect();
+      const endX = r.left + r.width * w.tip - sceneRect.left;
+      // A hair below the very top edge so the line tucks into the crest
+      // rather than floating just above it.
+      const endY = r.top + r.height * 0.06 - sceneRect.top;
       // A long vertical-ish S: both control points sit on the line's own
       // vertical run, which makes the bundle fan out from the card and
       // arrive at each crest from above rather than cutting across at an
@@ -136,7 +138,11 @@ export default function SeaScene() {
         }}
       />
 
-      <Sea focusId={focusId} focusColor={focus?.color ?? null} svgRef={svgRef} />
+      <Sea
+        focusId={focusId}
+        focusColor={focus?.color ?? null}
+        waveRefs={waveRefs}
+      />
 
       {/* Connector lines. Sits above the sea, below the cards, so a line
           appears to run out from under its card and land on the water. */}
