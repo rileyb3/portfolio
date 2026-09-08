@@ -160,6 +160,11 @@ const LAYOUT: Slot[] = [
 export type Wave = {
   slug: string;
   title: string;
+  // Shown in the hover card when you point at this wave directly — every
+  // wave is one project, so the sea is browsable on its own terms and not
+  // only through the discipline cards.
+  description: string;
+  href: string;
   disciplineIds: string[];
   src: string;
   aspect: number;
@@ -176,7 +181,10 @@ export type Wave = {
 // width. Lines from a card then fan across the sea instead of dropping
 // into one clump.
 function uniqueProjects() {
-  const bySlug = new Map<string, { title: string; disciplineIds: string[] }>();
+  const bySlug = new Map<
+    string,
+    { title: string; description: string; href: string; disciplineIds: string[] }
+  >();
   const order: string[] = [];
   const maxLen = Math.max(...categories.map((c) => c.projects.length));
 
@@ -184,37 +192,75 @@ function uniqueProjects() {
     for (const c of categories) {
       const p = c.projects[i];
       if (!p) continue;
-      const slug = projectHref(p).replace("/projects/", "");
+      const href = projectHref(p);
+      const slug = href.replace("/projects/", "");
       const existing = bySlug.get(slug);
       if (existing) {
         if (!existing.disciplineIds.includes(c.id)) existing.disciplineIds.push(c.id);
         continue;
       }
-      bySlug.set(slug, { title: p.title, disciplineIds: [c.id] });
+      bySlug.set(slug, {
+        title: p.title,
+        description: p.description,
+        href,
+        disciplineIds: [c.id],
+      });
       order.push(slug);
     }
   }
   return order.map((slug) => ({ slug, ...bySlug.get(slug)! }));
 }
 
-export const waves: Wave[] = uniqueProjects().map((p, i) => {
-  const slot = LAYOUT[i % LAYOUT.length];
-  const art = ART[slot.file];
-  return {
-    slug: p.slug,
-    title: p.title,
-    disciplineIds: p.disciplineIds,
-    src: `/waves/${slot.file}.png`,
-    aspect: art.w / art.h,
-    // Mirrored shapes have their crest mirrored too.
-    tip: slot.flip ? 1 - art.tip : art.tip,
-    left: slot.left,
-    bottom: slot.bottom,
-    width: slot.width,
-    depth: slot.depth,
-    flip: slot.flip ?? false,
-  };
-});
+export const waves: Wave[] = (() => {
+  const projects = uniqueProjects();
+  // Projects that answer to more than one discipline are the whole
+  // argument of this page, so they get the biggest breakers in the front
+  // row rather than whatever slot their index happened to land on — Pete
+  // the Snail first came out as a 35px sliver half off the left edge.
+  const shared = projects.filter((p) => p.disciplineIds.length > 1);
+  const solo = projects.filter((p) => p.disciplineIds.length === 1);
+
+  const heroSlots = [...LAYOUT]
+    .filter((s) => s.depth === 2)
+    .sort((a, b) => b.width - a.width)
+    .slice(0, shared.length)
+    .sort((a, b) => a.left - b.left);
+
+  // Everything else, left to right. Projects arrive round-robin by
+  // discipline, so x-ordered slots give each discipline roughly every
+  // fifth wave across the width and its lines fan across the whole sea.
+  // Assigning in authoring order instead clumped a discipline into
+  // whichever corner its slots happened to sit in (Design came out
+  // entirely in the left half).
+  const restSlots = [...LAYOUT]
+    .filter((s) => !heroSlots.includes(s))
+    .sort((a, b) => a.left - b.left);
+
+  const pairs: { p: (typeof projects)[number]; slot: Slot }[] = [
+    ...shared.map((p, i) => ({ p, slot: heroSlots[i % heroSlots.length] })),
+    ...solo.map((p, i) => ({ p, slot: restSlots[i % restSlots.length] })),
+  ];
+
+  return pairs.map(({ p, slot }) => {
+    const art = ART[slot.file];
+    return {
+      slug: p.slug,
+      title: p.title,
+      description: p.description,
+      href: p.href,
+      disciplineIds: p.disciplineIds,
+      src: `/waves/${slot.file}.png`,
+      aspect: art.w / art.h,
+      // Mirrored shapes have their crest mirrored too.
+      tip: slot.flip ? 1 - art.tip : art.tip,
+      left: slot.left,
+      bottom: slot.bottom,
+      width: slot.width,
+      depth: slot.depth,
+      flip: slot.flip ?? false,
+    };
+  });
+})();
 
 // ---------------------------------------------------------------------------
 // Color
@@ -251,8 +297,29 @@ function rand(seed: number) {
   return x - Math.floor(x);
 }
 
-export function waveGradient(w: Wave, i: number, angle: number, litColor: string | null) {
-  if (litColor) {
+export function waveGradient(
+  w: Wave,
+  i: number,
+  angle: number,
+  litColors: string[] | null
+) {
+  if (litColors && litColors.length > 1) {
+    // A project that belongs to two disciplines lights up in both, as one
+    // ombre across the wave (Pete the Snail comes up blue *and* orange).
+    // Each color holds solid at its own end so both are unmistakable, with
+    // a wide blend through the middle rather than a hard split.
+    const span = 100 / litColors.length;
+    const stops = litColors
+      .map((c, k) => {
+        const start = k * span + span * 0.18;
+        const end = (k + 1) * span - span * 0.18;
+        return `${c} ${start.toFixed(1)}%, ${c} ${end.toFixed(1)}%`;
+      })
+      .join(", ");
+    return `linear-gradient(${angle}deg, ${stops})`;
+  }
+  if (litColors && litColors.length === 1) {
+    const litColor = litColors[0];
     return `linear-gradient(${angle}deg, ${litColor} 0%, ${litColor}dd 58%, ${litColor}99 100%)`;
   }
   const hue = mix(SEA_BLUE, SEA_GREEN, rand(i * 2.4));

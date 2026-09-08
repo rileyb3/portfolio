@@ -11,8 +11,15 @@ import {
   ArrowRight,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import Sea from "./sea/Sea";
-import { disciplines, panelEntries, waves } from "./sea/seaData";
+import {
+  DISCIPLINE_COLOR,
+  disciplines,
+  panelEntries,
+  waves,
+  type Wave,
+} from "./sea/seaData";
 
 const iconMap: Record<string, LucideIcon> = {
   build: Code2,
@@ -47,6 +54,27 @@ export default function SeaScene() {
   const waveRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const cardRefs = useRef<Record<string, HTMLElement | null>>({});
   const [lines, setLines] = useState<string[]>([]);
+  const router = useRouter();
+  // Pointing at a single wave: every wave is one project, so the sea can
+  // be browsed directly rather than only through the discipline cards.
+  const [hoverWave, setHoverWave] = useState<{
+    wave: Wave;
+    x: number;
+    y: number;
+  } | null>(null);
+
+  const handleWaveHover = useCallback(
+    (wave: Wave | null, clientX: number, clientY: number) => {
+      const scene = sceneRef.current;
+      if (!wave || !scene) {
+        setHoverWave(null);
+        return;
+      }
+      const r = scene.getBoundingClientRect();
+      setHoverWave({ wave, x: clientX - r.left, y: clientY - r.top });
+    },
+    []
+  );
 
   // Lines are measured in real DOM pixels rather than authored in any fixed
   // coordinate space: the cards are laid out by flow/absolute rules and the
@@ -127,13 +155,15 @@ export default function SeaScene() {
           has a sky to sit under instead of flat black. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-[70vh] bg-[radial-gradient(120%_80%_at_50%_100%,rgba(125,211,252,0.16)_0%,rgba(200,255,61,0.07)_38%,transparent_72%)]"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-[85vh]"
         style={{
           // Focused, the horizon takes on that discipline's color — the
-          // whole scene acknowledges the selection, not just the crests.
+          // whole scene acknowledges the selection, not just the waves.
+          // Without this the band between the cards and the waterline is
+          // flat black, and the scene reads as two unrelated halves.
           background: focus
-            ? `radial-gradient(120% 80% at 50% 100%, ${focus.color}22 0%, ${focus.color}0d 40%, transparent 74%)`
-            : undefined,
+            ? `radial-gradient(125% 78% at 50% 100%, ${focus.color}2e 0%, ${focus.color}14 34%, transparent 72%)`
+            : "radial-gradient(125% 78% at 50% 100%, rgba(96,178,224,0.22) 0%, rgba(104,205,158,0.10) 36%, transparent 72%)",
           transition: "background 600ms ease-out",
         }}
       />
@@ -141,8 +171,60 @@ export default function SeaScene() {
       <Sea
         focusId={focusId}
         focusColor={focus?.color ?? null}
+        hoverSlug={hoverWave?.wave.slug ?? null}
+        onWaveHover={handleWaveHover}
+        onWaveClick={(w) => router.push(w.href)}
         waveRefs={waveRefs}
       />
+
+      {/* Hover card for a single wave. Follows the pointer, offset so it
+          never sits under the cursor, and flips to the left of the cursor
+          near the right edge so it can't run off-screen. */}
+      {hoverWave && (
+        <div
+          className="pointer-events-none absolute z-30 w-64 rounded-xl border bg-surface/95 p-4 backdrop-blur-md"
+          style={{
+            left: hoverWave.x,
+            top: hoverWave.y,
+            transform: `translate(${hoverWave.x > (sceneRef.current?.clientWidth ?? 0) - 300 ? "-105%" : "16px"}, -110%)`,
+            borderColor: `${DISCIPLINE_COLOR[hoverWave.wave.disciplineIds[0]]}66`,
+            // A shared project's card glows in both of its colors, matching
+            // the ombre on the wave itself.
+            boxShadow: hoverWave.wave.disciplineIds
+              .map((d) => `0 0 24px ${DISCIPLINE_COLOR[d]}33`)
+              .join(", "),
+          }}
+        >
+          <p
+            className="text-sm font-bold uppercase tracking-wide"
+            style={
+              hoverWave.wave.disciplineIds.length > 1
+                ? {
+                    // Title reads as the same ombre — two disciplines, one
+                    // piece of work.
+                    backgroundImage: `linear-gradient(100deg, ${hoverWave.wave.disciplineIds
+                      .map((d) => DISCIPLINE_COLOR[d])
+                      .join(", ")})`,
+                    WebkitBackgroundClip: "text",
+                    backgroundClip: "text",
+                    color: "transparent",
+                  }
+                : { color: DISCIPLINE_COLOR[hoverWave.wave.disciplineIds[0]] }
+            }
+          >
+            {hoverWave.wave.title}
+          </p>
+          <p className="mt-1.5 text-xs leading-relaxed text-muted">
+            {hoverWave.wave.description}
+          </p>
+          <p className="mt-2 text-[0.65rem] uppercase tracking-[0.18em] text-muted/70">
+            {hoverWave.wave.disciplineIds
+              .map((d) => disciplines.find((x) => x.id === d)?.label ?? d)
+              .join(" · ")}{" "}
+            — click to open
+          </p>
+        </div>
+      )}
 
       {/* Connector lines. Sits above the sea, below the cards, so a line
           appears to run out from under its card and land on the water. */}
@@ -170,18 +252,17 @@ export default function SeaScene() {
         ))}
       </svg>
 
-      {/* Intro line — the scene needs one plain sentence of orientation, the
-          way the reference site uses its search bar as a "this is a place
-          you move through" cue. */}
+      {/* The place's name, the way the reference site puts KATE CITY at the
+          top of its own scene. Doubles as the page's h1 — the old homepage
+          had none once the oversized name block came out. */}
       <div className="pointer-events-none relative z-20 px-6 pt-10 text-center sm:pt-14">
-        <p
-          className={`mx-auto max-w-md text-sm leading-relaxed text-muted transition-opacity duration-500 sm:text-base ${
+        <h1
+          className={`font-display text-3xl font-semibold tracking-wide text-paper transition-opacity duration-500 sm:text-4xl ${
             activeId ? "opacity-0" : "opacity-100"
           }`}
         >
-          Five disciplines, one sea. Pick one and watch which work belongs to
-          it — some waves answer to more than one.
-        </p>
+          Sea of Riley
+        </h1>
       </div>
 
       {/* Cards. Wrapped row on small screens, scattered at five different
@@ -189,8 +270,13 @@ export default function SeaScene() {
       <div className="relative z-20 mx-auto flex min-h-[46vh] max-w-6xl flex-wrap items-start justify-center gap-3 px-4 pt-8 sm:gap-4 lg:block lg:max-w-none lg:px-0 lg:pt-0">
         {disciplines.map((d) => {
           const Icon = iconMap[d.id] ?? Code2;
-          const isFocused = focusId === d.id;
-          const dimmed = focusId !== null && !isFocused;
+          // A card also lights when you point at a wave it owns — which is
+          // how a shared project shows that it belongs to two disciplines
+          // at once, without needing to click anything.
+          const ownsHovered =
+            hoverWave?.wave.disciplineIds.includes(d.id) ?? false;
+          const isFocused = focusId === d.id || ownsHovered;
+          const dimmed = focusId !== null && focusId !== d.id && !ownsHovered;
           const pos = CARD_POS[d.id];
           return (
             <button
