@@ -104,7 +104,10 @@ export default function Sea({
 
   return (
     <div
-      className="absolute inset-x-0 bottom-0 h-[72vh] sm:h-[78vh]"
+      // Shorter on phones: the five cards stack into a tall column there,
+      // and a 72vh sea would run straight up behind them. Kate City does
+      // the same — cards in clear space, skyline held to the bottom strip.
+      className="absolute inset-x-0 bottom-0 h-[40vh] sm:h-[78vh]"
       style={{ cursor: hoverSlug ? "pointer" : "default" }}
       onPointerMove={(e) => {
         const hit = pick(e.clientX, e.clientY);

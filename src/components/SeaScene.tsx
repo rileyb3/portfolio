@@ -9,6 +9,7 @@ import {
   Microscope,
   PenTool,
   ArrowRight,
+  X,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -35,6 +36,19 @@ const iconMap: Record<string, LucideIcon> = {
 // which is most of what keeps it from looking like a nav bar). Only used
 // at lg+; below that the cards fall back to a normal wrapped row, since
 // absolute scatter has nowhere to go on a phone.
+// Below lg the scatter collapses into a single stacked column, each card
+// stepped a little further right than the one above — the cascade Kate
+// City uses on a phone. Written as literal class strings so Tailwind's JIT
+// actually emits them, and cleared at lg where absolute positioning takes
+// over.
+const MOBILE_STAGGER = [
+  "ml-0",
+  "ml-[6%]",
+  "ml-[12%]",
+  "ml-[18%]",
+  "ml-[24%]",
+];
+
 const CARD_POS: Record<string, { left: string; top: string }> = {
   build: { left: "1%", top: "6%" },
   design: { left: "23%", top: "17%" },
@@ -169,6 +183,7 @@ export default function SeaScene() {
   }, [activeId]);
 
   return (
+    <>
     <section
       ref={sceneRef}
       id="top"
@@ -347,8 +362,8 @@ export default function SeaScene() {
 
       {/* Cards. Wrapped row on small screens, scattered at five different
           altitudes on lg+. */}
-      <div className="relative z-20 mx-auto flex min-h-[46vh] max-w-6xl flex-wrap items-start justify-center gap-3 px-4 pt-8 sm:gap-4 lg:block lg:max-w-none lg:px-0 lg:pt-0">
-        {disciplines.map((d) => {
+      <div className="relative z-20 mx-auto flex min-h-[46vh] max-w-6xl flex-col items-start gap-3 px-4 pt-8 sm:gap-4 lg:block lg:max-w-none lg:px-0 lg:pt-0">
+        {disciplines.map((d, i) => {
           const Icon = iconMap[d.id] ?? Code2;
           // A card also lights when you point at a wave it owns — which is
           // how a shared project shows that it belongs to two disciplines
@@ -390,9 +405,11 @@ export default function SeaScene() {
                 left: pos?.left,
                 top: pos?.top,
               }}
-              className={`group flex w-[46%] max-w-[15rem] flex-col items-center gap-1 rounded-2xl border px-4 py-3 text-center backdrop-blur-sm transition-all duration-300 sm:w-auto sm:min-w-[13rem] sm:px-6 sm:py-4 lg:absolute lg:w-[16rem] ${
-                dimmed ? "opacity-40" : "opacity-100"
-              } ${isFocused ? "-translate-y-1 scale-[1.03]" : "hover:-translate-y-0.5"}`}
+              className={`group flex w-[76%] flex-col items-center gap-1 rounded-2xl border px-4 py-3 text-center backdrop-blur-sm transition-all duration-300 sm:w-[60%] sm:px-6 sm:py-4 lg:absolute lg:ml-0 lg:w-[16rem] ${
+                MOBILE_STAGGER[i % MOBILE_STAGGER.length]
+              } ${dimmed ? "opacity-40" : "opacity-100"} ${
+                isFocused ? "-translate-y-1 scale-[1.03]" : "hover:-translate-y-0.5"
+              }`}
             >
               <span className="flex items-center gap-2">
                 <Icon
@@ -422,26 +439,48 @@ export default function SeaScene() {
           );
         })}
       </div>
+    </section>
 
       {/* Panel. Slides in from the right on click; the crest lines stay
           visible to its left, which is the whole point of the layout —
-          you can see the shape of a discipline and read its list at once. */}
+          you can see the shape of a discipline and read its list at once.
+
+          Deliberately a sibling of the scene rather than a child: the
+          scene sets `isolate`, and inside that stacking context no z-index
+          the panel could carry would ever beat the sticky header, which
+          lives outside it. The header was painting over the panel's top
+          strip — exactly where "back to the sea" and the close button sit.
+          On mobile the panel is full width, so with those two hidden and
+          no Escape key on a phone, tapping a category was a dead end. */}
       <aside
         ref={panelRef}
         aria-hidden={!activeId}
-        className={`fixed right-0 top-0 z-40 flex h-[100svh] w-full max-w-md flex-col overflow-y-auto border-l border-white/10 bg-surface/95 px-6 pb-16 pt-8 backdrop-blur-xl transition-transform duration-500 ease-out sm:px-8 ${
+        className={`fixed right-0 top-0 z-[60] flex h-[100svh] w-full max-w-md flex-col overflow-y-auto border-l border-white/10 bg-surface/95 px-6 pb-16 pt-8 backdrop-blur-xl transition-transform duration-500 ease-out sm:px-8 ${
           activeId ? "translate-x-0" : "pointer-events-none translate-x-full"
         }`}
       >
         {focus && (
           <>
-            <button
-              type="button"
-              onClick={() => setActiveId(null)}
-              className="self-start text-xs uppercase tracking-[0.2em] text-muted transition hover:text-paper"
-            >
-              ← Back to the sea
-            </button>
+            {/* Two ways out, because on mobile this panel is the whole
+                screen: there's no water left to click on and no Escape
+                key. */}
+            <div className="flex items-center justify-between gap-4">
+              <button
+                type="button"
+                onClick={() => setActiveId(null)}
+                className="text-xs uppercase tracking-[0.2em] text-muted transition hover:text-paper"
+              >
+                ← Back to the sea
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveId(null)}
+                aria-label="Close"
+                className="rounded-full border border-white/15 p-2 text-muted transition hover:border-white/40 hover:text-paper"
+              >
+                <X className="h-4 w-4" strokeWidth={2} />
+              </button>
+            </div>
             {/* The discipline's own page is the panel's main destination,
                 so the title is the link to it — not a quiet "see all" line
                 buried under a list of eight projects. */}
@@ -499,6 +538,6 @@ export default function SeaScene() {
           </>
         )}
       </aside>
-    </section>
+    </>
   );
 }
