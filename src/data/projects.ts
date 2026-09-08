@@ -1006,7 +1006,7 @@ private void UpdateLineRenderer() {
       },
       {
         title: "Achieving Godhood",
-        description: "A prose piece about becoming something more — published in The Cairn.",
+        description: "A prose piece published in The Cairn.",
         tags: ["Prose"],
         tagLabel: "Prose",
         year: "2024",
