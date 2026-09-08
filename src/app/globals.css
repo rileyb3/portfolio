@@ -34,3 +34,18 @@ body {
 .animate-marquee {
   animation: marquee 30s linear infinite;
 }
+
+/* Used by SeaScene.tsx — connector lines from a discipline card down to
+   its wave crests draw themselves in rather than appearing all at once.
+   The dash array is set inline (it has to exceed the longest path length),
+   so this only animates the offset. */
+@keyframes sea-draw {
+  from {
+    stroke-dashoffset: 2600;
+    opacity: 0;
+  }
+  to {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}

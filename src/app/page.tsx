@@ -1,17 +1,16 @@
-import Hero from "@/components/Hero";
-import Disciplines from "@/components/Disciplines";
+import SeaScene from "@/components/SeaScene";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 
-// Intro ("Selected work" byline), SelectedWorks (the project grid it led
-// into), and TechMarquee ("Tools & software") all removed from the
-// homepage per request — Disciplines now leads straight into Contact.
+// Homepage rebuilt as a sea (see SeaScene.tsx) — five discipline cards
+// floating over a wave field, with glowing lines drawn from a card down to
+// the specific crests that belong to it. Replaces the old Hero + Disciplines
+// pair entirely; Contact still closes the page out below the water.
 export default function Home() {
   return (
     <>
       <main>
-        <Hero />
-        <Disciplines />
+        <SeaScene />
         <Contact />
       </main>
       <Footer />
