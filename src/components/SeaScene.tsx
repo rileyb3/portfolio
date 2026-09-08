@@ -289,7 +289,16 @@ export default function SeaScene() {
               onMouseLeave={() => setHoverId(null)}
               onFocus={() => setHoverId(d.id)}
               onBlur={() => setHoverId(null)}
-              onClick={() => setActiveId((cur) => (cur === d.id ? null : d.id))}
+              // Click escalates rather than toggles: the first click opens
+              // the panel, a second click on the same card goes to that
+              // discipline's own page. The page was previously only
+              // reachable from a quiet text link at the bottom of the
+              // panel, which is a long way to travel for the main
+              // destination. Closing is still Escape or "back to the sea".
+              onClick={() => {
+                if (activeId === d.id) router.push(d.href);
+                else setActiveId(d.id);
+              }}
               aria-pressed={activeId === d.id}
               style={{
                 borderColor: isFocused ? d.color : `${d.color}66`,
@@ -317,8 +326,16 @@ export default function SeaScene() {
                   {d.label}
                 </span>
               </span>
-              <span className="text-[0.6rem] uppercase tracking-[0.18em] text-muted sm:text-xs">
-                {d.blurb}
+              {/* The subtitle becomes the affordance once the panel is
+                  open — otherwise the second-click-to-open behavior is
+                  invisible and nobody would ever find it. */}
+              <span
+                className="text-[0.6rem] uppercase tracking-[0.18em] transition-colors sm:text-xs"
+                style={{ color: activeId === d.id ? d.color : undefined }}
+              >
+                <span className={activeId === d.id ? "" : "text-muted"}>
+                  {activeId === d.id ? "click again to open →" : d.blurb}
+                </span>
               </span>
             </button>
           );
@@ -343,15 +360,37 @@ export default function SeaScene() {
             >
               ← Back to the sea
             </button>
-            <h2
-              className="mt-6 text-3xl font-bold uppercase tracking-wide sm:text-4xl"
-              style={{ color: focus.color }}
-            >
-              {focus.label}
-            </h2>
+            {/* The discipline's own page is the panel's main destination,
+                so the title is the link to it — not a quiet "see all" line
+                buried under a list of eight projects. */}
+            <Link href={focus.href} className="group mt-6 inline-flex items-center gap-3">
+              <h2
+                className="text-3xl font-bold uppercase tracking-wide sm:text-4xl"
+                style={{ color: focus.color }}
+              >
+                {focus.label}
+              </h2>
+              <ArrowRight
+                className="h-6 w-6 transition-transform group-hover:translate-x-1"
+                strokeWidth={2}
+                style={{ color: focus.color }}
+              />
+            </Link>
             <p className="mt-1 text-xs uppercase tracking-[0.2em] text-muted">
               {focus.blurb}
             </p>
+
+            <Link
+              href={focus.href}
+              className="mt-5 inline-block rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.15em] transition hover:brightness-125"
+              style={{
+                borderColor: `${focus.color}80`,
+                background: `${focus.color}1a`,
+                color: focus.color,
+              }}
+            >
+              See everything in {focus.label} →
+            </Link>
 
             <ul className="mt-8 space-y-6">
               {(panelEntries[focus.id] ?? []).map((entry) => (
@@ -375,12 +414,6 @@ export default function SeaScene() {
               ))}
             </ul>
 
-            <Link
-              href={focus.href}
-              className="mt-10 inline-block text-sm uppercase tracking-[0.15em] text-muted transition hover:text-paper"
-            >
-              See all {focus.label} →
-            </Link>
           </>
         )}
       </aside>

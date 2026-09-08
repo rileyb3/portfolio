@@ -3,9 +3,11 @@
 import { useCallback, useEffect, useRef } from "react";
 import {
   DISCIPLINE_COLOR,
+  FADE_START,
   waveAngle,
   waveGradient,
   waves,
+  wavesByZ,
   type Wave,
 } from "./seaData";
 
@@ -71,31 +73,34 @@ export default function Sea({
     };
   }, []);
 
-  // Front to back, so the wave you can actually see wins.
+  // Front to back, so the wave you can actually see wins — walking the
+  // same z-order the sea is painted in.
   const pick = useCallback((clientX: number, clientY: number) => {
-    for (let i = waves.length - 1; i >= 0; i--) {
-      const w = waves[i];
+    for (let i = wavesByZ.length - 1; i >= 0; i--) {
+      const w = wavesByZ[i];
       const el = waveRefs.current[w.slug];
       if (!el) continue;
       const r = el.getBoundingClientRect();
-      let u = (clientX - r.left) / r.width;
+      const u = (clientX - r.left) / r.width;
       const v = (clientY - r.top) / r.height;
       if (u < 0 || u > 1 || v < 0 || v > 1) continue;
       // getBoundingClientRect is post-transform, so a mirrored wave needs
-      // its sample flipped back into the drawing's own space.
-      if (w.flip) u = 1 - u;
+      // its sample flipped back into the drawing's own space. The fade
+      // below stays in screen space, since that's where it's visible.
+      const du = w.flip ? 1 - u : u;
+      const dv = w.flipY ? 1 - v : v;
       const map = alpha.current.get(w.src);
       if (!map) continue;
-      const px = Math.min(map.w - 1, Math.max(0, Math.floor(u * map.w)));
-      const py = Math.min(map.h - 1, Math.max(0, Math.floor(v * map.h)));
-      if (map.data[py * map.w + px] > 40) return w;
+      const px = Math.min(map.w - 1, Math.max(0, Math.floor(du * map.w)));
+      const py = Math.min(map.h - 1, Math.max(0, Math.floor(dv * map.h)));
+      // Fold in the same bottom fade the mask applies, so the faded-out
+      // tail of a wave isn't a hover target you can't see.
+      const start = FADE_START[w.depth] / 100;
+      const fade = v <= start ? 1 : Math.max(0, 1 - (v - start) / (1 - start));
+      if (map.data[py * map.w + px] * fade > 40) return w;
     }
     return null;
   }, [waveRefs]);
-
-  // Waves are sorted back-to-front for painting, so a later sibling sits
-  // in front; z-index by depth keeps that true across the three rows.
-  const ordered = [...waves].sort((a, b) => a.depth - b.depth);
 
   return (
     <div
@@ -111,7 +116,7 @@ export default function Sea({
         if (hit) onWaveClick(hit);
       }}
     >
-      {ordered.map((w, i) => {
+      {wavesByZ.map((w, i) => {
         const litByCard = focusId ? w.disciplineIds.includes(focusId) : false;
         const litByHover = hoverSlug === w.slug;
         const lit = litByCard || litByHover;
@@ -144,17 +149,22 @@ export default function Sea({
               bottom: `${w.bottom}%`,
               width: `${w.width}%`,
               aspectRatio: `${w.aspect}`,
-              zIndex: w.depth,
-              // The drawing contributes silhouette only; all color comes
-              // from this gradient showing through the mask.
+              zIndex: w.z,
+              // Outer element carries the drawing's silhouette. The color
+              // and the bottom fade live on the child below, so the two
+              // masks nest instead of needing mask-composite — which
+              // Chrome applied to only the first layer here, leaving the
+              // second one to union in the element's whole rectangle.
               WebkitMaskImage: `url(${w.src})`,
               maskImage: `url(${w.src})`,
               WebkitMaskSize: "100% 100%",
               maskSize: "100% 100%",
               WebkitMaskRepeat: "no-repeat",
               maskRepeat: "no-repeat",
-              backgroundImage: waveGradient(w, i, angle, lit ? colors : null),
-              transform: w.flip ? "scaleX(-1)" : undefined,
+              transform:
+                w.flip || w.flipY
+                  ? `scale(${w.flip ? -1 : 1}, ${w.flipY ? -1 : 1})`
+                  : undefined,
               opacity: dimmed ? dimAmount : 1,
               // One glow per discipline, so a shared wave throws both
               // colors into the water around it too.
@@ -171,7 +181,26 @@ export default function Sea({
                 "opacity 400ms ease-out, background-image 350ms ease-out, filter 350ms ease-out",
             }}
             className="pointer-events-none absolute"
-          />
+          >
+            {/* The water itself. Its own vertical mask dissolves the
+                drawing's flat baseline into whatever sits behind it — the
+                shapes all end on a hard horizontal cut, and 22 of those
+                stacked up read as cut paper rather than sea. Distant waves
+                start fading higher up, which is aerial perspective doing
+                the depth work for free. */}
+            <div
+              className="absolute inset-0"
+              style={{
+                backgroundImage: waveGradient(w, i, angle, lit ? colors : null),
+                // A vertically mirrored parent flips this gradient too, so
+                // the direction is inverted to keep the fade at the wave's
+                // on-screen bottom either way.
+                WebkitMaskImage: `linear-gradient(to ${w.flipY ? "top" : "bottom"}, #000 ${FADE_START[w.depth]}%, transparent 100%)`,
+                maskImage: `linear-gradient(to ${w.flipY ? "top" : "bottom"}, #000 ${FADE_START[w.depth]}%, transparent 100%)`,
+                transition: "background-image 350ms ease-out",
+              }}
+            />
+          </div>
         );
       })}
     </div>

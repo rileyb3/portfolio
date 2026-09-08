@@ -125,6 +125,10 @@ type Slot = {
   width: number;
   depth: 0 | 1 | 2;
   flip?: boolean;
+  // Vertical mirror. Only useful on the flat ripples, where it reads as
+  // the trough of a swell rather than its crest — enough variety that a
+  // row of them stops looking like the same shape repeated.
+  flipY?: boolean;
 };
 
 const LAYOUT: Slot[] = [
@@ -133,10 +137,13 @@ const LAYOUT: Slot[] = [
   { file: "wave-16", left: 19, bottom: 43, width: 17, depth: 0, flip: true },
   { file: "wave-09", left: 35, bottom: 40, width: 19, depth: 0 },
   { file: "wave-14", left: 55, bottom: 42, width: 18, depth: 0, flip: true },
-  { file: "wave-17", left: 71, bottom: 41, width: 21, depth: 0 },
+  // Flipped vertically and pulled left so it tucks under the small breaker
+  // beside it instead of sitting alone on its own line.
+  { file: "wave-17", left: 66, bottom: 40, width: 21, depth: 0, flipY: true },
   { file: "wave-22", left: 87, bottom: 39, width: 19, depth: 0, flip: true },
   { file: "wave-04", left: 11, bottom: 42, width: 9, depth: 0 },
-  { file: "wave-08", left: 62, bottom: 43, width: 8, depth: 0, flip: true },
+  // Dropped from 43 — it was floating clear of everything else back there.
+  { file: "wave-08", left: 62, bottom: 37, width: 8, depth: 0, flip: true },
 
   // middle — the working body of the sea
   { file: "wave-03", left: -3, bottom: 22, width: 21, depth: 1 },
@@ -157,6 +164,13 @@ const LAYOUT: Slot[] = [
   { file: "wave-01", left: 92, bottom: 4, width: 19, depth: 2 },
 ];
 
+// How far down each wave stays solid before it dissolves into the water.
+// The drawings all end on a flat baseline, which stacked up as a row of
+// hard horizontal cuts across the sea; fading the bottom lets each shape
+// sink into the one behind it instead. Distant waves fade earliest —
+// that's aerial perspective, and it buys extra depth for free.
+export const FADE_START = [36, 48, 60];
+
 export type Wave = {
   slug: string;
   title: string;
@@ -174,6 +188,11 @@ export type Wave = {
   width: number;
   depth: 0 | 1 | 2;
   flip: boolean;
+  flipY: boolean;
+  // Paint order. Within a depth band the widest wave goes furthest back
+  // and the smallest sits in front, so a big shape can never swallow a
+  // small one whole — the small one always breaks its silhouette.
+  z: number;
 };
 
 // Unique projects, walked round-robin across categories rather than one
@@ -241,7 +260,7 @@ export const waves: Wave[] = (() => {
     ...solo.map((p, i) => ({ p, slot: restSlots[i % restSlots.length] })),
   ];
 
-  return pairs.map(({ p, slot }) => {
+  const built = pairs.map(({ p, slot }) => {
     const art = ART[slot.file];
     return {
       slug: p.slug,
@@ -258,9 +277,29 @@ export const waves: Wave[] = (() => {
       width: slot.width,
       depth: slot.depth,
       flip: slot.flip ?? false,
+      flipY: slot.flipY ?? false,
+      z: 0,
     };
   });
+
+  // Within each band: widest at the back, smallest in front. Painting a
+  // big shape over a small one at the same depth is what buries a wave
+  // completely; this way every wave keeps a piece of its own outline.
+  // Bands still stack as bands, so the front row stays in front.
+  for (const depth of [0, 1, 2]) {
+    built
+      .filter((w) => w.depth === depth)
+      .sort((a, b) => b.width - a.width)
+      .forEach((w, i) => {
+        w.z = depth * 100 + i;
+      });
+  }
+
+  return built;
 })();
+
+// Painting/hit-testing order, back to front.
+export const wavesByZ: Wave[] = [...waves].sort((a, b) => a.z - b.z);
 
 // ---------------------------------------------------------------------------
 // Color
@@ -290,11 +329,20 @@ function rgb(c: [number, number, number], scale: number) {
 }
 
 // Deterministic per-wave values — the sea must be identical on server and
-// client (a Math.random() sea would hydrate-mismatch) and stable across
-// reloads, since this is a composition rather than noise.
+// client and stable across reloads, since this is a composition rather
+// than noise.
+//
+// Integer hashing, not the usual `Math.sin(seed) * 43758` trick: Math.sin
+// is only specified to be *approximately* correct, and Node and Chrome's
+// V8 disagree in the last couple of digits. That produced angles like
+// 119.41895416632178 on the server and 119.418954164139 in the browser —
+// a real React hydration mismatch on every wave in the sea.
 function rand(seed: number) {
-  const x = Math.sin(seed * 127.1 + 311.7) * 43758.5453;
-  return x - Math.floor(x);
+  let t = Math.imul(Math.round(seed * 1000) ^ 0x9e3779b9, 0x85ebca6b);
+  t ^= t >>> 13;
+  t = Math.imul(t, 0xc2b2ae35);
+  t ^= t >>> 16;
+  return (t >>> 0) / 4294967296;
 }
 
 export function waveGradient(
@@ -333,5 +381,6 @@ export function waveGradient(
 // from reading as one flat gradient wash, and the thing Riley singled out
 // about the reference site's buildings.
 export function waveAngle(i: number) {
-  return 20 + rand(i * 5.1) * 300;
+  // Rounded, so the value serializes identically everywhere too.
+  return Math.round((20 + rand(i * 5.1) * 300) * 100) / 100;
 }
