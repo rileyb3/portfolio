@@ -873,7 +873,7 @@ private void UpdateLineRenderer() {
       {
         title: "Blackjack",
         description:
-          "A short Blender character animation with more personality than its runtime should allow.",
+          "A short character animation I made in Blender for a 3D animation class — most of the work went into the lighting and the camera angles.",
         details:
           "A short character animation piece made almost entirely in Blender, for a 3D animation class.",
         tags: ["3D Animation", "Blender"],
