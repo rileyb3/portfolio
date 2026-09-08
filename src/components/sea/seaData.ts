@@ -142,8 +142,12 @@ const LAYOUT: Slot[] = [
   { file: "wave-17", left: 66, bottom: 40, width: 21, depth: 0, flipY: true },
   { file: "wave-22", left: 87, bottom: 39, width: 19, depth: 0, flip: true },
   { file: "wave-04", left: 11, bottom: 42, width: 9, depth: 0 },
-  // Dropped from 43 — it was floating clear of everything else back there.
-  { file: "wave-08", left: 62, bottom: 37, width: 8, depth: 0, flip: true },
+  // Dropped from 43 (it was floating clear of everything back there) and
+  // moved left off the flat swell that was washing it out. Kept at the
+  // back row's altitude but lit as a middle-band wave — at depth 0 it was
+  // simply too dark to find, and being the smallest shape in band 1 puts
+  // it in front there, which is where a little wave should sit anyway.
+  { file: "wave-08", left: 54, bottom: 37, width: 8, depth: 1, flip: true },
 
   // middle — the working body of the sea
   { file: "wave-03", left: -3, bottom: 22, width: 21, depth: 1 },

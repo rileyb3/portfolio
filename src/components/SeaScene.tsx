@@ -51,6 +51,7 @@ export default function SeaScene() {
   const focus = disciplines.find((d) => d.id === focusId) ?? null;
 
   const sceneRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLElement>(null);
   const waveRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const cardRefs = useRef<Record<string, HTMLElement | null>>({});
   const [lines, setLines] = useState<string[]>([]);
@@ -143,6 +144,25 @@ export default function SeaScene() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
+  }, [activeId]);
+
+  // Clicking anywhere outside the panel closes it. Done with a document
+  // listener rather than a full-screen backdrop on purpose: a backdrop
+  // would swallow clicks on the discipline cards, and clicking straight
+  // from one discipline to another is the main way you move around here.
+  // Cards opt out via data-discipline-card so they keep switching instead
+  // of closing.
+  useEffect(() => {
+    if (!activeId) return;
+    const onDown = (e: MouseEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (!target) return;
+      if (panelRef.current?.contains(target)) return;
+      if (target.closest("[data-discipline-card]")) return;
+      setActiveId(null);
+    };
+    document.addEventListener("mousedown", onDown);
+    return () => document.removeEventListener("mousedown", onDown);
   }, [activeId]);
 
   return (
@@ -285,6 +305,7 @@ export default function SeaScene() {
                 cardRefs.current[d.id] = el;
               }}
               type="button"
+              data-discipline-card
               onMouseEnter={() => setHoverId(d.id)}
               onMouseLeave={() => setHoverId(null)}
               onFocus={() => setHoverId(d.id)}
@@ -346,6 +367,7 @@ export default function SeaScene() {
           visible to its left, which is the whole point of the layout —
           you can see the shape of a discipline and read its list at once. */}
       <aside
+        ref={panelRef}
         aria-hidden={!activeId}
         className={`fixed right-0 top-0 z-40 flex h-[100svh] w-full max-w-md flex-col overflow-y-auto border-l border-white/10 bg-surface/95 px-6 pb-16 pt-8 backdrop-blur-xl transition-transform duration-500 ease-out sm:px-8 ${
           activeId ? "translate-x-0" : "pointer-events-none translate-x-full"
