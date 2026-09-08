@@ -1016,7 +1016,7 @@ private void UpdateLineRenderer() {
       {
         title: "A Gull Calls Me",
         description:
-          "A poem I published anonymously in the Touch Grass collection from Antelope Hill Publishing.",
+          "A poem I published anonymously in the Touch Grass anthology from Antelope Hill Publishing.",
         tags: ["Poetry"],
         tagLabel: "Poetry",
         year: "2023",
