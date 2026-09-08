@@ -20,7 +20,9 @@ export const navLinks = [
 export default function Header() {
   return (
     <header className="sticky top-0 z-50">
-      <nav className="flex items-center gap-3 border-b border-white/10 bg-ink px-4 py-2 shadow-lg sm:px-8">
+      {/* No bottom border — the pills already read as their own layer, and
+          a rule under them just cut the scene in half. */}
+      <nav className="flex items-center gap-3 bg-ink px-4 py-2 sm:px-8">
         <Link
           href="/"
           className="shrink-0 rounded-full border border-white/15 px-4 py-1.5 text-sm font-semibold tracking-wide text-paper transition hover:border-accent/50 hover:text-accent"
