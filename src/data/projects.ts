@@ -1026,7 +1026,7 @@ private void UpdateLineRenderer() {
       {
         title: "I am unsure of the validity of my claims",
         description:
-          "A chapbook that interrogates my own memory — seeking a publisher.",
+          "A chapbook that interrogates the meaning of truth — seeking a publisher.",
         tags: ["Poetry", "Chapbook"],
         tagLabel: "Poetry Chapbook",
         heroImageFirst: true,
@@ -1036,7 +1036,7 @@ private void UpdateLineRenderer() {
       {
         title: "Sometimes It's All Consuming",
         description:
-          "A chapbook about the parts of my mind that don't stay quiet — seeking a publisher.",
+          "A chapbook about parts of the mind that don't stay quiet — seeking a publisher.",
         tags: ["Poetry", "Chapbook"],
         tagLabel: "Poetry Chapbook",
         heroImageFirst: true,
