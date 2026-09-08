@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { profile } from "@/data/projects";
-import NameBadge from "@/components/NameBadge";
 
 // Global nav — sticky across every page (wired into layout.tsx). Three
-// pills: the name (which opens a short intro card — see NameBadge), About,
-// and the CV download, which keeps its place on the right.
+// pills: the name, About, and the CV download, which keeps its place on
+// the right. The name is a plain link back to the sea — it's the one
+// reliable way home from anywhere, so it does that and nothing else. The
+// short intro card lives on the word "Riley" in the homepage's own
+// "Sea of Riley" title instead (see SeaScene).
 //
 // navLinks stays exported because Hero.tsx still imports it for the white
 // bar it draws; the homepage no longer renders Hero, but the file is still
@@ -19,7 +21,12 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50">
       <nav className="flex items-center gap-3 border-b border-white/10 bg-ink px-4 py-2 shadow-lg sm:px-8">
-        <NameBadge />
+        <Link
+          href="/"
+          className="shrink-0 rounded-full border border-white/15 px-4 py-1.5 text-sm font-semibold tracking-wide text-paper transition hover:border-accent/50 hover:text-accent"
+        >
+          {profile.name}
+        </Link>
 
         <div className="ml-auto flex shrink-0 items-center gap-2">
           <Link

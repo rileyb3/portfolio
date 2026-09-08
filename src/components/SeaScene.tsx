@@ -20,6 +20,7 @@ import {
   waves,
   type Wave,
 } from "./sea/seaData";
+import { profile } from "@/data/projects";
 
 const iconMap: Record<string, LucideIcon> = {
   build: Code2,
@@ -45,6 +46,8 @@ const CARD_POS: Record<string, { left: string; top: string }> = {
 export default function SeaScene() {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [hoverId, setHoverId] = useState<string | null>(null);
+  // The short introduction hanging off "Riley" in the title.
+  const [nameOpen, setNameOpen] = useState(false);
   // Hover previews the connections; clicking locks them in and opens the
   // panel. Same feedback loop as the reference, one step earlier.
   const focusId = activeId ?? hoverId;
@@ -275,13 +278,55 @@ export default function SeaScene() {
       {/* The place's name, the way the reference site puts KATE CITY at the
           top of its own scene. Doubles as the page's h1 — the old homepage
           had none once the oversized name block came out. */}
-      <div className="pointer-events-none relative z-20 px-6 pt-10 text-center sm:pt-14">
+      <div className="pointer-events-none relative z-30 px-6 pt-10 text-center sm:pt-14">
         <h1
           className={`font-display text-3xl font-semibold tracking-wide text-paper transition-opacity duration-500 sm:text-4xl ${
             activeId ? "opacity-0" : "opacity-100"
           }`}
         >
-          Sea of Riley
+          Sea of{" "}
+          {/* "Riley" is the one word here that's a person rather than a
+              place, so it's what carries the short introduction. The
+              wrapper above is pointer-events-none (it sits over the water
+              and must not eat wave hovers), so this opts itself back in. */}
+          <span className="pointer-events-auto relative inline-block">
+            <button
+              type="button"
+              onMouseEnter={() => setNameOpen(true)}
+              onMouseLeave={() => setNameOpen(false)}
+              onClick={() => setNameOpen((o) => !o)}
+              aria-expanded={nameOpen}
+              className={`border-b border-dashed pb-0.5 transition ${
+                nameOpen
+                  ? "border-accent text-accent"
+                  : "border-paper/30 hover:border-accent hover:text-accent"
+              }`}
+            >
+              Riley
+            </button>
+
+            <span
+              aria-hidden={!nameOpen}
+              className={`absolute left-1/2 top-full z-50 mt-3 block w-72 -translate-x-1/2 rounded-2xl border border-white/10 bg-surface/95 p-4 text-left font-sans shadow-2xl backdrop-blur-md transition ${
+                nameOpen
+                  ? "pointer-events-auto opacity-100"
+                  : "pointer-events-none opacity-0"
+              }`}
+            >
+              <span className="block text-sm font-normal leading-relaxed text-paper">
+                {profile.tagline}
+              </span>
+              <span className="mt-2 block text-xs font-normal uppercase tracking-[0.18em] text-muted">
+                {profile.workYears}
+              </span>
+              <Link
+                href="/about"
+                className="mt-3 block text-sm font-normal text-accent transition hover:underline"
+              >
+                More about me →
+              </Link>
+            </span>
+          </span>
         </h1>
       </div>
 
