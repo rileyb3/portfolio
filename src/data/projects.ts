@@ -304,15 +304,12 @@ Deno.serve(async (req) => {
             type: "text",
             text: "Earlier versions, in the order they happened.",
           },
-          {
-            type: "images",
-            images: [
-              "/projects/portfolio/01-hero-photo.jpg",
-              "/projects/portfolio/02-hero-quote.jpg",
-              "/projects/portfolio/03-discipline-stars.jpg",
-              "/projects/portfolio/04-discipline-pills.jpg",
-            ],
-          },
+          // Full-bleed, one after another, so each earlier version gets
+          // its own immersive beat instead of piling into a small grid.
+          { type: "full-image", image: "/projects/portfolio/01-hero-photo.jpg" },
+          { type: "full-image", image: "/projects/portfolio/02-hero-quote.jpg" },
+          { type: "full-image", image: "/projects/portfolio/03-discipline-stars.jpg" },
+          { type: "full-image", image: "/projects/portfolio/04-discipline-pills.jpg" },
         ],
         tags: ["TypeScript", "Next.js", "Tailwind CSS"],
         link: "#",
