@@ -470,10 +470,8 @@ Deno.serve(async (req) => {
         ],
       },
     ],
-    // Projects with a cover image sort above the plain cross-reference
-    // stubs (Pete Assets, UI/UX Design, Branding, Route Design) below,
-    // which have no image of their own — see CategorySection, which
-    // renders this array in the order given, no separate sort.
+    // Rendered in the order given — see CategorySection, no separate
+    // sort applied.
     projects: [
       {
         title: "Voices Meet Minds Branding",
@@ -675,32 +673,91 @@ Deno.serve(async (req) => {
         slug: "childhood-bedroom",
       },
       {
+        // Own slug and write-up, separate from the Pete the Snail page
+        // under Play — focused on the character art itself rather than
+        // the Unity mechanics.
         title: "Pete Assets",
-        description:
-          "The character art and sprites behind Pete the Snail, painted in Krita — full story under Play.",
+        description: "The character art and sprites behind Pete the Snail, painted in Krita.",
+        image: "/projects/snail/pete-portrait.png",
         tags: ["Krita", "Character Design"],
-        slug: "pete-the-snail",
+        slug: "pete-assets",
+        heroImageFirst: true,
+        body: [
+          {
+            type: "text",
+            text: "Pete's idle animation, the ants he chases, and the sprite work behind both — all painted in Krita before any of it went into Unity.",
+          },
+          {
+            type: "images",
+            images: [
+              "/projects/snail/pete-idle.gif",
+              "/projects/snail/ant-sheet.png",
+            ],
+          },
+        ],
+        link: "/projects/pete-the-snail",
+        linkLabel: "view this project from another perspective",
       },
       {
-        title: "UI/UX Design",
+        // Renamed from "UI/UX Design" — this now has its own slug and its
+        // own write-up (the design/UI perspective), separate from the app
+        // build page. Same cover image as the Build AllTrees card — it's
+        // the same app icon, just a different lens on the same project.
+        title: "AllTrees",
         description:
-          "The interface behind AllTrees — full story under Build.",
+          "The interface behind AllTrees, designed in Figma before any code was written.",
         tags: ["UI/UX"],
-        slug: "alltrees",
+        slug: "alltrees-design",
+        heroImageFirst: true,
+        image: "/projects/alltrees/icon.jpg",
+        body: [
+          {
+            type: "text",
+            text: "AllTrees is still in first-round beta. Some of the actual feedback from testers, and what changed because of it.",
+          },
+          {
+            type: "text",
+            text: '"There\'s no option to collapse the keyboard back down when you finish typing a review, which makes the formatting a little weird." — added a collapsible keyboard.\n\n"It isn\'t obvious that logging a tree doesn\'t mean you\'re also logging the first ascent. Could there be a pop up after you post a tree that asks if you want to log the first ascent?" — added that pop-up.\n\n"Would it be possible to increase the color contrast for the menu options and icons at the bottom of the screen? Like white on green instead of green on green." — changed the icon colors from green to white.\n\n"The option to edit my profile picture is not clickable." — fixed.\n\n"The badges are so cute!" / "Huge fan of the tree name generator" — good signs the small details are landing.',
+          },
+          {
+            type: "beat",
+            kicker: "The Login Screen",
+            heading: "A redesigned login screen, with a \"last used\" indicator.",
+            text: "The old layout wasn't working, so I reworked it — one tap back in, instead of hunting for which sign-in method you used last time.",
+            image: "/projects/alltrees-design/login.jpg",
+            imageRatio: 700 / 1528,
+          },
+        ],
+        // Bottom-of-page link back to the engineering write-up — the two
+        // pages tell the same project from two different angles.
+        link: "/projects/alltrees",
+        linkLabel: "view this project from another perspective",
       },
       {
-        title: "Branding",
-        description:
-          "The icon and logo behind AllTrees — full story under Build.",
-        tags: ["Branding"],
-        slug: "alltrees",
-      },
-      {
+        // Own slug and write-up, separate from the Routesetting page
+        // under Build — same photos, but framed as a design constraint
+        // problem rather than the build/process story.
         title: "Route Design",
-        description:
-          "The movement design behind my climbing routes — full story under Build.",
+        description: "The movement design behind my climbing routes.",
         tags: ["Routesetting"],
-        slug: "routesetting",
+        slug: "route-design",
+        image: "/projects/routesetting/cover.jpg",
+        heroImageFirst: true,
+        body: [
+          {
+            type: "text",
+            text: "I set boulder problems and routes at three gyms: Active Climbing in Athens, GA, the Brandeis Climbing Wall in Waltham, MA, and Central Rock Gym in Watertown, MA. Every route starts from the same limited set of holds and the same wall — the design problem is finding movement inside those constraints that reads clearly at its grade, feels good in the body, and doesn't leave an accidental easier way through.",
+          },
+          {
+            type: "images",
+            images: [
+              "/projects/routesetting/route-1.jpg",
+              "/projects/routesetting/route-2.jpg",
+            ],
+          },
+        ],
+        link: "/projects/routesetting",
+        linkLabel: "view this project from another perspective",
       },
     ],
   },
@@ -1097,10 +1154,10 @@ export const slugProjects = categories.flatMap((c) =>
 );
 
 // Rough "how much is actually here" score — used below to pick the
-// fuller entry when the same project shows up under more than one
-// discipline (e.g. AllTrees is also cross-referenced as "UI/UX Design"
-// and "Branding" under Design, and Pete the Snail as "Pete Assets" —
-// those cross-reference stubs carry no year/image/details of their own).
+// fuller entry on the rare case a slug is still shared across two
+// category entries (most cross-discipline projects now get their own
+// slug and write-up instead — see AllTrees, Pete Assets, Route Design
+// under Design — but this stays as a safety net for any that don't).
 function richness(p: Project) {
   return (
     (p.year ? 1 : 0) +
@@ -1113,13 +1170,9 @@ function richness(p: Project) {
   );
 }
 
-// One entry per slug — when the same project is cross-referenced under
-// more than one discipline, the fullest entry wins. Used by both
-// getProjectBySlug (so /projects/pete-the-snail resolves to the full
-// Play entry, not the bare "Pete Assets" stub under Design — that stub
-// winning was a real bug: it has no description/gallery of its own, and
-// its categoryId sent the page's back-arrow to /design instead of
-// /play) and chronologicalProjects below.
+// One entry per slug — on the rare case two entries still share one,
+// the fullest wins. Used by both getProjectBySlug and
+// chronologicalProjects below.
 const richestBySlug = (() => {
   const bySlug = new Map<string, (typeof slugProjects)[number]>();
   for (const p of slugProjects) {
