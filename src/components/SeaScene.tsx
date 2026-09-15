@@ -96,11 +96,12 @@ export default function SeaScene() {
         router.push(w.href);
         return;
       }
-      // disciplineIds[0] is whichever discipline's entry set this wave's
-      // title/description/href in seaData's uniqueProjects() — i.e.
-      // exactly the page w.href is about to open, so the thread attaches
-      // to that card rather than an arbitrary one of the two.
-      const targetId = w.disciplineIds[0];
+      // Design wins when it's one of the two — same preference
+      // seaData's uniqueProjects() uses to pick w.href, so the thread
+      // always attaches to the card the click is actually about to open.
+      const targetId = w.disciplineIds.includes("design")
+        ? "design"
+        : w.disciplineIds[0];
       const scene = sceneRef.current;
       const card = cardRefs.current[targetId];
       const waveEl = waveRefs.current[w.slug];

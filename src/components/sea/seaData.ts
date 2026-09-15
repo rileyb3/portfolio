@@ -221,9 +221,10 @@ export type Wave = {
 // its own distinct write-up and page (AllTrees under Build vs. Design,
 // say), their slugs differ and only `waveGroup` still says "one project."
 function uniqueProjects() {
+  type Entry = { title: string; description: string; href: string };
   const byKey = new Map<
     string,
-    { title: string; description: string; href: string; disciplineIds: string[] }
+    Entry & { disciplineIds: string[]; byDiscipline: Record<string, Entry> }
   >();
   const order: string[] = [];
   const maxLen = Math.max(...categories.map((c) => c.projects.length));
@@ -234,21 +235,31 @@ function uniqueProjects() {
       if (!p) continue;
       const href = projectHref(p);
       const key = p.waveGroup ?? href.replace("/projects/", "");
+      const entry: Entry = { title: p.title, description: p.description, href };
       const existing = byKey.get(key);
       if (existing) {
         if (!existing.disciplineIds.includes(c.id)) existing.disciplineIds.push(c.id);
+        existing.byDiscipline[c.id] = entry;
         continue;
       }
-      byKey.set(key, {
-        title: p.title,
-        description: p.description,
-        href,
-        disciplineIds: [c.id],
-      });
+      byKey.set(key, { ...entry, disciplineIds: [c.id], byDiscipline: { [c.id]: entry } });
       order.push(key);
     }
   }
-  return order.map((key) => ({ slug: key, ...byKey.get(key)! }));
+
+  // The design write-up is the one Riley wants a shared wave to open —
+  // whichever category happened to be discovered first otherwise. Title/
+  // description/href all switch together so the hover card and the page
+  // a click actually opens never disagree about which one this is.
+  for (const group of byKey.values()) {
+    const preferred = group.byDiscipline.design;
+    if (preferred) Object.assign(group, preferred);
+  }
+
+  return order.map((key) => {
+    const { byDiscipline, ...rest } = byKey.get(key)!;
+    return { slug: key, ...rest };
+  });
 }
 
 export const waves: Wave[] = (() => {
