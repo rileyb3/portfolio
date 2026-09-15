@@ -44,7 +44,12 @@ export type Project = {
     // Breaks out of the article's max-w-3xl column to render near
     // full-viewport-width — for a single reveal/hero-ish image that
     // should read as a bigger moment than the inline gallery grid.
-    | { type: "full-image"; image: string }
+    // `bleed` drops the 85vh height cap so the image fills the full
+    // viewport width edge to edge instead of being letterboxed inside it.
+    // For wide source images where the subject is a small part of the
+    // frame (e.g. a phone centered in a simulator capture) and every
+    // pixel of width counts.
+    | { type: "full-image"; image: string; bleed?: boolean }
     // Full-bleed draggable before/after comparison slider.
     | { type: "before-after"; before: string; after: string }
     // Labeled row of pill chips (e.g. "Goals: Low Budget, Wall Mural...")
@@ -78,6 +83,25 @@ export type Project = {
     // Full-bleed video with playback controls — e.g. real screen-recorded
     // process footage, not just a finished-product demo.
     | { type: "video"; src: string; poster?: string }
+    // Gantt-style project timeline — phases across the top, staggered task
+    // bars underneath. See ProjectTimeline.tsx. `span` is in grid columns;
+    // the chart's column count is the sum of the phase spans, so pick a
+    // resolution (months, half-months) and lay both out against it.
+    | {
+        type: "timeline";
+        kicker?: string;
+        heading?: string;
+        phases: { label: string; span: number; note?: string }[];
+        tasks: { label: string; start: number; span: number }[];
+      }
+    // Full-bleed band of numbered cards — findings, methods, decisions.
+    // See NumberedCards.tsx.
+    | {
+        type: "cards";
+        label?: string;
+        columns?: 2 | 3 | 4;
+        items: { title: string; subtitle?: string; text: string }[];
+      }
   >;
   // When true, the project's cover `image` renders full-bleed ABOVE the
   // title/tags/meta block instead of below it — "one big, simple picture
@@ -246,6 +270,11 @@ export const categories: Category[] = [
         year: "2026",
         slug: "alltrees",
         image: "/projects/alltrees/icon.jpg",
+        // Return leg of the Design ⇄ Build pair. The link renderer spots
+        // an internal href and swaps the new-tab <a> for a same-tab
+        // next/link, then names the destination discipline in the pill.
+        link: "/projects/alltrees-design",
+        linkLabel: "view this project from another perspective",
         codeSnippet: {
           label: "Supabase Edge Function — keeping the Claude API key server-side",
           code: `// Species ID runs through an Edge Function instead of calling the
@@ -337,6 +366,8 @@ Deno.serve(async (req) => {
         image: "/projects/routesetting/cover.jpg",
         video: "/projects/routesetting/setting.mp4",
         slug: "routesetting",
+        link: "/projects/route-design",
+        linkLabel: "view this project from another perspective",
       },
       {
         title: "Wall Book Holders",
@@ -438,6 +469,8 @@ Deno.serve(async (req) => {
         images: [
           { src: "/art/hawk.jpg" },
           // { src: "/art/owl.jpg" }, — add once you resend the owl painting
+          { src: "/art/asparagus.jpg" },
+          { src: "/art/octopus.jpg" },
           { src: "/art/leopard.jpg" },
           { src: "/art/red-portrait.jpg" },
           { src: "/art/two-figures.jpg" },
@@ -447,6 +480,7 @@ Deno.serve(async (req) => {
           { src: "/art/abstract-bw.jpg" },
           { src: "/art/abstract-green.jpg" },
           { src: "/art/abstract-rainbow-swirl.jpg" },
+          { src: "/art/abstract-watercolor.jpg" },
           { src: "/art/abstract-bw-stripes.jpg" },
           { src: "/art/mural-herons-wip.jpg" },
         ],
@@ -457,6 +491,8 @@ Deno.serve(async (req) => {
           "Mostly freehand, with the occasional reference image — often prompted by a single word.",
         images: [
           { src: "/art/henna/swirl-forearm.jpg", name: "Joy" },
+          { src: "/art/henna/hawk-forearm.jpg" },
+          { src: "/art/henna/thorn-hand.jpg" },
           { src: "/art/henna/vine-forearm-2.jpg" },
           { src: "/art/henna/two-hands.jpg" },
           { src: "/art/henna/floral-panel.jpg" },
@@ -471,7 +507,11 @@ Deno.serve(async (req) => {
       },
     ],
     // Rendered in the order given — see CategorySection, no separate
-    // sort applied.
+    // sort applied. Ordered newest-first by hand: VMM and AllTrees (both
+    // 2026), then Route Design (ongoing — three gyms, present tense in
+    // the copy), Pete Assets (2023, same year as Pete the Snail), and
+    // Interior Design (2022). Keep new entries in that order rather than
+    // appending, since nothing here sorts for you.
     projects: [
       {
         title: "Voices Meet Minds Branding",
@@ -588,6 +628,435 @@ Deno.serve(async (req) => {
         slug: "voices-meet-minds",
       },
       {
+        // Renamed from "UI/UX Design" — this now has its own slug and its
+        // own write-up (the design/UI perspective), separate from the app
+        // build page. Same cover image as the Build AllTrees card — it's
+        // the same app icon, just a different lens on the same project.
+        title: "AllTrees",
+        description:
+          "The interface behind AllTrees, designed in Figma before any code was written.",
+        tags: ["UI/UX"],
+        slug: "alltrees-design",
+        heroImageFirst: true,
+        image: "/projects/alltrees/icon.jpg",
+        year: "2026",
+        meta: [
+          { label: "Timeline", values: ["Apr – Sep 2026", "6 months"] },
+          {
+            label: "Role",
+            values: ["Solo designer & developer", "3-person ideation"],
+          },
+          { label: "Tools", values: ["Figma", "Mapbox", "Supabase", "Expo"] },
+        ],
+        body: [
+          {
+            type: "text",
+            text: "AllTrees is a community map for tree climbers — find a tree, log an ascent, review it, and see what other climbers already knew about it. This page is the design side of the project: how the scope got set, what the research actually was, and what changed because of it. The engineering write-up lives on the Build page.",
+          },
+
+          // ---- Timeline ----------------------------------------------
+          // Six months at half-month resolution: 12 columns, two per
+          // month, so tasks can overlap phase boundaries the way they
+          // really did rather than snapping to tidy month blocks.
+          {
+            type: "timeline",
+            kicker: "Project Timeline",
+            heading:
+              "A six-month project that started as a voice note on the way back from a climbing competition, and is now in its second beta.",
+            phases: [
+              { label: "Ideation", span: 2, note: "April 2026" },
+              { label: "Resource Research", span: 2, note: "May 2026" },
+              { label: "Build", span: 2, note: "June 2026" },
+              { label: "Testing & Ideation", span: 2, note: "July 2026" },
+              { label: "Beta One", span: 2, note: "August 2026" },
+              { label: "Beta Two", span: 2, note: "September 2026" },
+            ],
+            tasks: [
+              { label: "Voice-note ideation session", start: 1, span: 1 },
+              { label: "Competitive framing", start: 1, span: 2 },
+              { label: "Core feature scoping", start: 2, span: 2 },
+              { label: "Map SDK evaluation", start: 3, span: 1 },
+              { label: "Backend & auth evaluation", start: 3, span: 2 },
+              { label: "Icon & pin design in Figma", start: 4, span: 2 },
+              { label: "Map & pin drop", start: 5, span: 2 },
+              { label: "Tree profile pages", start: 6, span: 2 },
+              { label: "Ascent logging", start: 6, span: 2 },
+              { label: "Search & filters", start: 7, span: 2 },
+              { label: "Self-testing & refinement", start: 7, span: 2 },
+              { label: "Network ideation", start: 8, span: 1 },
+              { label: "Advisor session", start: 8, span: 1 },
+              { label: "Treemium scoping", start: 8, span: 2 },
+              { label: "Beta one", start: 9, span: 2 },
+              { label: "Feedback synthesis", start: 10, span: 1 },
+              { label: "Fixes & refinements", start: 10, span: 2 },
+              { label: "Beta two", start: 11, span: 2 },
+            ],
+          },
+
+          // ---- Ideation ----------------------------------------------
+          {
+            type: "beat",
+            kicker: "Ideation",
+            heading:
+              "Three climbers, one voice note, and a gap that neither Mountain Project nor AllTrails fills.",
+            text: "The idea got worked out on the drive back from a climbing competition, with two other climbers, recorded as a voice note. We used Mountain Project and AllTrails as the reference points — both prove that a community-maintained map of outdoor features works, and neither one has any concept of a climbable tree.",
+          },
+          {
+            type: "cards",
+            label: "What that session settled",
+            items: [
+              {
+                title: "The map comes first",
+                subtitle: "Non-negotiable",
+                text: "A community map where any user can drop a pin. Everything else in the app is downstream of it — without user-added pins there is nothing to look at, so no other feature could be allowed to compete for build time.",
+              },
+              {
+                title: "Then a page per tree",
+                subtitle: "Second priority",
+                text: "Every pin needs somewhere to land: a profile page for the tree itself, so a pin is a record rather than a dot. Rating, difficulty, conditions, who climbed it first.",
+              },
+              {
+                title: "Then people, if it isn't too hard",
+                subtitle: "Conditional",
+                text: "User profiles and everything social were explicitly deferred behind the first two — worth building only if the map and tree pages came together without eating the whole timeline. They did, so they got built.",
+              },
+            ],
+          },
+
+          // ---- Resource research -------------------------------------
+          {
+            type: "beat",
+            kicker: "Resource Research",
+            heading:
+              "A month spent picking what the app would stand on, before writing anything that would be expensive to undo.",
+            text: "Four decisions were load-bearing enough that changing them later would have meant a rewrite. Each one was made against the specific thing AllTrees needed rather than general popularity.",
+          },
+          {
+            type: "cards",
+            label: "The four load-bearing choices",
+            items: [
+              {
+                title: "Mapbox",
+                subtitle: "over Google Maps & Apple MapKit",
+                text: "The map isn't a utility here, it's the product — so it had to look like AllTrees, not like a road atlas. Mapbox restyles vector tiles down to the individual layer, so the map could be pulled green and tree-forward with no custom assets. Google and Apple both hand you their look with only cosmetic control over it.",
+              },
+              {
+                title: "Supabase",
+                subtitle: "over Firebase",
+                text: "\"Trees near me\" is a geographic query, and Postgres does those natively — searching by radius is a real query rather than something faked client-side. Row-level security means a climber can only edit their own entries, enforced at the database instead of trusted to the app. Auth, storage and edge functions in one service, which matters when the team is one person.",
+              },
+              {
+                title: "Figma",
+                subtitle: "Design system & iconography",
+                text: "The map needed its pins, leaf icons and badges drawn before any of them could be built — a pin is the smallest, most repeated element in the app and the hardest to fix later. Screens iterate in minutes there and in hours in code.",
+              },
+              {
+                title: "RevenueCat",
+                subtitle: "Subscriptions",
+                text: "Receipt validation, restore-purchases, trial states and cancellations are a long tail of edge cases that have nothing to do with tree climbing. RevenueCat collapses all of it into a single entitlement flag the app can read.",
+              },
+            ],
+          },
+
+          // ---- Testing & network ideation ----------------------------
+          {
+            type: "beat",
+            kicker: "Testing & Network Ideation",
+            heading:
+              "I climbed with it, fixed what annoyed me, then went and asked people what would make it worth paying for.",
+            text: "July was the first month the app was complete enough to properly use. Most of the bug-catching happened at home, working through the app screen by screen, with some of it out while looking for trees. In parallel I started asking my network what they'd actually value — which is where the business model got decided for me.",
+          },
+          {
+            type: "beat",
+            kicker: "Monetisation",
+            heading:
+              "The plan was a Kickstarter. I went with a premium tier instead.",
+            text: "I ran it past my brother, who's the COO of an e-commerce services company. He suggested a paid feature rather than crowdfunding, and pointed out that the app needed to be easy to share.",
+          },
+          {
+            type: "cards",
+            label: "What changed as a result",
+            columns: 2,
+            items: [
+              {
+                title: "A premium tier, not a Kickstarter",
+                subtitle: "Monetisation",
+                text: "A Kickstarter asks strangers to fund something that doesn't exist yet; a premium tier asks people already using the app to pay for something they can see working. I dropped the Kickstarter and scoped Treemium in its place — $1.99/month or $14.99/year, with a 7-day trial.",
+              },
+              {
+                title: "Make it easy to share",
+                subtitle: "Growth",
+                text: "His other point was that growth would more likely come from climbers showing the app to other climbers than from advertising. That moved sharing up the priority list: shareable profile cards, tree links that open straight to the right pin, and share buttons on the screens people are proudest of.",
+              },
+            ],
+          },
+
+          // ---- Treemium ----------------------------------------------
+          {
+            type: "beat",
+            kicker: "Treemium",
+            heading:
+              "Every core feature stays free. What you pay for is the part that's fun to show people.",
+            text: "The constraint I set was that nothing load-bearing — the map, adding trees, tree pages, logging ascents, search — could ever sit behind the paywall. A community map with a paywalled community is just a worse map. So Treemium had to be built out of things that are desirable without being necessary.",
+          },
+          {
+            type: "cards",
+            label: "Three paid features, chosen for two different reasons",
+            items: [
+              {
+                title: "Custom pins",
+                subtitle: "Retention",
+                text: "Nine leaf shapes, one per botanical family — oak, maple, pine, birch, willow, apple, hickory, sycamore, magnolia — and each is unlocked by actually climbing a tree from that family. That makes them a reason to keep climbing rather than a cosmetic you buy once and forget.",
+              },
+              {
+                title: "The climber archetype",
+                subtitle: "Desire",
+                text: "The stats page scores six behavioural axes from your logged ascents — risk, novelty, range, diversity, difficulty and dedication — and resolves them into one of ten animals, from the Sloth to the Leopard. It's the feature I expect people to want because someone else has one and they don't.",
+              },
+              {
+                title: "For You",
+                subtitle: "Utility",
+                text: "Personalised tree recommendations, weighted by where you climb and what you've climbed before. The one paid feature that's genuinely useful rather than expressive — included so the tier isn't purely decorative.",
+              },
+            ],
+          },
+          {
+            type: "text-with-image",
+            text: "The six axes rendered as a radar chart, so the archetype is shown being derived rather than just asserted. Mine currently resolves to The Treecreeper — high diversity, high dedication, low risk — which is an accurate enough read that it was faintly annoying.",
+            image: "/projects/alltrees-design/stats-radar.jpg",
+          },
+
+          // ---- Beta one ----------------------------------------------
+          {
+            type: "beat",
+            kicker: "Beta One",
+            heading:
+              "Four testers: the two climbers who scoped it, and two UX designers who hadn't.",
+            text: "A four-person panel is small, so it was split deliberately rather than gathered conveniently — half with the full context of what the app was meant to become, half coming to it fresh.",
+          },
+          {
+            type: "cards",
+            label: "The panel",
+            columns: 2,
+            items: [
+              {
+                title: "Two climbers",
+                subtitle: "The original ideation group",
+                text: "The same two climbers from the April voice note. They knew exactly what the app had been meant to become, which made them the only people who could spot where the build had quietly drifted from the plan.",
+              },
+              {
+                title: "Two UX designers",
+                subtitle: "Friends in tech, two other cities",
+                text: "Both with UX backgrounds, one of them a climber as well. Neither had been part of the original scoping, so they read the app as an interface rather than as the thing we'd planned — and caught the usability problems the others had already learned to work around.",
+              },
+            ],
+          },
+          {
+            type: "text",
+            text: "Feedback arrived as a mix of written notes and calls. What follows is the written half — the part I have an exact record of — rather than everything that was said. The useful notes were unglamorous: specific, fixable problems, each of which shipped a change.",
+          },
+          {
+            type: "text",
+            text: '"There\'s no option to collapse the keyboard back down when you finish typing a review, which makes the formatting a little weird." — added a collapsible keyboard.\n\n"It isn\'t obvious that logging a tree doesn\'t mean you\'re also logging the first ascent. Could there be a pop up after you post a tree that asks if you want to log the first ascent?" — added that pop-up.\n\n"The option to edit my profile picture is not clickable." — fixed.\n\n"The badges are so cute!" / "Huge fan of the tree name generator" — good signs that the small details are landing.',
+          },
+          {
+            type: "beat",
+            kicker: "The Fix With A Picture",
+            heading:
+              "\"Like white on green instead of green on green.\"",
+            text: "The tab bar had been dark green on green since the first build, and I'd stopped seeing it — it was legible to me because I already knew what the icons said. The icons and labels went white, and the active tab kept the bright green so it still reads as selected. Drag the slider.",
+          },
+          // Same crop from the same screen on the same device, so the two
+          // halves line up exactly under the slider — the only thing that
+          // moves is the thing that actually changed.
+          {
+            type: "before-after",
+            before: "/projects/alltrees-design/tabbar-before.jpg",
+            after: "/projects/alltrees-design/tabbar-after.jpg",
+          },
+
+          // ---- The login redesign ------------------------------------
+          {
+            type: "beat",
+            kicker: "The Login Screen",
+            heading: "A redesigned login screen, with a \"last used\" indicator.",
+            text: "The old layout wasn't working, so I reworked it — one tap back in, instead of hunting for which sign-in method you used last time. Four sign-in paths, including a guest mode so the map can be browsed before committing to an account.",
+          },
+          // The "before" runs inline and small, the "after" full-bleed
+          // underneath — so the comparison reads as an escalation rather
+          // than showing the same screen twice at the same weight.
+          {
+            type: "text-with-image",
+            text: "Before: three full-width buttons stacked down the screen, guest access demoted to a small underlined link at the bottom, and nothing to indicate which method you'd used last time. It worked, but every return visit was a small guessing game — and the one option that lets someone look around before committing was the easiest one to miss.",
+            image: "/projects/alltrees-design/login-before.jpg",
+          },
+          // Full-bleed rather than an `image` on the beat above: the beat
+          // caps its image at the article's max-w-2xl column, which shrinks
+          // a full-screen capture down to thumbnail size and loses the point.
+          {
+            type: "full-image",
+            image: "/projects/alltrees-design/login.jpg",
+            bleed: true,
+          },
+
+          // ---- Beta two ----------------------------------------------
+          {
+            type: "beat",
+            kicker: "Beta Two — Running Now",
+            heading:
+              "The second round isn't testing whether it works. It's testing whether the map fills up.",
+            text: "Round one was bug discovery on a panel that already believed in the idea. Round two is the harder question: will climbers who weren't in the room add trees without being asked? So this round has a number attached rather than a feeling — 25 testers, and 100 trees on the map by the end of it.",
+          },
+          {
+            type: "cards",
+            label: "What round two has to prove",
+            columns: 2,
+            items: [
+              {
+                title: "25 testers",
+                subtitle: "Recruiting now",
+                text: "Large enough that a complaint repeated three times is a pattern rather than one person's taste, small enough that every piece of feedback still gets read properly. Recruiting through the gyms I set at and the competition circuit — climbers who already travel to climb are the ones who'll add pins in places I'll never get to.",
+              },
+              {
+                title: "100 trees on the map",
+                subtitle: "The real measure",
+                text: "The map is the product, and an empty map is just a demo. The number that matters isn't installs or session length, it's whether pins appear in places I've never been — which is the only evidence that this works as a community map rather than as my personal tree diary.",
+              },
+            ],
+          },
+
+          // ---- Feature details ---------------------------------------
+          // Riley's request: the feature-by-feature detail sits AFTER the
+          // research narrative, so the page argues for the decisions first
+          // and only then shows what got built.
+          {
+            type: "heading",
+            text: "The Features",
+          },
+          {
+            type: "text",
+            text: "What the research above actually turned into, in the order the ideation session prioritised them.",
+          },
+          {
+            type: "cards",
+            label: "The map, and everything downstream of it",
+            items: [
+              {
+                title: "The map",
+                subtitle: "Priority one from day one",
+                text: "A community map of climbable trees, where any climber can drop a pin at their location or place one by hand. Custom-styled so the map reads as woodland rather than road network.",
+              },
+              {
+                title: "Tree pages",
+                subtitle: "Priority two",
+                text: "Every tree gets a profile: a star rating, a leaf-icon difficulty scale, who claimed the first ascent, live-reported conditions, and reviews from other climbers.",
+              },
+              {
+                title: "Ascent logging",
+                subtitle: "The core loop",
+                text: "Log an ascent against a tree, separately from adding the tree itself — a distinction beta one showed was not obvious, and which now prompts explicitly after you post.",
+              },
+              {
+                title: "Search & filters",
+                subtitle: "Finding the next one",
+                text: "Filter by species, difficulty and conditions, with an adjustable search radius around wherever you are.",
+              },
+            ],
+          },
+          {
+            type: "cards",
+            label: "The social layer, built once the map held up",
+            items: [
+              {
+                title: "Species ID",
+                subtitle: "Claude API",
+                text: "A photo suggests the most likely species, weighted by GPS location so the shortlist is drawn from what actually grows nearby. Runs server-side so the API key never reaches the app.",
+              },
+              {
+                title: "Badges",
+                subtitle: "Seven, criteria-based",
+                text: "Off the Ground for a first ascent, Taxonomist for ten species, Twenty Trees Deep, Tree Hugger for thirty favourites, Ribbit Ribbit for forty reviews, Johnny Appleseed for fifty trees added, Part Squirrel for a hundred ascents.",
+              },
+              {
+                title: "Profiles & life list",
+                subtitle: "Your own record",
+                text: "A public profile per climber, plus a running life list of every species climbed — the birdwatching convention applied to trees.",
+              },
+              {
+                title: "Sharing",
+                subtitle: "Built as a requirement",
+                text: "Shareable profile cards rendered from your real stats, and links that open straight to the right tree — the direct output of the advisor session.",
+              },
+            ],
+          },
+
+          {
+            type: "beat",
+            kicker: "Where It Stands",
+            heading:
+              "Built, in the App Store pipeline, and now in its second beta.",
+            text: "The map, tree pages, ascent logging, search, profiles, badges and the Treemium tier are all built and working end to end. What's still unproven is the part no amount of design can settle on its own — whether climbers who weren't part of the plan will fill the map in.",
+          },
+        ],
+        // Bottom-of-page link back to the engineering write-up — the two
+        // pages tell the same project from two different angles.
+        link: "/projects/alltrees",
+        linkLabel: "view this project from another perspective",
+      },
+      {
+        // Own slug and write-up, separate from the Routesetting page
+        // under Build — same photos, but framed as a design constraint
+        // problem rather than the build/process story.
+        title: "Route Design",
+        description: "The movement design behind my climbing routes.",
+        tags: ["Routesetting"],
+        slug: "route-design",
+        image: "/projects/routesetting/cover.jpg",
+        heroImageFirst: true,
+        body: [
+          {
+            type: "text",
+            text: "I set boulder problems and routes at three gyms: Active Climbing in Athens, GA, the Brandeis Climbing Wall in Waltham, MA, and Central Rock Gym in Watertown, MA. Every route starts from the same limited set of holds and the same wall — the design problem is finding movement inside those constraints that reads clearly at its grade, feels good in the body, and doesn't leave an accidental easier way through.",
+          },
+          {
+            type: "images",
+            images: [
+              "/projects/routesetting/route-1.jpg",
+              "/projects/routesetting/route-2.jpg",
+            ],
+          },
+        ],
+        link: "/projects/routesetting",
+        linkLabel: "view this project from another perspective",
+      },
+      {
+        // Own slug and write-up, separate from the Pete the Snail page
+        // under Play — focused on the character art itself rather than
+        // the Unity mechanics.
+        title: "Pete Assets",
+        description: "The character art and sprites behind Pete the Snail, painted in Krita.",
+        image: "/projects/snail/pete-portrait.png",
+        tags: ["Krita", "Character Design"],
+        year: "2023",
+        slug: "pete-assets",
+        heroImageFirst: true,
+        body: [
+          {
+            type: "text",
+            text: "Pete's idle animation, the ants he chases, and the sprite work behind both — all painted in Krita before any of it went into Unity.",
+          },
+          {
+            type: "images",
+            images: [
+              "/projects/snail/pete-idle.gif",
+              "/projects/snail/ant-sheet.png",
+            ],
+          },
+        ],
+        link: "/projects/pete-the-snail",
+        linkLabel: "view this project from another perspective",
+      },
+      {
         title: "Interior Design",
         description:
           "Repainting my childhood bedroom and hand-painting a heron-and-sun mural directly onto the wall, freshman summer of college.",
@@ -672,93 +1141,6 @@ Deno.serve(async (req) => {
         image: "/projects/childhood-bedroom/after-reveal.jpg",
         slug: "childhood-bedroom",
       },
-      {
-        // Own slug and write-up, separate from the Pete the Snail page
-        // under Play — focused on the character art itself rather than
-        // the Unity mechanics.
-        title: "Pete Assets",
-        description: "The character art and sprites behind Pete the Snail, painted in Krita.",
-        image: "/projects/snail/pete-portrait.png",
-        tags: ["Krita", "Character Design"],
-        slug: "pete-assets",
-        heroImageFirst: true,
-        body: [
-          {
-            type: "text",
-            text: "Pete's idle animation, the ants he chases, and the sprite work behind both — all painted in Krita before any of it went into Unity.",
-          },
-          {
-            type: "images",
-            images: [
-              "/projects/snail/pete-idle.gif",
-              "/projects/snail/ant-sheet.png",
-            ],
-          },
-        ],
-        link: "/projects/pete-the-snail",
-        linkLabel: "view this project from another perspective",
-      },
-      {
-        // Renamed from "UI/UX Design" — this now has its own slug and its
-        // own write-up (the design/UI perspective), separate from the app
-        // build page. Same cover image as the Build AllTrees card — it's
-        // the same app icon, just a different lens on the same project.
-        title: "AllTrees",
-        description:
-          "The interface behind AllTrees, designed in Figma before any code was written.",
-        tags: ["UI/UX"],
-        slug: "alltrees-design",
-        heroImageFirst: true,
-        image: "/projects/alltrees/icon.jpg",
-        body: [
-          {
-            type: "text",
-            text: "AllTrees is still in first-round beta. Some of the actual feedback from testers, and what changed because of it.",
-          },
-          {
-            type: "text",
-            text: '"There\'s no option to collapse the keyboard back down when you finish typing a review, which makes the formatting a little weird." — added a collapsible keyboard.\n\n"It isn\'t obvious that logging a tree doesn\'t mean you\'re also logging the first ascent. Could there be a pop up after you post a tree that asks if you want to log the first ascent?" — added that pop-up.\n\n"Would it be possible to increase the color contrast for the menu options and icons at the bottom of the screen? Like white on green instead of green on green." — changed the icon colors from green to white.\n\n"The option to edit my profile picture is not clickable." — fixed.\n\n"The badges are so cute!" / "Huge fan of the tree name generator" — good signs the small details are landing.',
-          },
-          {
-            type: "beat",
-            kicker: "The Login Screen",
-            heading: "A redesigned login screen, with a \"last used\" indicator.",
-            text: "The old layout wasn't working, so I reworked it — one tap back in, instead of hunting for which sign-in method you used last time.",
-            image: "/projects/alltrees-design/login.jpg",
-            imageRatio: 700 / 1528,
-          },
-        ],
-        // Bottom-of-page link back to the engineering write-up — the two
-        // pages tell the same project from two different angles.
-        link: "/projects/alltrees",
-        linkLabel: "view this project from another perspective",
-      },
-      {
-        // Own slug and write-up, separate from the Routesetting page
-        // under Build — same photos, but framed as a design constraint
-        // problem rather than the build/process story.
-        title: "Route Design",
-        description: "The movement design behind my climbing routes.",
-        tags: ["Routesetting"],
-        slug: "route-design",
-        image: "/projects/routesetting/cover.jpg",
-        heroImageFirst: true,
-        body: [
-          {
-            type: "text",
-            text: "I set boulder problems and routes at three gyms: Active Climbing in Athens, GA, the Brandeis Climbing Wall in Waltham, MA, and Central Rock Gym in Watertown, MA. Every route starts from the same limited set of holds and the same wall — the design problem is finding movement inside those constraints that reads clearly at its grade, feels good in the body, and doesn't leave an accidental easier way through.",
-          },
-          {
-            type: "images",
-            images: [
-              "/projects/routesetting/route-1.jpg",
-              "/projects/routesetting/route-2.jpg",
-            ],
-          },
-        ],
-        link: "/projects/routesetting",
-        linkLabel: "view this project from another perspective",
-      },
     ],
   },
   {
@@ -790,6 +1172,8 @@ Deno.serve(async (req) => {
         year: "2023",
         slug: "pete-the-snail",
         image: "/projects/snail/pete-portrait.png",
+        link: "/projects/pete-assets",
+        linkLabel: "view this project from another perspective",
         codeSnippet: {
           label: "SnaleHandler.cs — slime trail tracking",
           code: `private Queue<(Vector3, float)> positionRecord = new Queue<(Vector3, float)>();

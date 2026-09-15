@@ -9,6 +9,8 @@ import BeforeAfterSlider from "@/components/BeforeAfterSlider";
 import ImageSlideshow from "@/components/ImageSlideshow";
 import StoryBeat from "@/components/StoryBeat";
 import ImagePile from "@/components/ImagePile";
+import ProjectTimeline from "@/components/ProjectTimeline";
+import NumberedCards from "@/components/NumberedCards";
 import { slugProjects, getProjectBySlug } from "@/data/projects";
 
 export function generateStaticParams() {
@@ -180,17 +182,45 @@ export default function ProjectPage({
                   );
                 }
                 if (block.type === "full-image") {
+                  // `bleed` skips the 85vh cap: without it a wide image is
+                  // scaled to fit the height and letterboxed with bg-surface2
+                  // bars, so it never actually reaches the viewport edges.
                   return (
                     <RevealOnScroll
                       key={i}
-                      className="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden bg-surface2 sm:max-h-[85vh]"
+                      className={`relative left-1/2 w-screen -translate-x-1/2 overflow-hidden bg-surface2 ${
+                        block.bleed ? "" : "sm:max-h-[85vh]"
+                      }`}
                     >
                       <ExpandableImage
                         src={block.image}
                         alt=""
-                        className="w-full sm:max-h-[85vh] sm:object-contain"
+                        className={`w-full ${
+                          block.bleed ? "" : "sm:max-h-[85vh] sm:object-contain"
+                        }`}
                       />
                     </RevealOnScroll>
+                  );
+                }
+                if (block.type === "timeline") {
+                  return (
+                    <ProjectTimeline
+                      key={i}
+                      kicker={block.kicker}
+                      heading={block.heading}
+                      phases={block.phases}
+                      tasks={block.tasks}
+                    />
+                  );
+                }
+                if (block.type === "cards") {
+                  return (
+                    <NumberedCards
+                      key={i}
+                      label={block.label}
+                      columns={block.columns}
+                      items={block.items}
+                    />
                   );
                 }
                 if (block.type === "slideshow") {
@@ -378,16 +408,57 @@ export default function ProjectPage({
             </RevealOnScroll>
           )}
 
-          {project.link && project.link !== "#" && (
-            <a
-              href={project.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-6 inline-block text-base text-accent hover:underline"
-            >
-              {project.linkLabel ?? "View project"} →
-            </a>
-          )}
+          {project.link &&
+            project.link !== "#" &&
+            (() => {
+              // `link` is two different things depending on the project: an
+              // outbound URL (a live app, a publication) or an in-site
+              // cross-link to the same project told from another discipline
+              // — e.g. Design's AllTrees pointing at Build's. Those two want
+              // opposite behaviour, so branch on the href rather than
+              // sending every one of them to a new tab.
+              const isInternal = project.link.startsWith("/");
+              const crossLinked = project.link.startsWith("/projects/")
+                ? getProjectBySlug(
+                    project.link.slice("/projects/".length)
+                  )
+                : undefined;
+              const label = project.linkLabel ?? "View project";
+              const className =
+                "mt-6 inline-flex flex-wrap items-center gap-2 text-base text-accent hover:underline";
+
+              // "another perspective" doesn't say WHICH perspective. When we
+              // can resolve the destination, name the discipline it lands in
+              // so the link states where it goes before you click it.
+              const inner = (
+                <>
+                  <span>{label}</span>
+                  {crossLinked?.categoryLabel && (
+                    <span className="rounded-full border border-accent/40 px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide no-underline">
+                      Go to {crossLinked.categoryLabel}
+                    </span>
+                  )}
+                  <span aria-hidden="true">→</span>
+                </>
+              );
+
+              // Internal links go through next/link: same tab, client-side
+              // nav, no new-tab jump between two pages of the same site.
+              return isInternal ? (
+                <Link href={project.link} className={className}>
+                  {inner}
+                </Link>
+              ) : (
+                <a
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={className}
+                >
+                  {inner}
+                </a>
+              );
+            })()}
 
           {project.gallery && project.gallery.length > 0 && (
             <RevealOnScroll className="mt-10">
