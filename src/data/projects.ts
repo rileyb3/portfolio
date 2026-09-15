@@ -10,6 +10,14 @@ export type Project = {
   // only ones that show up on the homepage. Everything else only shows up
   // once someone clicks into that discipline's own page.
   featured?: boolean;
+  // When the same real-world project has its own distinct write-up (and
+  // slug) under more than one discipline — AllTrees under both Build and
+  // Design, say — set the same waveGroup string on each entry. The sea
+  // (seaData.ts) uses this instead of the slug to recognize them as one
+  // project, so it still renders as a single multi-color wave that both
+  // discipline cards draw a line to, even though each entry now links
+  // to its own page. Leave unset for anything with only one write-up.
+  waveGroup?: string;
   // Optional cover image shown at the top of the project card.
   // Drop files in public/projects/<slug>/ and reference them as "/projects/<slug>/file.jpg".
   image?: string;
@@ -193,6 +201,7 @@ export const categories: Category[] = [
           "Think Mountain Project, but for trees. A community map where climbers discover, log, and review climbable trees — currently in first-round beta.",
         tagLabel: "iOS Build",
         featured: true,
+        waveGroup: "alltrees",
         // Vertical-story treatment, same pattern as Voices Meet Minds and
         // Interior Design: heroImageFirst opens full-bleed on the app icon
         // (a single clean graphic mark, same role the finished mascot/room
@@ -348,6 +357,7 @@ Deno.serve(async (req) => {
         description:
           "Designing boulder problems and routes at three different gyms — same holds, same wall, a hundred ways to get the movement wrong.",
         tagLabel: "Routesetting",
+        waveGroup: "routesetting",
         heroImageFirst: true,
         body: [
           {
@@ -637,6 +647,11 @@ Deno.serve(async (req) => {
           "The interface behind AllTrees, designed in Figma before any code was written.",
         tags: ["UI/UX"],
         slug: "alltrees-design",
+        // Same waveGroup as the Build entry — the sea still recognizes
+        // these as one project and draws a two-color wave for it, even
+        // though each links to its own page now.
+        waveGroup: "alltrees",
+        featured: true,
         heroImageFirst: true,
         image: "/projects/alltrees/icon.jpg",
         year: "2026",
@@ -1011,6 +1026,7 @@ Deno.serve(async (req) => {
         description: "The movement design behind my climbing routes.",
         tags: ["Routesetting"],
         slug: "route-design",
+        waveGroup: "routesetting",
         image: "/projects/routesetting/cover.jpg",
         heroImageFirst: true,
         body: [
@@ -1039,6 +1055,7 @@ Deno.serve(async (req) => {
         tags: ["Krita", "Character Design"],
         year: "2023",
         slug: "pete-assets",
+        waveGroup: "pete-the-snail",
         heroImageFirst: true,
         body: [
           {
@@ -1154,6 +1171,7 @@ Deno.serve(async (req) => {
         description:
           "A Snake-inspired game where the trail behind you is slime, and the things you're chasing are ants. Currently paused.",
         tagLabel: "Game Design",
+        waveGroup: "pete-the-snail",
         heroImageFirst: true,
         body: [
           {
@@ -1401,7 +1419,6 @@ private void UpdateLineRenderer() {
         title: "Cognitive Flexibility Research",
         description:
           "An EEG eye-tracking internship studying how the brain shifts gears — co-authored work submitted to the Cognitive Neuroscience Society.",
-        featured: true,
         details:
           "An internship at the Clinical and Cognitive Neuroscience Lab at the University of Georgia, run by Dr. McDowell and Dr. Clemenz, working under grad student mentor Beryl Huang on her cognitive flexibility research in young adults. The lab's broader work spans schizophrenia, sensory processing, and aging, using MRI, fMRI, EEG, and eye-tracking.\n\nMy role centered on the technical side of an EEG eye-tracking paradigm: setting up and troubleshooting the hardware, running timing tests, calibrating the eye tracker, and helping design the study's preregistration. I also picked up R to build a script that converts raw eye-movement data (recorded per participant as a large Excel export) into clean PDF reports of eye position and velocity over time — the processing pipeline the study now uses for every participant. Later on I was trained to score EEG data by hand as well, ahead of full-scale data collection.\n\nThe project — an interactive ocular motor set-shifting task designed to evoke distinct electrophysiological markers across stages of cognitive flexibility — was submitted to the Cognitive Neuroscience Society's 2023 meeting with me as a co-author.\n\nOutside the core project, I sat in on other work in the lab (a clozapine drug trial using EEG and eye-tracking, an fMRI study of brain structure in psychosis) and gave weekly presentations to my mentor on assigned and self-chosen readings — a big part of how I found the areas of psychology (autism, executive function, theory of mind) I'm most interested in continuing to explore.",
         tags: ["R", "EEG", "Eye-Tracking", "Psychology Research", "Data Analysis"],
@@ -1421,6 +1438,7 @@ private void UpdateLineRenderer() {
         title: "Bird Call Classification Research",
         description:
           "Do chickadees change their calls when a hawk is nearby? Cornell Lab of Ornithology research I helped turn into a co-authored paper, published in Ecology.",
+        featured: true,
         tags: ["R", "Data Cleaning", "Cluster Analysis", "Machine Learning", "Bioacoustics"],
         tagLabel: "Bioacoustics Research",
         year: "2024",
@@ -1459,6 +1477,7 @@ private void UpdateLineRenderer() {
         description:
           "A prize-winning poem about illness, published in Laurel Moon.",
         tags: ["Poetry"],
+        image: "/write/dull-red-thing/cover.jpg",
         link: "https://www.laurelmoonmag.com/riley-byers-in-which-illness-is-a-dull-thing-with-feathers",
         linkLabel: "Read on Laurel Moon",
         tagLabel: "Poetry",
@@ -1469,6 +1488,7 @@ private void UpdateLineRenderer() {
         title: "Achieving Godhood",
         description: "A prose piece published in The Cairn.",
         tags: ["Prose"],
+        image: "/write/achieving-godhood/cover.jpg",
         tagLabel: "Prose",
         year: "2024",
         link: "https://thecairnstonehill.org/achieving-godhood/",
@@ -1479,6 +1499,7 @@ private void UpdateLineRenderer() {
         description:
           "A poem I published anonymously in the Touch Grass anthology from Antelope Hill Publishing.",
         tags: ["Poetry"],
+        image: "/write/a-gull-calls-me/cover.jpg",
         tagLabel: "Poetry",
         year: "2023",
         link: "https://antelopehillpublishing.com/product/touch-grass-antelope-hill-writing-competition-2023/",

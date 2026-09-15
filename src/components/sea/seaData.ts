@@ -203,8 +203,15 @@ export type Wave = {
 // category at a time, so each discipline's waves spread across the whole
 // width. Lines from a card then fan across the sea instead of dropping
 // into one clump.
+//
+// Grouped by `waveGroup` when a project sets one, falling back to its own
+// slug otherwise. Most cross-discipline projects used to share one literal
+// slug (the Design "stub" simply pointed at the Build page), so grouping
+// by slug alone used to be enough — but now that each discipline can carry
+// its own distinct write-up and page (AllTrees under Build vs. Design,
+// say), their slugs differ and only `waveGroup` still says "one project."
 function uniqueProjects() {
-  const bySlug = new Map<
+  const byKey = new Map<
     string,
     { title: string; description: string; href: string; disciplineIds: string[] }
   >();
@@ -216,22 +223,22 @@ function uniqueProjects() {
       const p = c.projects[i];
       if (!p) continue;
       const href = projectHref(p);
-      const slug = href.replace("/projects/", "");
-      const existing = bySlug.get(slug);
+      const key = p.waveGroup ?? href.replace("/projects/", "");
+      const existing = byKey.get(key);
       if (existing) {
         if (!existing.disciplineIds.includes(c.id)) existing.disciplineIds.push(c.id);
         continue;
       }
-      bySlug.set(slug, {
+      byKey.set(key, {
         title: p.title,
         description: p.description,
         href,
         disciplineIds: [c.id],
       });
-      order.push(slug);
+      order.push(key);
     }
   }
-  return order.map((slug) => ({ slug, ...bySlug.get(slug)! }));
+  return order.map((key) => ({ slug: key, ...byKey.get(key)! }));
 }
 
 export const waves: Wave[] = (() => {
