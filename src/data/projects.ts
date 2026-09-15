@@ -519,7 +519,7 @@ Deno.serve(async (req) => {
     // Rendered in the order given — see CategorySection, no separate
     // sort applied. Ordered newest-first by hand: VMM and AllTrees (both
     // 2026), then Route Design (ongoing — three gyms, present tense in
-    // the copy), Pete Assets (2023, same year as Pete the Snail), and
+    // the copy), Pete the Snail (2023, same year as the Play entry), and
     // Interior Design (2022). Keep new entries in that order rather than
     // appending, since nothing here sorts for you.
     projects: [
@@ -1048,9 +1048,11 @@ Deno.serve(async (req) => {
       {
         // Own slug and write-up, separate from the Pete the Snail page
         // under Play — focused on the character art itself rather than
-        // the Unity mechanics.
-        title: "Pete Assets",
-        description: "The character art and sprites behind Pete the Snail, painted in Krita.",
+        // the Unity mechanics. Same title as the Play entry (rather than
+        // "Pete Assets") so both halves read as one project everywhere —
+        // the card here, the sea's shared wave, and the panel list.
+        title: "Pete the Snail",
+        description: "The character art and sprites, painted in Krita.",
         image: "/projects/snail/pete-portrait.png",
         tags: ["Krita", "Character Design"],
         year: "2023",
@@ -1561,8 +1563,9 @@ export const slugProjects = categories.flatMap((c) =>
 // Rough "how much is actually here" score — used below to pick the
 // fuller entry on the rare case a slug is still shared across two
 // category entries (most cross-discipline projects now get their own
-// slug and write-up instead — see AllTrees, Pete Assets, Route Design
-// under Design — but this stays as a safety net for any that don't).
+// slug and write-up instead — see AllTrees, Pete the Snail (pete-assets),
+// and Route Design under Design — but this stays as a safety net for any
+// that don't).
 function richness(p: Project) {
   return (
     (p.year ? 1 : 0) +
