@@ -38,9 +38,9 @@ const iconMap: Record<string, LucideIcon> = {
 // absolute scatter has nowhere to go on a phone.
 const CARD_POS: Record<string, { left: string; top: string }> = {
   build: { left: "1%", top: "6%" },
-  design: { left: "23%", top: "17%" },
-  play: { left: "42%", top: "27%" },
-  discover: { left: "62%", top: "16%" },
+  design: { left: "21%", top: "17%" },
+  play: { left: "41%", top: "27%" },
+  discover: { left: "61%", top: "16%" },
   write: { left: "81%", top: "5%" },
 };
 
