@@ -62,20 +62,30 @@ export type PanelEntry = {
   href: string;
 };
 
-// What the slide-in panel lists: that category's own entries, in its own
-// order, with each entry's own title/description — so a cross-reference
-// stub ("UI/UX Design — the interface behind AllTrees") still reads as
-// written even though it shares a wave with the fuller AllTrees entry.
+// What the slide-in panel lists: that category's own entries, with each
+// entry's own title/description — so a cross-reference stub ("UI/UX
+// Design — the interface behind AllTrees") still reads as written even
+// though it shares a wave with the fuller AllTrees entry.
+//
+// Featured project(s) first, then the rest in their original order —
+// same lead-project-first ordering CategorySection.tsx uses on the
+// discipline's own page, so the panel's list and that page's list read
+// in the same order rather than the panel using raw authoring order.
 export const panelEntries: Record<string, PanelEntry[]> = Object.fromEntries(
-  categories.map((c) => [
-    c.id,
-    c.projects.map((p: Project, i) => ({
-      key: `${c.id}-${i}`,
-      title: p.title,
-      description: p.description,
-      href: projectHref(p),
-    })),
-  ])
+  categories.map((c) => {
+    const featured = c.projects.filter((p) => p.featured);
+    const rest = c.projects.filter((p) => !p.featured);
+    const ordered = [...featured, ...rest];
+    return [
+      c.id,
+      ordered.map((p: Project, i) => ({
+        key: `${c.id}-${i}`,
+        title: p.title,
+        description: p.description,
+        href: projectHref(p),
+      })),
+    ];
+  })
 );
 
 // ---------------------------------------------------------------------------
