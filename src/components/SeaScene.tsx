@@ -81,6 +81,50 @@ export default function SeaScene() {
     []
   );
 
+  // A one-shot glowing thread from the target discipline's card down to
+  // the wave you just clicked, drawn in before the page actually changes.
+  // Only for shared waves: a single-discipline wave has nothing to
+  // disambiguate, so it navigates straight away like it always has.
+  const [clickThread, setClickThread] = useState<{
+    d: string;
+    color: string;
+  } | null>(null);
+
+  const handleWaveClick = useCallback(
+    (w: Wave) => {
+      if (w.disciplineIds.length < 2) {
+        router.push(w.href);
+        return;
+      }
+      // disciplineIds[0] is whichever discipline's entry set this wave's
+      // title/description/href in seaData's uniqueProjects() — i.e.
+      // exactly the page w.href is about to open, so the thread attaches
+      // to that card rather than an arbitrary one of the two.
+      const targetId = w.disciplineIds[0];
+      const scene = sceneRef.current;
+      const card = cardRefs.current[targetId];
+      const waveEl = waveRefs.current[w.slug];
+      if (scene && card && waveEl) {
+        const sceneRect = scene.getBoundingClientRect();
+        const cardRect = card.getBoundingClientRect();
+        const waveRect = waveEl.getBoundingClientRect();
+        const startX = cardRect.left + cardRect.width / 2 - sceneRect.left;
+        const startY = cardRect.bottom - sceneRect.top;
+        const endX = waveRect.left + waveRect.width * w.tip - sceneRect.left;
+        const endY = waveRect.top + waveRect.height * 0.06 - sceneRect.top;
+        const dy = endY - startY;
+        setClickThread({
+          d: `M ${startX} ${startY} C ${startX} ${startY + dy * 0.42} ${endX} ${startY + dy * 0.52} ${endX} ${endY}`,
+          color: DISCIPLINE_COLOR[targetId] ?? "#fafafa",
+        });
+      }
+      // Long enough to read as a deliberate "attaching," short enough
+      // that a click still feels responsive rather than laggy.
+      window.setTimeout(() => router.push(w.href), 480);
+    },
+    [router]
+  );
+
   // Lines are measured in real DOM pixels rather than authored in any fixed
   // coordinate space: the cards are laid out by flow/absolute rules and the
   // waves are percentage-positioned masked divs, so the only way the two
@@ -198,7 +242,7 @@ export default function SeaScene() {
         focusColor={focus?.color ?? null}
         hoverSlug={hoverWave?.wave.slug ?? null}
         onWaveHover={handleWaveHover}
-        onWaveClick={(w) => router.push(w.href)}
+        onWaveClick={handleWaveClick}
         waveRefs={waveRefs}
       />
 
@@ -275,6 +319,24 @@ export default function SeaScene() {
             }}
           />
         ))}
+        {/* The click-to-navigate thread — a brighter, one-shot version of
+            the hover lines above, showing exactly which of a shared
+            wave's two pages you're about to land on. */}
+        {clickThread && (
+          <path
+            d={clickThread.d}
+            fill="none"
+            stroke={clickThread.color}
+            strokeWidth={2.2}
+            strokeOpacity={0.95}
+            style={{
+              filter: `drop-shadow(0 0 10px ${clickThread.color})`,
+              strokeDasharray: 2600,
+              strokeDashoffset: 0,
+              animation: "sea-draw 450ms ease-out both",
+            }}
+          />
+        )}
       </svg>
 
       {/* The place's name, the way the reference site puts KATE CITY at the
