@@ -198,7 +198,7 @@ export const categories: Category[] = [
       {
         title: "AllTrees",
         description:
-          "Think Mountain Project, but for trees. A community map where climbers discover, log, and review climbable trees — currently in first-round beta.",
+          "Think Mountain Project, but for trees. A community map where climbers discover, log, and review climbable trees — currently in second-round beta.",
         tagLabel: "iOS Build",
         featured: true,
         waveGroup: "alltrees",
@@ -208,7 +208,7 @@ export const categories: Category[] = [
         // photo played on those pages), then every named section below is
         // a StoryBeat. Screenshots throughout are real app screens, not
         // mockups — some carry obvious placeholder/test data (e.g. "(test)
-        // :0" as a tree name) since this is still first-round beta.
+        // :0" as a tree name) since this is still in beta.
         heroImageFirst: true,
         body: [
           {
@@ -262,8 +262,8 @@ export const categories: Category[] = [
             type: "beat",
             kicker: "The Result",
             heading:
-              "Still in first-round beta — the map, tree pages, ascent logging, search, and profile system are all built and live.",
-            text: "No usage data yet, but the foundation works end to end.",
+              "Now in second-round beta — the map, tree pages, ascent logging, search, and profile system are all built and live.",
+            text: "First-round beta feedback already shaped several fixes; second-round beta is running now.",
           },
         ],
         tags: [
