@@ -11,6 +11,7 @@ import StoryBeat from "@/components/StoryBeat";
 import ImagePile from "@/components/ImagePile";
 import ProjectTimeline from "@/components/ProjectTimeline";
 import NumberedCards from "@/components/NumberedCards";
+import RouteTrace from "@/components/RouteTrace";
 import { slugProjects, getProjectBySlug } from "@/data/projects";
 
 export function generateStaticParams() {
@@ -200,6 +201,18 @@ export default function ProjectPage({
                         }`}
                       />
                     </RevealOnScroll>
+                  );
+                }
+                if (block.type === "route-trace") {
+                  return (
+                    <RouteTrace
+                      key={i}
+                      src={block.image}
+                      alt={block.alt}
+                      path={block.path}
+                      viewBox={block.viewBox}
+                      caption={block.caption}
+                    />
                   );
                 }
                 if (block.type === "timeline") {

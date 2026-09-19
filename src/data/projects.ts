@@ -91,6 +91,19 @@ export type Project = {
     // Full-bleed video with playback controls — e.g. real screen-recorded
     // process footage, not just a finished-product demo.
     | { type: "video"; src: string; poster?: string }
+    // A wall photo with one route traced over it, the line drawing itself
+    // bottom-to-top on scroll. See RouteTrace.tsx. `path` is SVG path data
+    // in `viewBox` coordinates, ordered from the first hold upward — a
+    // wall of holds is unreadable to anyone who doesn't climb, so this is
+    // how a set gets pointed at.
+    | {
+        type: "route-trace";
+        image: string;
+        alt: string;
+        path: string;
+        viewBox: string;
+        caption?: string;
+      }
     // Gantt-style project timeline — phases across the top, staggered task
     // bars underneath. See ProjectTimeline.tsx. `span` is in grid columns;
     // the chart's column count is the sum of the phase spans, so pick a
@@ -371,6 +384,24 @@ Deno.serve(async (req) => {
               "/projects/routesetting/route-2.jpg",
             ],
           },
+          {
+            type: "text-with-image",
+            text: "August — a lead route on the tall wall at Central Rock Gym.",
+            image: "/projects/routesetting/august-lead-wall.jpg",
+          },
+          {
+            type: "text-with-image",
+            text: "September — a boulder problem, the line marked on the wall in green.",
+            image: "/projects/routesetting/september-boulder.jpg",
+          },
+          {
+            type: "route-trace",
+            image: "/projects/routesetting/traced-route.jpg",
+            alt: "A lead wall with one of my routes traced from the first hold to the anchor",
+            viewBox: "0 0 1000 1333",
+            path: "M 526 1272 L 517 1242 L 516 1211 L 516 1181 L 505 1150 L 491 1120 L 480 1059 L 472 1028 L 470 998 L 467 967 L 465 937 L 466 906 L 471 876 L 480 846 L 489 815 L 501 785 L 518 754 L 536 708 L 547 678 L 552 647 L 559 617 L 563 587 L 567 556 L 570 526 L 573 495 L 575 465 L 576 434 L 576 404 L 576 373 L 577 343 L 574 312 L 567 282 L 559 251 L 550 221 L 538 190 L 531 160 L 528 129 L 526 99 L 524 69 L 524 38 L 524 8",
+            caption: "A wall like this reads as noise unless you already know what you're looking at — every route's holds are interleaved with three others'. This is the line of mine through it.",
+          },
         ],
         tags: ["Routesetting"],
         image: "/projects/routesetting/cover.jpg",
@@ -503,6 +534,7 @@ Deno.serve(async (req) => {
           { src: "/art/henna/swirl-forearm.jpg", name: "Joy" },
           { src: "/art/henna/hawk-forearm.jpg" },
           { src: "/art/henna/thorn-hand.jpg" },
+          { src: "/art/henna/shoulder-climbing.jpg" },
           { src: "/art/henna/vine-forearm-2.jpg" },
           { src: "/art/henna/two-hands.jpg" },
           { src: "/art/henna/floral-panel.jpg" },
