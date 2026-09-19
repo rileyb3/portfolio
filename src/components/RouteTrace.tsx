@@ -69,13 +69,18 @@ export default function RouteTrace({
           className="pointer-events-none absolute inset-0 h-full w-full"
           aria-hidden="true"
         >
-          {/* Dark under-stroke so the line stays readable over pale
-              concrete and bright holds alike. */}
+          {/* Translucent, so the holds it passes over stay visible — the
+              point is to point AT the route, not to cover it. A single
+              soft-edged stroke rather than the usual opaque line plus dark
+              halo, since the halo is what actually hides the wall.
+              pathLength normalises the geometry to 1 unit, so the dash
+              maths is identical no matter how long the real path is. */}
           <path
             d={path}
             fill="none"
-            stroke="rgba(0,0,0,0.55)"
-            strokeWidth={14}
+            stroke="#C8FF3D"
+            strokeOpacity={0.45}
+            strokeWidth={13}
             strokeLinecap="round"
             strokeLinejoin="round"
             pathLength={1}
@@ -85,15 +90,16 @@ export default function RouteTrace({
               transition: `stroke-dashoffset ${durationMs}ms cubic-bezier(0.4, 0, 0.2, 1)`,
             }}
           />
+          {/* A brighter hairline down the middle keeps the path readable
+              at a glance without adding much coverage. */}
           <path
             d={path}
             fill="none"
             stroke="#C8FF3D"
-            strokeWidth={8}
+            strokeOpacity={0.8}
+            strokeWidth={3}
             strokeLinecap="round"
             strokeLinejoin="round"
-            // pathLength normalises the geometry to 1 unit, so the dash
-            // maths is identical no matter how long the real path is.
             pathLength={1}
             style={{
               strokeDasharray: 1,
