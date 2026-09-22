@@ -273,10 +273,17 @@ export const categories: Category[] = [
           },
           {
             type: "beat",
+            kicker: "Sharing",
+            heading:
+              "Any climb, tree, or badge can become a card and go straight to an Instagram Story.",
+            text: "The cards render from live data on-device, and a companion site at alltrees.app carries links that open straight to the right tree in-app — so growth can come from climbers showing the app to other climbers.",
+          },
+          {
+            type: "beat",
             kicker: "The Result",
             heading:
-              "Now in second-round beta — the map, tree pages, ascent logging, search, and profile system are all built and live.",
-            text: "First-round beta feedback already shaped several fixes; second-round beta is running now.",
+              "Now in second-round beta — the map, tree pages, ascent logging, search, profiles, and sharing are all built and live.",
+            text: "First-round beta feedback already shaped several fixes; second-round beta is running now on iOS, with an Android build going out to testers.",
           },
         ],
         tags: [
@@ -555,6 +562,148 @@ Deno.serve(async (req) => {
     // Interior Design (2022). Keep new entries in that order rather than
     // appending, since nothing here sorts for you.
     projects: [
+      {
+        // IN PROGRESS — scaffolded ahead of the work so the process has a
+        // place to land as it happens, rather than being reconstructed
+        // from memory at the end. The five `beat` sections below mirror
+        // the five phases of the process (Discover / Define / Design /
+        // Build / Launch); fill each one in as that phase closes and the
+        // page writes itself.
+        //
+        // This is the sequel to the VMM branding page below, which ends
+        // on "Next up: a refresh of VMM's website."
+        //
+        // TODO(riley): no cover `image` yet — add
+        // /projects/vmm-website/card.jpg once there's a comp worth
+        // showing, then consider `featured: true` and
+        // `heroImageFirst: true` to match the branding page's treatment.
+        // TODO(riley): set `waveGroup: "vmm"` on BOTH this and the
+        // branding entry if you want the homepage sea to draw them as one
+        // project rather than two separate waves.
+        title: "Voices Meet Minds Website Redesign",
+        description:
+          "Restructuring a mental health nonprofit's site around what a first-time visitor actually needs — mission first, stories second, and a way in that isn't nine equal buttons.",
+        tagLabel: "UI/UX",
+        year: "2026",
+        slug: "vmm-website",
+        tags: ["UI/UX", "Information Architecture", "Content Strategy"],
+        meta: [
+          { label: "Timeline", values: ["Sep 2026 – present"] },
+          {
+            label: "Role",
+            values: ["Executive board member", "Design lead"],
+          },
+          { label: "Tools", values: ["Figma", "Wix"] },
+        ],
+        body: [
+          {
+            type: "text",
+            text: "Voices Meet Minds is a mental health nonprofit built on storytelling — a collective journal, firsthand accounts of the psychiatric system, and an anonymous thought wall. The writing is the organization's whole asset. The site around it is what I'm rebuilding, as a member of the board rather than an outside contractor, which means the work is as much about getting the org to agree on what the site is for as it is about design.",
+          },
+
+          {
+            type: "beat",
+            kicker: "01 — Discover",
+            heading:
+              "The mission statement sits at the bottom of the homepage.",
+            text: "A first-time visitor lands on a logo, scrolls through several people's most painful memories, and only then finds out what the organization does. The stories are doing the work of an introduction they were never written to do.",
+          },
+          {
+            type: "cards",
+            label: "What the audit found",
+            items: [
+              {
+                title: "No orientation",
+                subtitle: "Homepage",
+                text: "The mission paragraph is the second-to-last block on the page. Nothing above it explains who VMM is or why these stories are here.",
+              },
+              {
+                title: "Nine flat nav items",
+                subtitle: "Information architecture",
+                text: "Home, About, Resources, Blog, Newsletter, Donate, Collective Journal, Stories of the System, Thought Wall — all rendered as equal-weight buttons, plus a hamburger duplicating them.",
+              },
+              {
+                title: "Three story sections that read as one",
+                subtitle: "Content model",
+                text: "Collective Journal, Stories of the System, and Thought Wall are meaningfully different, but the homepage presents two of them back to back with identical 'View Stories' buttons.",
+              },
+              {
+                title: "Heavy content, no scaffolding",
+                subtitle: "Duty of care",
+                text: "Self-harm and hospitalization accounts appear in the first screens with no content note and no support resources beside them.",
+              },
+            ],
+          },
+          {
+            type: "pills",
+            label: "Constraints",
+            items: [
+              "Volunteer team",
+              "Wix",
+              "No budget",
+              "Existing butterfly mark stays",
+              "Board consensus required",
+            ],
+          },
+
+          {
+            type: "beat",
+            kicker: "02 — Define",
+            heading:
+              "The org already has a three-part structure. The site just doesn't use it.",
+            text: "VMM's own about page names education, awareness, and advocacy as its pillars. The navigation exposes internal content-type names instead. Mapping the nav onto the pillars the org already believes in means the restructure is an argument the board has effectively already won.",
+          },
+
+          {
+            type: "beat",
+            kicker: "03 — Design",
+            heading: "Structure first, taste second.",
+            text: "Wireframes in grayscale before a single color decision, so the conversation with the founder is about what goes where — not about blue.",
+          },
+
+          {
+            type: "beat",
+            kicker: "04 — Build",
+            heading: "Rebuilt in place, on the platform the team can maintain.",
+            text: "A volunteer-run org has to be able to publish without me. That rules out handing back something only I can edit.",
+          },
+
+          {
+            type: "beat",
+            kicker: "05 — Launch",
+            heading: "Measured against the thing it was supposed to fix.",
+          },
+
+          {
+            type: "timeline",
+            kicker: "Process",
+            heading: "Five phases, each ending in a decision the board makes",
+            phases: [
+              { label: "Discover", span: 2, note: "Audit & goals" },
+              { label: "Define", span: 2, note: "IA & content model" },
+              { label: "Design", span: 3, note: "Wireframes → visual" },
+              { label: "Build", span: 3, note: "Staging" },
+              { label: "Launch", span: 2, note: "Migrate & measure" },
+            ],
+            tasks: [
+              { label: "Heuristic audit", start: 0, span: 2 },
+              { label: "Stakeholder interviews", start: 1, span: 2 },
+              { label: "Sitemap & nav labels", start: 2, span: 2 },
+              { label: "Content inventory", start: 3, span: 2 },
+              { label: "Grayscale wireframes", start: 4, span: 2 },
+              { label: "Visual direction", start: 5, span: 2 },
+              { label: "Key page comps", start: 6, span: 2 },
+              { label: "Implementation", start: 7, span: 3 },
+              { label: "Content migration", start: 9, span: 2 },
+              { label: "Launch & baseline", start: 10, span: 2 },
+            ],
+          },
+        ],
+        // TODO(riley): add `reflection` once the project ships. Left off
+        // deliberately rather than stubbed with empty strings — the detail
+        // page only checks that `reflection` exists, so a stub object with
+        // blank fields renders an empty bordered card.
+      },
       {
         title: "Voices Meet Minds Branding",
         description:
@@ -1025,24 +1174,34 @@ Deno.serve(async (req) => {
                 text: "Off the Ground for a first ascent, Taxonomist for ten species, Twenty Trees Deep, Tree Hugger for thirty favourites, Ribbit Ribbit for forty reviews, Johnny Appleseed for fifty trees added, Part Squirrel for a hundred ascents.",
               },
               {
-                title: "Profiles & life list",
+                title: "Profiles, friends & life list",
                 subtitle: "Your own record",
-                text: "A public profile per climber, plus a running life list of every species climbed — the birdwatching convention applied to trees.",
+                text: "A public profile per climber and a running life list of every species climbed — the birdwatching convention applied to trees. Climbers find each other by @username and send friend requests, so the map has people on it, not just pins.",
               },
               {
                 title: "Sharing",
                 subtitle: "Built as a requirement",
-                text: "Shareable profile cards rendered from your real stats, and links that open straight to the right tree — the direct output of the advisor session.",
+                text: "A swipeable set of cards — profile, tree, ascent, badge — that post straight to an Instagram Story or send as a link that opens the right tree in-app. It includes a community mad-lib card (\"Where ___ meets ___\") deliberately built so anything a user types stays boxed as their words, never AllTrees'. The direct output of the advisor session.",
               },
             ],
           },
 
           {
+            type: "text-with-image",
+            text: "Sharing turned into its own small design problem: make it effortless, and make it safe. The community mad-lib — \"Where ___ meets ___\" — turns the app's own tagline into something climbers fill in themselves, with the two blanks boxed so whatever gets typed always reads as their words rather than the brand's. Every filled-in card is a different, screenshot-ready ad.",
+            image: "/projects/alltrees-design/madlib-post.jpg",
+          },
+          {
             type: "beat",
             kicker: "Where It Stands",
             heading:
-              "Built, in the App Store pipeline, and now in its second beta.",
-            text: "The map, tree pages, ascent logging, search, profiles, badges and the Treemium tier are all built and working end to end. What's still unproven is the part no amount of design can settle on its own — whether climbers who weren't part of the plan will fill the map in.",
+              "Built on iOS, going to Android, with a companion site — and now in its second beta.",
+            text: "The map, tree pages, ascent logging, search, profiles, friends, badges, sharing and the Treemium tier are all built and working end to end. An Android build is going out to testers, and a landing site at alltrees.app carries the deep links that let a shared tree open straight in the app. What's still unproven is the part no amount of design can settle on its own — whether climbers who weren't part of the plan will fill the map in.",
+          },
+          {
+            type: "text-with-image",
+            text: "alltrees.app does two quiet jobs: it gives the app somewhere to point people, and it carries the links so a shared tree or profile opens straight in the app instead of a browser.",
+            image: "/projects/alltrees-design/website.jpg",
           },
         ],
         // Bottom-of-page link back to the engineering write-up — the two
