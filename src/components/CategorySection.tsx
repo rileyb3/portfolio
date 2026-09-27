@@ -62,20 +62,15 @@ export default function CategorySection({ category }: { category: Category }) {
       </RevealOnScroll>
 
       {featured.length > 0 && (
-        <RevealOnScroll className="px-6 sm:px-10">
-          <div
-            className={`grid gap-6 ${
-              featured.length > 1 ? "lg:grid-cols-2" : ""
-            }`}
-          >
-            {featured.map((project) => (
-              <FeaturedProject
-                key={project.title}
-                project={project}
-                wide={featured.length === 1}
-              />
-            ))}
-          </div>
+        {/* Stacked, not side by side. Every feature gets the full column
+            width and the `wide` split layout (image beside the writeup),
+            which is both easier to read and shorter than the two-up
+            image-over-text cards — those stack their content vertically,
+            so two of them side by side ran taller than one of these. */}
+        <RevealOnScroll className="space-y-6 px-6 sm:px-10">
+          {featured.map((project) => (
+            <FeaturedProject key={project.title} project={project} wide />
+          ))}
         </RevealOnScroll>
       )}
 
