@@ -583,35 +583,28 @@ Deno.serve(async (req) => {
         tags: ["UI/UX", "Information Architecture", "Content Strategy", "Wix"],
         meta: [
           { label: "Timeline", values: ["September 2026", "2 weeks"] },
-          {
-            label: "Role",
-            values: ["Solo designer", "Treasurer, executive board"],
-          },
+          { label: "Role", values: ["Solo designer"] },
           { label: "Tools", values: ["Wix"] },
         ],
         body: [
           {
             type: "text",
-            text: "Voices Meet Minds is a mental health nonprofit built on storytelling — a collective journal, firsthand accounts of the psychiatric system, and an anonymous thought wall. The writing is the organization's whole asset. I redesigned the site around it as treasurer and a member of the executive board rather than as an outside contractor, which meant the work was as much about getting the org to agree on what the site is for as it was about design — and it meant I had to take my own restructure back to the board for approval like anyone else.",
+            text: "Voices Meet Minds is a mental health nonprofit built on storytelling. The writing is the organization's whole asset; the site around it was burying it. I redesigned it as treasurer and a board member rather than an outside contractor, which meant taking my own restructure back to the board for approval.",
           },
 
           {
             type: "beat",
             kicker: "The Problem",
-            heading:
-              "Nine equal buttons, three kinds of story, and the mission at the bottom.",
-            text: "A first-time visitor landed on a logo, met a grid of nine equally-weighted destinations with nothing to say where to start, and scrolled through several people's most painful memories before finding out what the organization actually does.",
+            heading: "This was the menu.",
           },
-          // The old site, captured before the rebuild went live. Evidence
-          // sits next to the claims rather than the reader being asked to
-          // take the audit on trust.
+          // Full-bleed and cropped to the nav alone. Shown at three-up
+          // thumbnail size inside a masonry grid it was unreadable, and
+          // the whole argument of this section is that a reader should be
+          // able to count the buttons.
           {
-            type: "images",
-            images: [
-              "/projects/vmm-website/before-home.jpg",
-              "/projects/vmm-website/before-journal.jpg",
-              "/projects/vmm-website/before-story-sections.jpg",
-            ],
+            type: "full-image",
+            image: "/projects/vmm-website/before-menu.jpg",
+            bleed: true,
           },
           {
             type: "cards",
@@ -620,52 +613,22 @@ Deno.serve(async (req) => {
               {
                 title: "Nine flat nav items",
                 subtitle: "Information architecture",
-                text: "Home, About Us, Resources, Blog, Newsletter, Donate, Collective Journal, Stories of the System, Thought Wall — all rendered as equal-weight buttons under the hero, and duplicated again in a hamburger menu at the top.",
+                text: "Nine, all equal weight, no hierarchy — and duplicated again in a hamburger above.",
               },
               {
                 title: "Three story sections that read as one",
                 subtitle: "Content model",
-                text: "Collective Journal, Stories of the System, and Thought Wall are meaningfully different, but they sat side by side in the nav with no explanation, and ran back to back down the homepage as near-identical rows of cards under near-identical \"View Stories\" buttons. \"Stories of the System\" means nothing to someone arriving for the first time.",
+                text: "Three different things, presented identically — back-to-back card rows under matching \"View Stories\" buttons.",
               },
               {
                 title: "No orientation before the hard part",
                 subtitle: "Homepage",
-                text: "The mission paragraph sat near the bottom of the page. Deeply personal writing came first, with nothing above it to explain who VMM is or why these stories are here.",
+                text: "The mission paragraph sat near the bottom. Personal writing came first, with nothing above it saying who VMM is.",
               },
               {
                 title: "Donate buried in the row",
                 subtitle: "Conversion",
-                text: "The one action the org needs from visitors was a button among eight others, styled identically to everything else.",
-              },
-            ],
-          },
-
-          {
-            type: "beat",
-            kicker: "How It Got Decided",
-            heading:
-              "Two weeks, one designer, and two sets of people worth asking.",
-            text: "Not a formal research programme — a small org moving fast. But the two decisions that mattered most each went past someone else before they were made.",
-          },
-          {
-            type: "cards",
-            label: "The process",
-            columns: 3,
-            items: [
-              {
-                title: "The VMM team",
-                subtitle: "Navigation",
-                text: "I raised my concerns with the team and we talked through how the navigation should work — which is the decision that most affects how people who already use the site find things.",
-              },
-              {
-                title: "Friends",
-                subtitle: "Visual direction",
-                text: "I narrowed it to a couple of directions I could go and asked friends which read better, rather than picking on my own taste alone.",
-              },
-              {
-                title: "Me, with approval",
-                subtitle: "Execution",
-                text: "I did the redesign myself and took the changes back for approval before they went live — the org owns the site, so the restructure had to be agreed, not just shipped.",
+                text: "A button among eight, styled like the rest.",
               },
             ],
           },
@@ -674,11 +637,11 @@ Deno.serve(async (req) => {
             type: "beat",
             kicker: "Navigation",
             heading: "Nine destinations became four, plus Donate.",
-            text: "About Us, Resources, Newsletter, and Stories — with the three writing categories nested underneath Stories where they explain themselves, instead of competing at the top level. Donate came out of the row entirely and became its own button.",
+            text: "The three writing categories nest under Stories instead of competing at the top level. Donate leaves the row and becomes its own button.",
           },
           {
             type: "text-with-image",
-            text: "The new menu structure. All Stories, Thought Wall, Collective Journal, and Stories of the System sit under one Stories parent, along with a \"Share your story\" link — so the categories are something you discover once you're already looking for writing, not a decision you have to make before you've understood the site.",
+            text: "The categories become something you meet once you're already looking for writing — not a decision you make before you understand the site.",
             image: "/projects/vmm-website/nav-structure.jpg",
           },
 
@@ -687,7 +650,7 @@ Deno.serve(async (req) => {
             kicker: "The Homepage",
             heading:
               "Say what this is before asking anyone to read the hardest thing on the page.",
-            text: "The hero now carries the tagline and a plain description of what VMM is, with one clear way in. \"Let's talk about it\" lays out the three things you can actually do here — read stories, find resources, join the newsletter — and Who We Are moved up so the mission arrives before the personal writing rather than after it.",
+            text: "The hero says what VMM is and gives one way in. Who We Are moves up, so the mission arrives before the personal writing instead of after it.",
           },
           {
             type: "images",
@@ -703,7 +666,7 @@ Deno.serve(async (req) => {
             type: "beat",
             kicker: "Stories",
             heading: "One front door, then the categories.",
-            text: "Every kind of writing now lands on a single Stories page. \"Start Here\" gives a newcomer three featured reads with their category tagged on the card, so the distinction is learned by example. Browse By Category sits below it with a one-line explanation of each — the sentence that was missing from the old nav.",
+            text: "One page for every kind of writing. \"Start Here\" tags each featured read with its category, so the distinction is learned by example.",
           },
           {
             type: "images",
@@ -719,7 +682,7 @@ Deno.serve(async (req) => {
             kicker: "Before / After",
             heading:
               "Same butterfly, same words, an entirely different first ten seconds.",
-            text: "Drag the slider. The old homepage opened on a logo and asked you to choose between nine buttons; the new one says what Voices Meet Minds is, what it stands for, and gives you one place to start — with Donate lifted out of the row into its own button.",
+            text: "Drag the slider.",
           },
           // Both halves are the same 1800×1000 canvas so the slider can
           // overlay them exactly. Each capture is fitted onto it in the
@@ -735,7 +698,7 @@ Deno.serve(async (req) => {
             type: "beat",
             kicker: "Where It Stands",
             heading: "Designed and approved, going live on Wix.",
-            text: "The org keeps publishing on the platform the team already knows, so nothing about the redesign depends on me being around to maintain it.",
+            text: "Rebuilt in place on Wix, so nothing about it depends on me being around to maintain it.",
           },
         ],
         link: "/projects/voices-meet-minds",

@@ -96,18 +96,26 @@ export default function ProjectPage({
 
           {project.meta && project.meta.length > 0 && (
             <RevealOnScroll className="mt-6 grid grid-cols-2 gap-x-6 gap-y-4 border-y border-white/10 py-5 sm:grid-cols-4">
+              {/* Values render as pills rather than a stacked column of
+                  bare text: a meta row is a set of short labelled facts,
+                  and as running paragraphs they read as prose you're
+                  meant to parse instead of chips you can scan. Matches
+                  the tag pills directly above. */}
               {project.meta.map((m) => (
                 <div key={m.label}>
-                  <h2 className="text-sm uppercase tracking-widest text-muted">
+                  <h2 className="text-xs uppercase tracking-[0.2em] text-muted">
                     {m.label}
                   </h2>
-                  <div className="mt-1.5 space-y-0.5">
+                  <ul className="mt-2.5 flex flex-wrap gap-1.5">
                     {m.values.map((v) => (
-                      <p key={v} className="text-base text-paper">
+                      <li
+                        key={v}
+                        className="rounded-full border border-white/10 bg-surface px-3 py-1 text-sm text-paper"
+                      >
                         {v}
-                      </p>
+                      </li>
                     ))}
-                  </div>
+                  </ul>
                 </div>
               ))}
             </RevealOnScroll>
