@@ -431,11 +431,21 @@ export default function ProjectPage({
               // opposite behaviour, so branch on the href rather than
               // sending every one of them to a new tab.
               const isInternal = project.link.startsWith("/");
-              const crossLinked = project.link.startsWith("/projects/")
+              const linkedProject = project.link.startsWith("/projects/")
                 ? getProjectBySlug(
                     project.link.slice("/projects/".length)
                   )
                 : undefined;
+              // Only name the destination when it's a DIFFERENT discipline.
+              // Two entries in the same category (the VMM branding and
+              // website pages both live under Design) would otherwise get
+              // a "Go to Design" pill while you're already on a Design
+              // page, which reads as a mistake.
+              const crossLinked =
+                linkedProject &&
+                linkedProject.categoryId !== project.categoryId
+                  ? linkedProject
+                  : undefined;
               const label = project.linkLabel ?? "View project";
               const className =
                 "mt-6 inline-flex flex-wrap items-center gap-2 text-base text-accent hover:underline";

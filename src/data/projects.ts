@@ -563,146 +563,183 @@ Deno.serve(async (req) => {
     // appending, since nothing here sorts for you.
     projects: [
       {
-        // IN PROGRESS — scaffolded ahead of the work so the process has a
-        // place to land as it happens, rather than being reconstructed
-        // from memory at the end. The five `beat` sections below mirror
-        // the five phases of the process (Discover / Define / Design /
-        // Build / Launch); fill each one in as that phase closes and the
-        // page writes itself.
+        // Sequel to the VMM branding page below, which ends on "Next up:
+        // a refresh of VMM's website." Separate project rather than a
+        // section there: different problem, different research.
         //
-        // This is the sequel to the VMM branding page below, which ends
-        // on "Next up: a refresh of VMM's website."
-        //
-        // TODO(riley): no cover `image` yet — add
-        // /projects/vmm-website/card.jpg once there's a comp worth
-        // showing, then consider `featured: true` and
-        // `heroImageFirst: true` to match the branding page's treatment.
-        // TODO(riley): set `waveGroup: "vmm"` on BOTH this and the
-        // branding entry if you want the homepage sea to draw them as one
-        // project rather than two separate waves.
+        // Everything here is Riley's own account of the work or is
+        // verifiable from the old and new sites. An earlier scaffold of
+        // this page invented a five-phase Discover/Define/Design/Build/
+        // Launch methodology with stakeholder interviews and grayscale
+        // wireframes — none of which happened — and it has been removed.
         title: "Voices Meet Minds Website Redesign",
         description:
           "Restructuring a mental health nonprofit's site around what a first-time visitor actually needs — mission first, stories second, and a way in that isn't nine equal buttons.",
         tagLabel: "UI/UX",
         year: "2026",
         slug: "vmm-website",
-        tags: ["UI/UX", "Information Architecture", "Content Strategy"],
+        heroImageFirst: true,
+        image: "/projects/vmm-website/home-hero.jpg",
+        tags: ["UI/UX", "Information Architecture", "Content Strategy", "Wix"],
         meta: [
-          { label: "Timeline", values: ["Sep 2026 – present"] },
+          { label: "Timeline", values: ["September 2026", "2 weeks"] },
           {
             label: "Role",
-            values: ["Executive board member", "Design lead"],
+            values: ["Solo designer", "Treasurer, executive board"],
           },
-          { label: "Tools", values: ["Figma", "Wix"] },
+          { label: "Tools", values: ["Wix"] },
         ],
         body: [
           {
             type: "text",
-            text: "Voices Meet Minds is a mental health nonprofit built on storytelling — a collective journal, firsthand accounts of the psychiatric system, and an anonymous thought wall. The writing is the organization's whole asset. The site around it is what I'm rebuilding, as a member of the board rather than an outside contractor, which means the work is as much about getting the org to agree on what the site is for as it is about design.",
+            text: "Voices Meet Minds is a mental health nonprofit built on storytelling — a collective journal, firsthand accounts of the psychiatric system, and an anonymous thought wall. The writing is the organization's whole asset. I redesigned the site around it as treasurer and a member of the executive board rather than as an outside contractor, which meant the work was as much about getting the org to agree on what the site is for as it was about design — and it meant I had to take my own restructure back to the board for approval like anyone else.",
           },
 
           {
             type: "beat",
-            kicker: "01 — Discover",
+            kicker: "The Problem",
             heading:
-              "The mission statement sits at the bottom of the homepage.",
-            text: "A first-time visitor lands on a logo, scrolls through several people's most painful memories, and only then finds out what the organization does. The stories are doing the work of an introduction they were never written to do.",
+              "Nine equal buttons, three kinds of story, and the mission at the bottom.",
+            text: "A first-time visitor landed on a logo, met a grid of nine equally-weighted destinations with nothing to say where to start, and scrolled through several people's most painful memories before finding out what the organization actually does.",
+          },
+          // The old site, captured before the rebuild went live. Evidence
+          // sits next to the claims rather than the reader being asked to
+          // take the audit on trust.
+          {
+            type: "images",
+            images: [
+              "/projects/vmm-website/before-home.jpg",
+              "/projects/vmm-website/before-journal.jpg",
+              "/projects/vmm-website/before-story-sections.jpg",
+            ],
           },
           {
             type: "cards",
-            label: "What the audit found",
+            label: "What was wrong",
             items: [
-              {
-                title: "No orientation",
-                subtitle: "Homepage",
-                text: "The mission paragraph is the second-to-last block on the page. Nothing above it explains who VMM is or why these stories are here.",
-              },
               {
                 title: "Nine flat nav items",
                 subtitle: "Information architecture",
-                text: "Home, About, Resources, Blog, Newsletter, Donate, Collective Journal, Stories of the System, Thought Wall — all rendered as equal-weight buttons, plus a hamburger duplicating them.",
+                text: "Home, About Us, Resources, Blog, Newsletter, Donate, Collective Journal, Stories of the System, Thought Wall — all rendered as equal-weight buttons under the hero, and duplicated again in a hamburger menu at the top.",
               },
               {
                 title: "Three story sections that read as one",
                 subtitle: "Content model",
-                text: "Collective Journal, Stories of the System, and Thought Wall are meaningfully different, but the homepage presents two of them back to back with identical 'View Stories' buttons.",
+                text: "Collective Journal, Stories of the System, and Thought Wall are meaningfully different, but they sat side by side in the nav with no explanation, and ran back to back down the homepage as near-identical rows of cards under near-identical \"View Stories\" buttons. \"Stories of the System\" means nothing to someone arriving for the first time.",
               },
               {
-                title: "Heavy content, no scaffolding",
-                subtitle: "Duty of care",
-                text: "Self-harm and hospitalization accounts appear in the first screens with no content note and no support resources beside them.",
+                title: "No orientation before the hard part",
+                subtitle: "Homepage",
+                text: "The mission paragraph sat near the bottom of the page. Deeply personal writing came first, with nothing above it to explain who VMM is or why these stories are here.",
+              },
+              {
+                title: "Donate buried in the row",
+                subtitle: "Conversion",
+                text: "The one action the org needs from visitors was a button among eight others, styled identically to everything else.",
               },
             ],
           },
-          {
-            type: "pills",
-            label: "Constraints",
-            items: [
-              "Volunteer team",
-              "Wix",
-              "No budget",
-              "Existing butterfly mark stays",
-              "Board consensus required",
-            ],
-          },
 
           {
             type: "beat",
-            kicker: "02 — Define",
+            kicker: "How It Got Decided",
             heading:
-              "The org already has a three-part structure. The site just doesn't use it.",
-            text: "VMM's own about page names education, awareness, and advocacy as its pillars. The navigation exposes internal content-type names instead. Mapping the nav onto the pillars the org already believes in means the restructure is an argument the board has effectively already won.",
+              "Two weeks, one designer, and two sets of people worth asking.",
+            text: "Not a formal research programme — a small org moving fast. But the two decisions that mattered most each went past someone else before they were made.",
           },
-
           {
-            type: "beat",
-            kicker: "03 — Design",
-            heading: "Structure first, taste second.",
-            text: "Wireframes in grayscale before a single color decision, so the conversation with the founder is about what goes where — not about blue.",
-          },
-
-          {
-            type: "beat",
-            kicker: "04 — Build",
-            heading: "Rebuilt in place, on the platform the team can maintain.",
-            text: "A volunteer-run org has to be able to publish without me. That rules out handing back something only I can edit.",
-          },
-
-          {
-            type: "beat",
-            kicker: "05 — Launch",
-            heading: "Measured against the thing it was supposed to fix.",
-          },
-
-          {
-            type: "timeline",
-            kicker: "Process",
-            heading: "Five phases, each ending in a decision the board makes",
-            phases: [
-              { label: "Discover", span: 2, note: "Audit & goals" },
-              { label: "Define", span: 2, note: "IA & content model" },
-              { label: "Design", span: 3, note: "Wireframes → visual" },
-              { label: "Build", span: 3, note: "Staging" },
-              { label: "Launch", span: 2, note: "Migrate & measure" },
+            type: "cards",
+            label: "The process",
+            columns: 3,
+            items: [
+              {
+                title: "The VMM team",
+                subtitle: "Navigation",
+                text: "I raised my concerns with the team and we talked through how the navigation should work — which is the decision that most affects how people who already use the site find things.",
+              },
+              {
+                title: "Friends",
+                subtitle: "Visual direction",
+                text: "I narrowed it to a couple of directions I could go and asked friends which read better, rather than picking on my own taste alone.",
+              },
+              {
+                title: "Me, with approval",
+                subtitle: "Execution",
+                text: "I did the redesign myself and took the changes back for approval before they went live — the org owns the site, so the restructure had to be agreed, not just shipped.",
+              },
             ],
-            tasks: [
-              { label: "Heuristic audit", start: 0, span: 2 },
-              { label: "Stakeholder interviews", start: 1, span: 2 },
-              { label: "Sitemap & nav labels", start: 2, span: 2 },
-              { label: "Content inventory", start: 3, span: 2 },
-              { label: "Grayscale wireframes", start: 4, span: 2 },
-              { label: "Visual direction", start: 5, span: 2 },
-              { label: "Key page comps", start: 6, span: 2 },
-              { label: "Implementation", start: 7, span: 3 },
-              { label: "Content migration", start: 9, span: 2 },
-              { label: "Launch & baseline", start: 10, span: 2 },
+          },
+
+          {
+            type: "beat",
+            kicker: "Navigation",
+            heading: "Nine destinations became four, plus Donate.",
+            text: "About Us, Resources, Newsletter, and Stories — with the three writing categories nested underneath Stories where they explain themselves, instead of competing at the top level. Donate came out of the row entirely and became its own button.",
+          },
+          {
+            type: "text-with-image",
+            text: "The new menu structure. All Stories, Thought Wall, Collective Journal, and Stories of the System sit under one Stories parent, along with a \"Share your story\" link — so the categories are something you discover once you're already looking for writing, not a decision you have to make before you've understood the site.",
+            image: "/projects/vmm-website/nav-structure.jpg",
+          },
+
+          {
+            type: "beat",
+            kicker: "The Homepage",
+            heading:
+              "Say what this is before asking anyone to read the hardest thing on the page.",
+            text: "The hero now carries the tagline and a plain description of what VMM is, with one clear way in. \"Let's talk about it\" lays out the three things you can actually do here — read stories, find resources, join the newsletter — and Who We Are moved up so the mission arrives before the personal writing rather than after it.",
+          },
+          {
+            type: "images",
+            images: [
+              "/projects/vmm-website/home-hero.jpg",
+              "/projects/vmm-website/home-lets-talk.jpg",
+              "/projects/vmm-website/home-who-we-are.jpg",
+              "/projects/vmm-website/home-newsletter.jpg",
             ],
+          },
+
+          {
+            type: "beat",
+            kicker: "Stories",
+            heading: "One front door, then the categories.",
+            text: "Every kind of writing now lands on a single Stories page. \"Start Here\" gives a newcomer three featured reads with their category tagged on the card, so the distinction is learned by example. Browse By Category sits below it with a one-line explanation of each — the sentence that was missing from the old nav.",
+          },
+          {
+            type: "images",
+            images: [
+              "/projects/vmm-website/stories-hero.jpg",
+              "/projects/vmm-website/stories-cards.jpg",
+              "/projects/vmm-website/stories-browse.jpg",
+            ],
+          },
+
+          {
+            type: "beat",
+            kicker: "Before / After",
+            heading:
+              "Same butterfly, same words, an entirely different first ten seconds.",
+            text: "Drag the slider. The old homepage opened on a logo and asked you to choose between nine buttons; the new one says what Voices Meet Minds is, what it stands for, and gives you one place to start — with Donate lifted out of the row into its own button.",
+          },
+          // Both halves are the same 1800×1000 canvas so the slider can
+          // overlay them exactly. Each capture is fitted onto it in the
+          // page's own surface colour rather than cropped to match, so
+          // neither one loses content just to make the dimensions line up.
+          {
+            type: "before-after",
+            before: "/projects/vmm-website/compare-before.jpg",
+            after: "/projects/vmm-website/compare-after.jpg",
+          },
+
+          {
+            type: "beat",
+            kicker: "Where It Stands",
+            heading: "Designed and approved, going live on Wix.",
+            text: "The org keeps publishing on the platform the team already knows, so nothing about the redesign depends on me being around to maintain it.",
           },
         ],
-        // TODO(riley): add `reflection` once the project ships. Left off
-        // deliberately rather than stubbed with empty strings — the detail
-        // page only checks that `reflection` exists, so a stub object with
-        // blank fields renders an empty bordered card.
+        link: "/projects/voices-meet-minds",
+        linkLabel: "see the branding work behind this",
       },
       {
         title: "Voices Meet Minds Branding",
