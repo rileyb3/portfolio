@@ -145,6 +145,12 @@ export type Project = {
   // .com/bink's opening beat. Opt-in per project so every other page
   // keeps its current title-first layout.
   heroImageFirst?: boolean;
+  // How the opening image is presented. "full" (default) is the
+  // full-bleed near-full-screen crop. "split" contains the image beside
+  // the title instead — for covers whose subject is a fixed size (an app
+  // icon, a character, a chart), where the full-bleed treatment both
+  // crops the subject and inflates it. Ignored when `video` is set.
+  heroLayout?: "full" | "split";
   // Short label/value pairs shown in a row near the top of the project
   // page (e.g. TIME, TOOLS, ROLE) — same idea as the meta row on
   // angelechendesigns.com's case studies.
@@ -313,6 +319,7 @@ export const categories: Category[] = [
         ],
         year: "2026",
         slug: "alltrees",
+        heroLayout: "split",
         image: "/projects/alltrees/icon.jpg",
         // Return leg of the Design ⇄ Build pair. The link renderer spots
         // an internal href and swaps the new-tab <a> for a same-tab
@@ -593,7 +600,6 @@ Deno.serve(async (req) => {
         tagLabel: "UI/UX",
         year: "2026",
         slug: "vmm-website",
-        featured: true,
         heroImageFirst: true,
         image: "/projects/vmm-website/home-hero.jpg",
         tags: ["UI/UX", "Information Architecture", "Content Strategy", "Wix"],
@@ -803,9 +809,9 @@ Deno.serve(async (req) => {
           },
         ],
         tags: ["Branding", "Character Design", "Mascot Design"],
-        // Return leg of the VMM pair. Both entries sit under Design, so
-        // the link renderer omits the discipline pill (it would read
-        // "Go to Design" while you're already on a Design page).
+        // Return leg of the VMM pair. Both sit under Design, so the link
+        // renderer omits the discipline pill (it would read "Go to
+        // Design" while you're already on a Design page).
         link: "/projects/vmm-website",
         linkLabel: "see other VMM branding work",
         // 16:9 (padded with the character art's own near-black background,
@@ -817,6 +823,7 @@ Deno.serve(async (req) => {
         // tried and dropped, and those files are now unused.
         image: "/projects/voices-meet-minds/card.jpg",
         slug: "voices-meet-minds",
+        heroLayout: "split",
       },
       {
         // Renamed from "UI/UX Design" — this now has its own slug and its
@@ -828,6 +835,7 @@ Deno.serve(async (req) => {
           "The interface behind AllTrees, designed in Figma before any code was written.",
         tags: ["UI/UX"],
         slug: "alltrees-design",
+        heroLayout: "split",
         // Same waveGroup as the Build entry — the sea still recognizes
         // these as one project and draws a two-color wave for it, even
         // though each links to its own page now.
@@ -1248,6 +1256,7 @@ Deno.serve(async (req) => {
         tags: ["Krita", "Character Design"],
         year: "2023",
         slug: "pete-assets",
+        heroLayout: "split",
         waveGroup: "pete-the-snail",
         heroImageFirst: true,
         body: [
@@ -1382,6 +1391,7 @@ Deno.serve(async (req) => {
         tags: ["Unity", "C#", "Game Design", "Krita"],
         year: "2023",
         slug: "pete-the-snail",
+        heroLayout: "split",
         image: "/projects/snail/pete-portrait.png",
         link: "/projects/pete-assets",
         linkLabel: "view this project from another perspective",
@@ -1583,6 +1593,7 @@ private void UpdateLineRenderer() {
         year: "2025",
         heroImageFirst: true,
         slug: "ebbinghaus-illusion-grey-parrots",
+        heroLayout: "split",
         image: "/projects/ebbinghaus-illusion-grey-parrots/parrot-cover-v2.jpg",
       },
       {
@@ -1604,6 +1615,7 @@ private void UpdateLineRenderer() {
           },
         ],
         slug: "contrafreeloading-parrots",
+        heroLayout: "split",
         link: "https://pubmed.ncbi.nlm.nih.gov/39250240/",
         linkLabel: "View related publication",
         image: "/projects/contrafreeloading-parrots/overall-contrafreeloading.jpg",
@@ -1619,6 +1631,7 @@ private void UpdateLineRenderer() {
         year: "2023",
         heroImageFirst: true,
         slug: "cognitive-flexibility-research",
+        heroLayout: "split",
         image: "/projects/cognitive-flexibility-research/eye-movement-plot.png",
         reflection: {
           proudOf:
@@ -1653,6 +1666,7 @@ private void UpdateLineRenderer() {
           },
         ],
         slug: "bird-call-research",
+        heroLayout: "split",
         link: "https://doi.org/10.1002/ecy.70362",
         linkLabel: "View publication",
         image: "/projects/bird-call-research/kmeans-full.png",
@@ -1670,9 +1684,8 @@ private void UpdateLineRenderer() {
         description:
           "A prize-winning poem about illness, published in Laurel Moon.",
         tags: ["Poetry"],
-        image: "/write/dull-red-thing/cover.jpg",
         link: "https://www.laurelmoonmag.com/riley-byers-in-which-illness-is-a-dull-thing-with-feathers",
-        linkLabel: "Read on Laurel Moon",
+        linkLabel: "Read the full piece on Laurel Moon",
         tagLabel: "Poetry",
         featured: true,
         year: "2023",
@@ -1681,22 +1694,20 @@ private void UpdateLineRenderer() {
         title: "Achieving Godhood",
         description: "A prose piece published in The Cairn.",
         tags: ["Prose"],
-        image: "/write/achieving-godhood/cover.jpg",
         tagLabel: "Prose",
         year: "2024",
         link: "https://thecairnstonehill.org/achieving-godhood/",
-        linkLabel: "Read on The Cairn",
+        linkLabel: "Read the full piece on The Cairn",
       },
       {
         title: "A Gull Calls Me",
         description:
           "A poem I published anonymously in the Touch Grass anthology from Antelope Hill Publishing.",
         tags: ["Poetry"],
-        image: "/write/a-gull-calls-me/cover.jpg",
         tagLabel: "Poetry",
         year: "2023",
         link: "https://antelopehillpublishing.com/product/touch-grass-antelope-hill-writing-competition-2023/",
-        linkLabel: "View the anthology",
+        linkLabel: "Buy the anthology to read it",
       },
       {
         title: "I am unsure of the validity of my claims",

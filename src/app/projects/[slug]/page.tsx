@@ -13,6 +13,7 @@ import ProjectTimeline from "@/components/ProjectTimeline";
 import NumberedCards from "@/components/NumberedCards";
 import RouteTrace from "@/components/RouteTrace";
 import ProblemSolution from "@/components/ProblemSolution";
+import SplitHero from "@/components/SplitHero";
 import { slugProjects, getProjectBySlug } from "@/data/projects";
 
 export function generateStaticParams() {
@@ -32,6 +33,11 @@ export default function ProjectPage({
   // Otherwise fall back to the plain paragraph split used everywhere else.
   const paragraphs = (project.details ?? project.description).split("\n\n");
 
+  // A video always wants the big full-bleed frame; `split` only applies
+  // to still covers whose subject has a fixed size (icons, charts).
+  const splitHero =
+    project.heroLayout === "split" && Boolean(project.image) && !project.video;
+
   return (
     <>
       <main className="min-h-screen bg-ink pb-20">
@@ -42,7 +48,22 @@ export default function ProjectPage({
               no text on it at all, before the title even shows up. Pulled
               up over the article's own top padding so it sits right under
               SubpageHeader's back-link row instead of leaving a gap. */}
-          {project.heroImageFirst && (project.video || project.image) && (
+          {/* `heroLayout: "split"` swaps the full-bleed opening for a
+              contained image beside the title — see SplitHero.tsx. It
+              renders the title/tags itself, so the standard title block
+              below is skipped for these. Video projects always use the
+              full-bleed treatment. */}
+          {splitHero && (
+            <SplitHero
+              title={project.title}
+              image={project.image!}
+              categoryHref={`/${project.categoryId}`}
+              categoryLabel={project.tagLabel ?? project.categoryLabel}
+              year={project.year}
+              tags={project.tags}
+            />
+          )}
+          {!splitHero && project.heroImageFirst && (project.video || project.image) && (
             <RevealOnScroll className="relative left-1/2 -mt-10 mb-8 w-screen -translate-x-1/2 overflow-hidden bg-surface2">
               {project.video ? (
                 <video
@@ -69,31 +90,35 @@ export default function ProjectPage({
               />
             </RevealOnScroll>
           )}
-          <div className="flex items-baseline justify-between gap-2">
-            <Link
-              href={`/${project.categoryId}`}
-              className="text-sm uppercase tracking-widest text-muted transition hover:text-accent hover:underline"
-            >
-              {project.tagLabel ?? project.categoryLabel}
-            </Link>
-            {project.year && (
-              <span className="text-sm text-muted">{project.year}</span>
-            )}
-          </div>
-          <h1 className="mt-2 text-4xl font-bold tracking-tight text-paper sm:text-5xl">
-            {project.title}
-          </h1>
+          {!splitHero && (
+            <>
+              <div className="flex items-baseline justify-between gap-2">
+                <Link
+                  href={`/${project.categoryId}`}
+                  className="text-sm uppercase tracking-widest text-muted transition hover:text-accent hover:underline"
+                >
+                  {project.tagLabel ?? project.categoryLabel}
+                </Link>
+                {project.year && (
+                  <span className="text-sm text-muted">{project.year}</span>
+                )}
+              </div>
+              <h1 className="mt-2 text-4xl font-bold tracking-tight text-paper sm:text-5xl">
+                {project.title}
+              </h1>
 
-          <ul className="mt-4 flex flex-wrap gap-2">
-            {project.tags.map((tag) => (
-              <li
-                key={tag}
-                className="rounded-full bg-white/5 px-3 py-1 text-sm text-muted"
-              >
-                {tag}
-              </li>
-            ))}
-          </ul>
+              <ul className="mt-4 flex flex-wrap gap-2">
+                {project.tags.map((tag) => (
+                  <li
+                    key={tag}
+                    className="rounded-full bg-white/5 px-3 py-1 text-sm text-muted"
+                  >
+                    {tag}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
 
           {project.meta && project.meta.length > 0 && (
             <RevealOnScroll className="mt-6 grid grid-cols-2 gap-x-6 gap-y-4 border-y border-white/10 py-5 sm:grid-cols-4">
@@ -466,8 +491,23 @@ export default function ProjectPage({
                   ? linkedProject
                   : undefined;
               const label = project.linkLabel ?? "View project";
-              const className =
-                "mt-6 inline-flex flex-wrap items-center gap-2 text-base text-accent hover:underline";
+              // An internal cross-link is a "see also" and stays a quiet
+              // text link. An outbound one is often the ONLY place to read
+              // or use the thing — a piece published in a magazine, a live
+              // app — so it gets a filled button in the palette's CTA
+              // colour, plus the host name and an ↗, making it obvious
+              // both that it leaves the site and that it's the way in.
+              const className = isInternal
+                ? "mt-6 inline-flex flex-wrap items-center gap-2 text-base text-accent hover:underline"
+                : "mt-8 inline-flex flex-wrap items-center gap-2.5 rounded-full bg-accent3 px-6 py-3 text-base font-semibold text-ink transition hover:brightness-110";
+              let host = "";
+              if (!isInternal) {
+                try {
+                  host = new URL(project.link).hostname.replace(/^www\./, "");
+                } catch {
+                  host = "";
+                }
+              }
 
               // "another perspective" doesn't say WHICH perspective. When we
               // can resolve the destination, name the discipline it lands in
@@ -480,7 +520,7 @@ export default function ProjectPage({
                       Go to {crossLinked.categoryLabel}
                     </span>
                   )}
-                  <span aria-hidden="true">→</span>
+                  <span aria-hidden="true">{isInternal ? "→" : "↗"}</span>
                 </>
               );
 
@@ -491,14 +531,21 @@ export default function ProjectPage({
                   {inner}
                 </Link>
               ) : (
-                <a
-                  href={project.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={className}
-                >
-                  {inner}
-                </a>
+                <div>
+                  <a
+                    href={project.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={className}
+                  >
+                    {inner}
+                  </a>
+                  {host && (
+                    <p className="mt-2.5 text-sm text-muted">
+                      Opens {host} in a new tab.
+                    </p>
+                  )}
+                </div>
               );
             })()}
 
