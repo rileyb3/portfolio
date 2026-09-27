@@ -12,6 +12,7 @@ import ImagePile from "@/components/ImagePile";
 import ProjectTimeline from "@/components/ProjectTimeline";
 import NumberedCards from "@/components/NumberedCards";
 import RouteTrace from "@/components/RouteTrace";
+import ProblemSolution from "@/components/ProblemSolution";
 import { slugProjects, getProjectBySlug } from "@/data/projects";
 
 export function generateStaticParams() {
@@ -209,6 +210,16 @@ export default function ProjectPage({
                         }`}
                       />
                     </RevealOnScroll>
+                  );
+                }
+                if (block.type === "problem-solution") {
+                  return (
+                    <ProblemSolution
+                      key={i}
+                      label={block.label}
+                      problem={block.problem}
+                      solution={block.solution}
+                    />
                   );
                 }
                 if (block.type === "route-trace") {

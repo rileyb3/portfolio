@@ -91,6 +91,15 @@ export type Project = {
     // Full-bleed video with playback controls — e.g. real screen-recorded
     // process footage, not just a finished-product demo.
     | { type: "video"; src: string; poster?: string }
+    // One area of a redesign as a matched pair — what was wrong, then
+    // what replaced it, each with its evidence at full width underneath.
+    // See ProblemSolution.tsx.
+    | {
+        type: "problem-solution";
+        label: string;
+        problem: { text: string; image: string; ratio?: number };
+        solution: { text: string; image: string; ratio?: number };
+      }
     // A wall photo with one route traced over it, the line drawing itself
     // bottom-to-top on scroll. See RouteTrace.tsx. `path` is SVG path data
     // in `viewBox` coordinates, ordered from the first hold upward — a
@@ -589,116 +598,59 @@ Deno.serve(async (req) => {
         body: [
           {
             type: "text",
-            text: "Voices Meet Minds is a mental health nonprofit built on storytelling. The writing is the organization's whole asset; the site around it was burying it. I redesigned it as treasurer and a board member rather than an outside contractor, which meant taking my own restructure back to the board for approval.",
+            text: "Voices Meet Minds is a mental health nonprofit built on storytelling. The writing is the organization's whole asset; the site around it was burying it. I redesigned it as a board member rather than an outside contractor, which meant taking my own restructure back to the board for approval.",
           },
 
           {
-            type: "beat",
-            kicker: "The Problem",
-            heading: "This was the menu.",
-          },
-          // Full-bleed and cropped to the nav alone. Shown at three-up
-          // thumbnail size inside a masonry grid it was unreadable, and
-          // the whole argument of this section is that a reader should be
-          // able to count the buttons.
-          {
-            type: "full-image",
-            image: "/projects/vmm-website/before-menu.jpg",
-            bleed: true,
-          },
-          {
-            type: "cards",
-            label: "What was wrong",
-            items: [
-              {
-                title: "Nine flat nav items",
-                subtitle: "Information architecture",
-                text: "Nine, all equal weight, no hierarchy — and duplicated again in a hamburger above.",
-              },
-              {
-                title: "Three story sections that read as one",
-                subtitle: "Content model",
-                text: "Three different things, presented identically — back-to-back card rows under matching \"View Stories\" buttons.",
-              },
-              {
-                title: "No orientation before the hard part",
-                subtitle: "Homepage",
-                text: "The mission paragraph sat near the bottom. Personal writing came first, with nothing above it saying who VMM is.",
-              },
-              {
-                title: "Donate buried in the row",
-                subtitle: "Conversion",
-                text: "A button among eight, styled like the rest.",
-              },
-            ],
+            type: "problem-solution",
+            label: "Navigation",
+            problem: {
+              text: "Nine destinations, all equal weight — plus a hamburger repeating them.",
+              image: "/projects/vmm-website/before-menu.jpg",
+              ratio: 1800 / 305,
+            },
+            solution: {
+              text: "Four, with the writing categories nested under Stories. Donate gets its own button.",
+              image: "/projects/vmm-website/after-menu.jpg",
+              ratio: 1800 / 122,
+            },
           },
 
           {
-            type: "beat",
-            kicker: "Navigation",
-            heading: "Nine destinations became four, plus Donate.",
-            text: "The three writing categories nest under Stories instead of competing at the top level. Donate leaves the row and becomes its own button.",
-          },
-          {
-            type: "text-with-image",
-            text: "The categories become something you meet once you're already looking for writing — not a decision you make before you understand the site.",
-            image: "/projects/vmm-website/nav-structure.jpg",
-          },
-
-          {
-            type: "beat",
-            kicker: "The Homepage",
-            heading:
-              "Say what this is before asking anyone to read the hardest thing on the page.",
-            text: "The hero says what VMM is and gives one way in. Who We Are moves up, so the mission arrives before the personal writing instead of after it.",
-          },
-          {
-            type: "images",
-            images: [
-              "/projects/vmm-website/home-hero.jpg",
-              "/projects/vmm-website/home-lets-talk.jpg",
-              "/projects/vmm-website/home-who-we-are.jpg",
-              "/projects/vmm-website/home-newsletter.jpg",
-            ],
+            type: "problem-solution",
+            label: "The Homepage",
+            problem: {
+              text: "A logo, and nothing saying what this is.",
+              image: "/projects/vmm-website/before-home.jpg",
+              ratio: 1800 / 1016,
+            },
+            solution: {
+              text: "What VMM is, what it stands for, and one way in.",
+              image: "/projects/vmm-website/home-hero.jpg",
+              ratio: 1800 / 890,
+            },
           },
 
           {
-            type: "beat",
-            kicker: "Stories",
-            heading: "One front door, then the categories.",
-            text: "One page for every kind of writing. \"Start Here\" tags each featured read with its category, so the distinction is learned by example.",
-          },
-          {
-            type: "images",
-            images: [
-              "/projects/vmm-website/stories-hero.jpg",
-              "/projects/vmm-website/stories-cards.jpg",
-              "/projects/vmm-website/stories-browse.jpg",
-            ],
-          },
-
-          {
-            type: "beat",
-            kicker: "Before / After",
-            heading:
-              "Same butterfly, same words, an entirely different first ten seconds.",
-            text: "Drag the slider.",
-          },
-          // Both halves are the same 1800×1000 canvas so the slider can
-          // overlay them exactly. Each capture is fitted onto it in the
-          // page's own surface colour rather than cropped to match, so
-          // neither one loses content just to make the dimensions line up.
-          {
-            type: "before-after",
-            before: "/projects/vmm-website/compare-before.jpg",
-            after: "/projects/vmm-website/compare-after.jpg",
+            type: "problem-solution",
+            label: "Stories",
+            problem: {
+              text: "Three different things, stacked back to back under matching \"View Stories\" buttons.",
+              image: "/projects/vmm-website/before-story-sections.jpg",
+              ratio: 1800 / 1008,
+            },
+            solution: {
+              text: "One page. Each featured read carries its category, so the distinction is learned by example.",
+              image: "/projects/vmm-website/stories-cards.jpg",
+              ratio: 1800 / 869,
+            },
           },
 
           {
             type: "beat",
             kicker: "Where It Stands",
-            heading: "Designed and approved, going live on Wix.",
-            text: "Rebuilt in place on Wix, so nothing about it depends on me being around to maintain it.",
+            heading: "Designed, approved, and live on Wix.",
+            text: "Rebuilt in place, so nothing about it depends on me being around to maintain it.",
           },
         ],
         link: "/projects/voices-meet-minds",
