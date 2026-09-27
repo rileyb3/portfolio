@@ -400,7 +400,6 @@ Deno.serve(async (req) => {
           "Designing boulder problems and routes at three different gyms — same holds, same wall, a hundred ways to get the movement wrong.",
         tagLabel: "Routesetting",
         waveGroup: "routesetting",
-        heroImageFirst: true,
         body: [
           {
             type: "text",
@@ -413,15 +412,11 @@ Deno.serve(async (req) => {
               "/projects/routesetting/route-2.jpg",
             ],
           },
+          // August's lead wall is the page's cover image now, so it only
+          // appears once — up top — rather than again down here.
           {
-            type: "text-with-image",
-            text: "August — a lead route on the tall wall at Central Rock Gym.",
-            image: "/projects/routesetting/august-lead-wall.jpg",
-          },
-          {
-            type: "text-with-image",
-            text: "September — a boulder problem, the line marked on the wall in green.",
-            image: "/projects/routesetting/september-boulder.jpg",
+            type: "images",
+            images: ["/projects/routesetting/september-boulder.jpg"],
           },
           {
             type: "route-trace",
@@ -429,12 +424,19 @@ Deno.serve(async (req) => {
             alt: "A lead wall with one of my routes traced from the first hold to the anchor",
             viewBox: "0 0 1000 1333",
             path: "M 526 1272 L 517 1242 L 516 1211 L 516 1181 L 505 1150 L 491 1120 L 480 1059 L 472 1028 L 470 998 L 467 967 L 465 937 L 466 906 L 471 876 L 480 846 L 489 815 L 501 785 L 518 754 L 536 708 L 547 678 L 552 647 L 559 617 L 563 587 L 567 556 L 570 526 L 573 495 L 575 465 L 576 434 L 576 404 L 576 373 L 577 343 L 574 312 L 567 282 L 559 251 L 550 221 L 538 190 L 531 160 L 528 129 L 526 99 L 524 69 L 524 38 L 524 8",
-            caption: "A wall like this reads as noise unless you already know what you're looking at — every route's holds are interleaved with three others'. This is the line of mine through it.",
+          },
+          // The setting footage lives down here as a body block rather than
+          // as the page's top-level `video`. As a hero it rendered with
+          // object-cover inside a max-h-[88vh] frame, which cropped roughly
+          // half the frame away; the body block is full-bleed but uncropped.
+          {
+            type: "video",
+            src: "/projects/routesetting/setting.mp4",
+            poster: "/projects/routesetting/cover.jpg",
           },
         ],
         tags: ["Routesetting"],
-        image: "/projects/routesetting/cover.jpg",
-        video: "/projects/routesetting/setting.mp4",
+        image: "/projects/routesetting/august-lead-wall.jpg",
         slug: "routesetting",
         link: "/projects/route-design",
         linkLabel: "view this project from another perspective",
@@ -600,6 +602,7 @@ Deno.serve(async (req) => {
         tagLabel: "UI/UX",
         year: "2026",
         slug: "vmm-website",
+        featured: true,
         heroImageFirst: true,
         image: "/projects/vmm-website/home-hero.jpg",
         tags: ["UI/UX", "Information Architecture", "Content Strategy", "Wix"],
