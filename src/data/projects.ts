@@ -97,8 +97,14 @@ export type Project = {
     | {
         type: "problem-solution";
         label: string;
-        problem: { text: string; image: string; ratio?: number };
-        solution: { text: string; image: string; ratio?: number };
+        problem: {
+          text: string;
+          images: { src: string; ratio?: number }[];
+        };
+        solution: {
+          text: string;
+          images: { src: string; ratio?: number }[];
+        };
       }
     // A wall photo with one route traced over it, the line drawing itself
     // bottom-to-top on scroll. See RouteTrace.tsx. `path` is SVG path data
@@ -600,19 +606,46 @@ Deno.serve(async (req) => {
             type: "text",
             text: "Voices Meet Minds is a mental health nonprofit built on storytelling. The writing is the organization's whole asset; the site around it was burying it. I redesigned it as a board member rather than an outside contractor, which meant taking my own restructure back to the board for approval.",
           },
+          {
+            type: "cards",
+            label: "What was wrong",
+            items: [
+              {
+                title: "Nine flat nav items",
+                subtitle: "Information architecture",
+                text: "Nine, all equal weight, no hierarchy — and duplicated again in a hamburger above.",
+              },
+              {
+                title: "Three story sections that read as one",
+                subtitle: "Content model",
+                text: "Three different things, presented identically — back-to-back card rows under matching \"View Stories\" buttons.",
+              },
+              {
+                title: "No orientation before the hard part",
+                subtitle: "Homepage",
+                text: "The mission paragraph sat near the bottom. Personal writing came first, with nothing above it saying who VMM is.",
+              },
+              {
+                title: "Donate buried in the row",
+                subtitle: "Conversion",
+                text: "A button among eight, styled like the rest.",
+              },
+            ],
+          },
 
           {
             type: "problem-solution",
             label: "Navigation",
             problem: {
               text: "Nine destinations, all equal weight — plus a hamburger repeating them.",
-              image: "/projects/vmm-website/before-menu.jpg",
-              ratio: 1800 / 305,
+              images: [{ src: "/projects/vmm-website/before-menu.jpg", ratio: 1800 / 305 }],
             },
             solution: {
               text: "Four, with the writing categories nested under Stories. Donate gets its own button.",
-              image: "/projects/vmm-website/after-menu.jpg",
-              ratio: 1800 / 122,
+              images: [
+                { src: "/projects/vmm-website/after-menu.jpg", ratio: 1800 / 122 },
+                { src: "/projects/vmm-website/nav-structure.jpg", ratio: 672 / 1076 },
+              ],
             },
           },
 
@@ -621,13 +654,15 @@ Deno.serve(async (req) => {
             label: "The Homepage",
             problem: {
               text: "A logo, and nothing saying what this is.",
-              image: "/projects/vmm-website/before-home.jpg",
-              ratio: 1800 / 1016,
+              images: [{ src: "/projects/vmm-website/before-home.jpg", ratio: 1800 / 1016 }],
             },
             solution: {
-              text: "What VMM is, what it stands for, and one way in.",
-              image: "/projects/vmm-website/home-hero.jpg",
-              ratio: 1800 / 890,
+              text: "What VMM is, what it stands for, and one way in — then the three things you can actually do, then the mission.",
+              images: [
+                { src: "/projects/vmm-website/home-hero.jpg", ratio: 1800 / 890 },
+                { src: "/projects/vmm-website/home-lets-talk.jpg", ratio: 1800 / 835 },
+                { src: "/projects/vmm-website/home-who-we-are.jpg", ratio: 1800 / 826 },
+              ],
             },
           },
 
@@ -636,13 +671,16 @@ Deno.serve(async (req) => {
             label: "Stories",
             problem: {
               text: "Three different things, stacked back to back under matching \"View Stories\" buttons.",
-              image: "/projects/vmm-website/before-story-sections.jpg",
-              ratio: 1800 / 1008,
+              images: [
+                { src: "/projects/vmm-website/before-story-sections.jpg", ratio: 1800 / 1008 },
+              ],
             },
             solution: {
-              text: "One page. Each featured read carries its category, so the distinction is learned by example.",
-              image: "/projects/vmm-website/stories-cards.jpg",
-              ratio: 1800 / 869,
+              text: "One page. Each featured read carries its category, and Browse By Category explains each in a line — the sentence the old nav never had.",
+              images: [
+                { src: "/projects/vmm-website/stories-cards.jpg", ratio: 1800 / 869 },
+                { src: "/projects/vmm-website/stories-browse.jpg", ratio: 1800 / 734 },
+              ],
             },
           },
 

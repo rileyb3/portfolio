@@ -1,20 +1,24 @@
 import ExpandableImage from "./ExpandableImage";
 import RevealOnScroll from "./RevealOnScroll";
 
-export type PSHalf = {
-  // One line. The image is the argument; this just says what to look at.
-  text: string;
-  image: string;
+export type PSImage = {
+  src: string;
   // Intrinsic width/height, so the box is reserved before the file lands
-  // and nothing below it jumps on load.
+  // and nothing below it jumps on load. Also decides the portrait cap
+  // below — a tall screenshot stretched to 1200px is just blurry.
   ratio?: number;
 };
 
+export type PSHalf = {
+  // One line. The images are the argument; this says what to look at.
+  text: string;
+  images: PSImage[];
+};
+
 // One area of a redesign, stated as a matched pair: what was wrong, then
-// what replaced it, each with its evidence at full width directly
-// underneath. Breaks out of the article's max-w-3xl column — a cropped
-// nav bar shown at 600px is unreadable, which defeats the point of
-// showing it at all.
+// what replaced it, each with its evidence at full width underneath.
+// Breaks out of the article's max-w-3xl column — a cropped nav bar shown
+// at 600px is unreadable, which defeats the point of showing it at all.
 export default function ProblemSolution({
   label,
   problem,
@@ -34,14 +38,10 @@ export default function ProblemSolution({
           <span className="h-px flex-1 bg-white/10" aria-hidden="true" />
         </div>
 
-        <Half
-          kind="Problem"
-          half={problem}
-          alt={`Before — ${label.toLowerCase()}`}
-        />
+        <Half kind="Problem" half={problem} label={label} />
 
-        {/* Two screenshots of the same site stacked in one column read as
-            one continuous page scrolling past. This arrow, the gap either
+        {/* Screenshots of the same site stacked in one column read as one
+            continuous page scrolling past. This arrow, the gap either
             side of it, and the different border colour on each card are
             what say "separate artifact, later version" rather than "keep
             scrolling, same site". */}
@@ -56,11 +56,7 @@ export default function ProblemSolution({
           <span className="h-px flex-1 bg-white/10" />
         </div>
 
-        <Half
-          kind="Solution"
-          half={solution}
-          alt={`After — ${label.toLowerCase()}`}
-        />
+        <Half kind="Solution" half={solution} label={label} />
       </div>
     </RevealOnScroll>
   );
@@ -69,11 +65,11 @@ export default function ProblemSolution({
 function Half({
   kind,
   half,
-  alt,
+  label,
 }: {
   kind: "Problem" | "Solution";
   half: PSHalf;
-  alt: string;
+  label: string;
 }) {
   const isProblem = kind === "Problem";
   return (
@@ -90,19 +86,30 @@ function Half({
           {half.text}
         </p>
       </div>
-      {/* Different border colour per half, so even at a glance the two
-          cards are visibly separate objects rather than one long page. */}
-      <div
-        className={`mt-4 overflow-hidden rounded-xl border bg-surface2 ${
-          isProblem ? "border-white/10" : "border-accent/30"
-        }`}
-      >
-        <ExpandableImage
-          src={half.image}
-          alt={alt}
-          ratio={half.ratio}
-          className="w-full"
-        />
+
+      <div className="mt-4 space-y-4">
+        {half.images.map((img) => {
+          const portrait = img.ratio !== undefined && img.ratio < 1;
+          return (
+            <div
+              key={img.src}
+              // Different border colour per half, so even at a glance the
+              // cards are visibly separate objects rather than one long
+              // page. Portrait shots are capped rather than blown up to
+              // the full column width.
+              className={`overflow-hidden rounded-xl border bg-surface2 ${
+                isProblem ? "border-white/10" : "border-accent/30"
+              } ${portrait ? "mx-auto max-w-md" : ""}`}
+            >
+              <ExpandableImage
+                src={img.src}
+                alt={`${isProblem ? "Before" : "After"} — ${label.toLowerCase()}`}
+                ratio={img.ratio}
+                className="w-full"
+              />
+            </div>
+          );
+        })}
       </div>
     </div>
   );
