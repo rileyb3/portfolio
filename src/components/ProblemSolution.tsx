@@ -7,6 +7,12 @@ export type PSImage = {
   // and nothing below it jumps on load. Also decides the portrait cap
   // below — a tall screenshot stretched to 1200px is just blurry.
   ratio?: number;
+  // Pixel height of a scroll window for a long page capture. Shrinking a
+  // tall screenshot to fit makes its content unreadable; this shows it at
+  // full width inside a fixed frame you scroll instead — the same motion
+  // as scrolling the real page, which is the point when the argument is
+  // "this section repeats further down".
+  scrollHeight?: number;
 };
 
 export type PSHalf = {
@@ -90,20 +96,47 @@ function Half({
       <div className="mt-4 space-y-4">
         {half.images.map((img) => {
           const portrait = img.ratio !== undefined && img.ratio < 1;
+          const alt = `${isProblem ? "Before" : "After"} — ${label.toLowerCase()}`;
+          // Different border colour per half, so even at a glance the
+          // cards are visibly separate objects rather than one long page.
+          // Portrait shots are capped rather than blown up to the full
+          // column width.
+          const frame = `overflow-hidden rounded-xl border bg-surface2 ${
+            isProblem ? "border-white/10" : "border-accent/30"
+          } ${portrait ? "mx-auto max-w-md" : ""}`;
+
+          if (img.scrollHeight) {
+            return (
+              <figure key={img.src}>
+                <div className={`relative ${frame}`}>
+                  <div
+                    className="overflow-y-auto"
+                    style={{ maxHeight: img.scrollHeight }}
+                  >
+                    {/* Not ExpandableImage here: its click-to-zoom would
+                        fight the scroll gesture inside the frame. */}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={img.src} alt={alt} className="block w-full" />
+                  </div>
+                  {/* Fade at the lower edge so it reads as a window onto
+                      something longer rather than a cropped image. */}
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-ink/80 to-transparent"
+                  />
+                </div>
+                <figcaption className="mt-2 text-center text-xs uppercase tracking-[0.18em] text-muted">
+                  Scroll inside the frame
+                </figcaption>
+              </figure>
+            );
+          }
+
           return (
-            <div
-              key={img.src}
-              // Different border colour per half, so even at a glance the
-              // cards are visibly separate objects rather than one long
-              // page. Portrait shots are capped rather than blown up to
-              // the full column width.
-              className={`overflow-hidden rounded-xl border bg-surface2 ${
-                isProblem ? "border-white/10" : "border-accent/30"
-              } ${portrait ? "mx-auto max-w-md" : ""}`}
-            >
+            <div key={img.src} className={frame}>
               <ExpandableImage
                 src={img.src}
-                alt={`${isProblem ? "Before" : "After"} — ${label.toLowerCase()}`}
+                alt={alt}
                 ratio={img.ratio}
                 className="w-full"
               />

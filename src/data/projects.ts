@@ -99,11 +99,11 @@ export type Project = {
         label: string;
         problem: {
           text: string;
-          images: { src: string; ratio?: number }[];
+          images: { src: string; ratio?: number; scrollHeight?: number }[];
         };
         solution: {
           text: string;
-          images: { src: string; ratio?: number }[];
+          images: { src: string; ratio?: number; scrollHeight?: number }[];
         };
       }
     // A wall photo with one route traced over it, the line drawing itself
@@ -593,6 +593,7 @@ Deno.serve(async (req) => {
         tagLabel: "UI/UX",
         year: "2026",
         slug: "vmm-website",
+        featured: true,
         heroImageFirst: true,
         image: "/projects/vmm-website/home-hero.jpg",
         tags: ["UI/UX", "Information Architecture", "Content Strategy", "Wix"],
@@ -672,7 +673,11 @@ Deno.serve(async (req) => {
             problem: {
               text: "Three different things, stacked back to back under matching \"View Stories\" buttons.",
               images: [
-                { src: "/projects/vmm-website/before-story-sections.jpg", ratio: 1800 / 1008 },
+                {
+                  src: "/projects/vmm-website/before-stories-scroll.jpg",
+                  ratio: 1800 / 1841,
+                  scrollHeight: 560,
+                },
               ],
             },
             solution: {
@@ -692,7 +697,7 @@ Deno.serve(async (req) => {
           },
         ],
         link: "/projects/voices-meet-minds",
-        linkLabel: "see the branding work behind this",
+        linkLabel: "see other VMM branding work",
       },
       {
         title: "Voices Meet Minds Branding",
@@ -793,19 +798,24 @@ Deno.serve(async (req) => {
             heading:
               "A friendly, on-brand mascot, ready for VMM's newsletter.",
             text: "Next up: a refresh of VMM's website.",
-            image: "/projects/voices-meet-minds/mascot-final-blue.png",
-            imageRatio: 1222 / 1156,
+            image: "/projects/voices-meet-minds/mascot.jpg",
+            imageRatio: 678 / 640,
           },
         ],
         tags: ["Branding", "Character Design", "Mascot Design"],
+        // Return leg of the VMM pair. Both entries sit under Design, so
+        // the link renderer omits the discipline pill (it would read
+        // "Go to Design" while you're already on a Design page).
+        link: "/projects/vmm-website",
+        linkLabel: "see other VMM branding work",
         // 16:9 (padded with the character art's own near-black background,
         // not cropped) so the card thumbnail's aspect-video/object-cover
         // box (see ProjectCard.tsx) shows the whole character instead of
         // cutting off his feet. Also doubles as the opening full-bleed
-        // hero via heroImageFirst. mascot-final-blue.png is the source —
-        // this blue colorway is the actual final pick, replacing the
-        // earlier green version (which only remains as an iteration).
-        image: "/projects/voices-meet-minds/card-final-blue.jpg",
+        // hero via heroImageFirst. The green colourway is the final pick —
+        // the blue one (mascot-final-blue.png, card-final-blue.jpg) was
+        // tried and dropped, and those files are now unused.
+        image: "/projects/voices-meet-minds/card.jpg",
         slug: "voices-meet-minds",
       },
       {
