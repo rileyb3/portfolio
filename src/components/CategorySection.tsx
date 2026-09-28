@@ -61,12 +61,12 @@ export default function CategorySection({ category }: { category: Category }) {
         )}
       </RevealOnScroll>
 
+      {/* Stacked, not side by side. Every feature gets the full column
+          width and the `wide` split layout (image beside the writeup),
+          which is both easier to read and shorter than the two-up
+          image-over-text cards — those stack their content vertically, so
+          two of them side by side ran taller than one of these. */}
       {featured.length > 0 && (
-        {/* Stacked, not side by side. Every feature gets the full column
-            width and the `wide` split layout (image beside the writeup),
-            which is both easier to read and shorter than the two-up
-            image-over-text cards — those stack their content vertically,
-            so two of them side by side ran taller than one of these. */}
         <RevealOnScroll className="space-y-6 px-6 sm:px-10">
           {featured.map((project) => (
             <FeaturedProject key={project.title} project={project} wide />
