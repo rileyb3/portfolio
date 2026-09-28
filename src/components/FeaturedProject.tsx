@@ -17,6 +17,11 @@ export default function FeaturedProject({
   project: Project;
   wide: boolean;
 }) {
+  // `heroLayout: "split"` already marks covers whose subject is a fixed
+  // size — an app icon, a character, a chart. Those must not be
+  // object-cover: cropping a square icon into a wide card shows a
+  // meaningless magnified fragment of it.
+  const containCover = project.heroLayout === "split";
   const eyebrow = [project.year, project.tagLabel ?? project.tags[0]]
     .filter(Boolean)
     .join(" · ");
@@ -24,10 +29,11 @@ export default function FeaturedProject({
   return (
     <Link
       href={projectHref(project)}
-      // The wide variant's image column is `lg:h-full`, so the card's
-      // height is whatever the writeup happens to need — which on a page
-      // with one feature turned into a full-screen slab. Capped here, with
-      // the blurb clamped below so nothing overflows the cap.
+      // The image column used to be `lg:h-full` inside an auto-sized grid
+      // row, which is circular: the browser falls back to the image's
+      // natural height, so a square icon made the card ~50rem tall and the
+      // max-height below only clipped it. The column now has a definite
+      // height instead, so the card is 22rem by construction.
       className={`group overflow-hidden rounded-3xl border border-white/10 bg-surface transition duration-300 hover:border-white/25 hover:bg-surface2 ${
         wide ? "lg:grid lg:grid-cols-5 lg:max-h-[22rem]" : "flex flex-col"
       }`}
@@ -36,7 +42,7 @@ export default function FeaturedProject({
         <div
           className={`overflow-hidden bg-surface2 ${
             wide
-              ? "aspect-[2/1] lg:col-span-3 lg:aspect-auto lg:h-full"
+              ? "aspect-[2/1] lg:col-span-3 lg:aspect-auto lg:h-[22rem]"
               : "aspect-[2/1]"
           }`}
         >
@@ -44,7 +50,9 @@ export default function FeaturedProject({
           <img
             src={project.image}
             alt={project.title}
-            className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+            className={`h-full w-full transition duration-500 group-hover:scale-[1.03] ${
+              containCover ? "object-contain p-8" : "object-cover"
+            }`}
           />
         </div>
       )}
