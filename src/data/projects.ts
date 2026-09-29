@@ -1034,21 +1034,22 @@ Deno.serve(async (req) => {
           },
           {
             type: "cards",
-            label: "Four choices that would have meant a rewrite to change",
+            label: "Four software decisions",
+            leadWith: "subtitle",
             items: [
               {
-                title: "Mapbox",
-                subtitle: "over Google Maps & Apple MapKit",
+                title: "Mapbox, over Google Maps & Apple MapKit",
+                subtitle: "Map",
                 text: "The map is the product, so it had to look like AllTrees. Mapbox restyles vector tiles layer by layer, which got the map green and tree-forward with no custom assets.",
               },
               {
-                title: "Supabase",
-                subtitle: "over Firebase",
-                text: "\"Trees near me\" is a geographic query, and Postgres does those natively. Row-level security, auth and storage in one service suits a team of one.",
+                title: "Supabase, over Firebase",
+                subtitle: "User credentials",
+                text: "Accounts, sign-in and the tree database in one service. \"Trees near me\" is a geographic query Postgres does natively, and row-level security keeps climbers to their own entries.",
               },
               {
                 title: "Figma",
-                subtitle: "Design system & iconography",
+                subtitle: "Design",
                 text: "Pins, leaf icons and badges had to be drawn before they could be built. Screens iterate in minutes there and in hours in code.",
               },
               {
