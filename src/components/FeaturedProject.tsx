@@ -21,7 +21,11 @@ export default function FeaturedProject({
   // size — an app icon, a character, a chart. Those must not be
   // object-cover: cropping a square icon into a wide card shows a
   // meaningless magnified fragment of it.
-  const containCover = project.heroLayout === "split";
+  // A purpose-built card image is already composed for this frame, so it
+  // fills it. The contain-fit escape hatch is only for projects whose
+  // only cover is a fixed-size mark.
+  const cover = project.cardImage ?? project.image;
+  const containCover = !project.cardImage && project.heroLayout === "split";
   const eyebrow = [project.year, project.tagLabel ?? project.tags[0]]
     .filter(Boolean)
     .join(" · ");
@@ -38,7 +42,7 @@ export default function FeaturedProject({
         wide ? "lg:grid lg:grid-cols-5 lg:max-h-[22rem]" : "flex flex-col"
       }`}
     >
-      {project.image && (
+      {cover && (
         <div
           className={`overflow-hidden bg-surface2 ${
             wide
@@ -48,7 +52,7 @@ export default function FeaturedProject({
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={project.image}
+            src={cover}
             alt={project.title}
             className={`h-full w-full transition duration-500 group-hover:scale-[1.03] ${
               containCover ? "object-contain p-8" : "object-cover"

@@ -12,6 +12,10 @@ export type PSImage = {
   // full width inside a fixed frame you scroll instead — the same motion
   // as scrolling the real page, which is the point when the argument is
   // "this section repeats further down".
+  //
+  // Only set this on a capture that is genuinely much taller than the
+  // window once rendered at the full column width (~1150px). Setting it
+  // on a near-square image produces a frame with nothing to scroll.
   scrollHeight?: number;
 };
 
@@ -82,8 +86,10 @@ function Half({
     <div className={isProblem ? "mt-8" : ""}>
       <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
         <span
-          className={`shrink-0 rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] ${
-            isProblem ? "bg-white/10 text-muted" : "bg-accent/15 text-accent"
+          className={`shrink-0 rounded-full border px-4 py-1.5 text-xs font-bold uppercase tracking-[0.18em] sm:text-sm ${
+            isProblem
+              ? "border-red-400/40 bg-red-500/15 text-red-300"
+              : "border-accent/40 bg-accent/15 text-accent"
           }`}
         >
           {kind}
@@ -101,14 +107,21 @@ function Half({
           // cards are visibly separate objects rather than one long page.
           // Portrait shots are capped rather than blown up to the full
           // column width.
-          const frame = `overflow-hidden rounded-xl border bg-surface2 ${
+          const frameBase = `overflow-hidden rounded-xl border bg-surface2 ${
             isProblem ? "border-white/10" : "border-accent/30"
-          } ${portrait ? "mx-auto max-w-md" : ""}`;
+          }`;
+          const frame = `${frameBase} ${portrait ? "mx-auto max-w-md" : ""}`;
 
           if (img.scrollHeight) {
+            // Deliberately NOT capped to max-w-md even when the capture is
+            // nominally portrait. A scroll frame exists to show a long page
+            // at READABLE width; narrowing it shrinks the rendered image
+            // until it is shorter than the window, at which point there is
+            // nothing to scroll and the caption below is a lie. Full width
+            // is what makes the frame scroll at all.
             return (
               <figure key={img.src}>
-                <div className={`relative ${frame}`}>
+                <div className={`relative ${frameBase}`}>
                   <div
                     className="overflow-y-auto"
                     style={{ maxHeight: img.scrollHeight }}

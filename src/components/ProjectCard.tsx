@@ -12,11 +12,11 @@ export default function ProjectCard({ project }: { project: Project }) {
       href={href}
       className="group flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-surface transition hover:border-white/20 hover:bg-surface2"
     >
-      {project.image && (
+      {(project.cardImage ?? project.image) && (
         <div className="aspect-video w-full overflow-hidden border-b border-white/10 bg-surface2">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={project.image}
+            src={project.cardImage ?? project.image}
             alt={project.title}
             className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.03]"
           />

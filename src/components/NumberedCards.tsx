@@ -17,12 +17,17 @@ export default function NumberedCards({
   label,
   items,
   columns,
+  leadWith,
 }: {
   label?: string;
   items: NumberedCard[];
   // Defaults to one column per card up to 4, which is what the layout
   // wants almost every time — pass this only to override.
   columns?: 2 | 3 | 4;
+  // "subtitle" swaps the hierarchy: the subtitle becomes the bold heading
+  // and the title drops to an italic line under it. Cards without a
+  // subtitle fall back to the normal layout.
+  leadWith?: "subtitle";
 }) {
   const cols = columns ?? (Math.min(items.length, 4) as 2 | 3 | 4);
   const colClass =
@@ -41,7 +46,9 @@ export default function NumberedCards({
           </h2>
         )}
         <div className={`grid grid-cols-1 gap-4 ${colClass}`}>
-          {items.map((item, i) => (
+          {items.map((item, i) => {
+            const swap = leadWith === "subtitle" && !!item.subtitle;
+            return (
             <div
               key={item.title}
               className="rounded-2xl bg-surface2 p-6 sm:p-7"
@@ -49,17 +56,29 @@ export default function NumberedCards({
               <p className="text-lg font-bold text-muted/60">
                 {String(i + 1).padStart(2, "0")}
               </p>
-              <h3 className="mt-4 text-lg font-bold tracking-tight text-paper">
-                {item.title}
-              </h3>
-              {item.subtitle && (
-                <p className="mt-1 text-sm text-muted">{item.subtitle}</p>
+              {swap ? (
+                <>
+                  <h3 className="mt-4 text-lg font-bold tracking-tight text-paper">
+                    {item.subtitle}
+                  </h3>
+                  <p className="mt-1 text-sm italic text-muted">{item.title}</p>
+                </>
+              ) : (
+                <>
+                  <h3 className="mt-4 text-lg font-bold tracking-tight text-paper">
+                    {item.title}
+                  </h3>
+                  {item.subtitle && (
+                    <p className="mt-1 text-sm text-muted">{item.subtitle}</p>
+                  )}
+                </>
               )}
               <p className="mt-3 text-sm leading-relaxed text-muted">
                 {item.text}
               </p>
             </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </RevealOnScroll>

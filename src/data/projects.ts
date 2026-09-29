@@ -91,6 +91,37 @@ export type Project = {
     // Full-bleed video with playback controls — e.g. real screen-recorded
     // process footage, not just a finished-product demo.
     | { type: "video"; src: string; poster?: string }
+    // One full-bleed row of same-shaped images, each big enough to read.
+    // For portrait posts and mockups. See ImageRow.tsx.
+    | {
+        type: "image-row";
+        images: string[];
+        ratio?: number;
+      }
+    // A closing index of work that didn't earn its own section, full
+    // bleed and captionless. See SettingGallery.tsx.
+    | {
+        type: "gallery";
+        label?: string;
+        images: string[];
+      }
+    // The same move under different conditions, side by side and
+    // looping, with a shared replay so they can be read against each
+    // other. See MoveComparison.tsx.
+    | {
+        type: "move-comparison";
+        label?: string;
+        clips: {
+          src: string;
+          poster?: string;
+          variable: string;
+          note?: string;
+          // Where this setup sits on the precision/difficulty scale,
+          // 1 = least demanding. Rendered as a dot meter so the four can
+          // be ranked at a glance without reordering the row.
+          rank?: number;
+        }[];
+      }
     // One area of a redesign as a matched pair — what was wrong, then
     // what replaced it, each with its evidence at full width underneath.
     // See ProblemSolution.tsx.
@@ -136,9 +167,20 @@ export type Project = {
         type: "cards";
         label?: string;
         columns?: 2 | 3 | 4;
+        // Make the subtitle the bold heading and demote the title to an
+        // italic line beneath it. For sets where the category is what you
+        // scan by ("Information architecture") and the finding is detail.
+        leadWith?: "subtitle";
         items: { title: string; subtitle?: string; text: string }[];
       }
   >;
+  // A purpose-built image for the discipline-page cards, when the hero
+  // image doesn't survive a wide crop. AllTrees' hero is a square app
+  // icon: correct at the top of its own page, but in a 2:1 card it is
+  // either a magnified fragment (object-cover) or a small square marooned
+  // in dead space (object-contain). This is a composed shot instead, so
+  // the card can go back to filling its frame.
+  cardImage?: string;
   // When true, the project's cover `image` renders full-bleed ABOVE the
   // title/tags/meta block instead of below it — "one big, simple picture
   // first, then scroll for the quick description" per angelechendesigns
@@ -320,6 +362,9 @@ export const categories: Category[] = [
         year: "2026",
         slug: "alltrees",
         heroLayout: "split",
+        // Same composed shot as the Design entry's card. The icon stays as
+        // the page's own opening image; the cards get the mockup.
+        cardImage: "/projects/alltrees/alltrees-card.jpg",
         image: "/projects/alltrees/icon.jpg",
         // Return leg of the Design ⇄ Build pair. The link renderer spots
         // an internal href and swaps the new-tab <a> for a same-tab
@@ -619,6 +664,7 @@ Deno.serve(async (req) => {
           {
             type: "cards",
             label: "What was wrong",
+            leadWith: "subtitle",
             items: [
               {
                 title: "Nine flat nav items",
@@ -692,8 +738,15 @@ Deno.serve(async (req) => {
             solution: {
               text: "One page. Each featured read carries its category, and Browse By Category explains each in a line — the sentence the old nav never had.",
               images: [
-                { src: "/projects/vmm-website/stories-cards.jpg", ratio: 1800 / 869 },
-                { src: "/projects/vmm-website/stories-browse.jpg", ratio: 1800 / 734 },
+                {
+                  // The three separate captures of the new Stories page
+                  // stitched back into the one continuous page they came
+                  // from, so the after can be scrolled exactly like the
+                  // before it is answering.
+                  src: "/projects/vmm-website/after-stories-scroll.jpg",
+                  ratio: 1800 / 1984,
+                  scrollHeight: 560,
+                },
               ],
             },
           },
@@ -744,7 +797,7 @@ Deno.serve(async (req) => {
             type: "beat",
             kicker: "The Approach",
             heading:
-              "VMM's existing mark is a butterfly. A caterpillar is the same creature, one stage earlier — it stays on-brand instead of introducing a new character.",
+              "VMM's existing mark is a butterfly. A caterpillar is the same creature, one stage earlier — staying on brand.",
             image: "/projects/voices-meet-minds/logo.png",
             imageRatio: 2332 / 1118,
           },
@@ -806,9 +859,41 @@ Deno.serve(async (req) => {
             kicker: "The Result",
             heading:
               "A friendly, on-brand mascot, ready for VMM's newsletter.",
-            text: "Next up: a refresh of VMM's website.",
             image: "/projects/voices-meet-minds/mascot.jpg",
             imageRatio: 678 / 640,
+          },
+
+          // ---- In use -------------------------------------------------
+          // What the org did with him. Captions and claims are limited to
+          // what is legible in the images themselves.
+          {
+            type: "beat",
+            kicker: "In Use",
+            heading:
+              "He's introduced in the August 2026 issue of Metamorphosis, VMM's newsletter.",
+          },
+          {
+            type: "full-image",
+            image: "/projects/voices-meet-minds/mockups/mockup-newsletter.jpg",
+          },
+          {
+            type: "beat",
+            kicker: "The Naming Call",
+            heading:
+              "VMM's posts introduce him to the community and ask for a name.",
+          },
+          {
+            type: "image-row",
+            ratio: 1080 / 1350,
+            images: [
+              "/projects/voices-meet-minds/mockups/mockup-naming-camp.jpg",
+              "/projects/voices-meet-minds/mockups/mockup-naming-paint.jpg",
+            ],
+          },
+          {
+            type: "beat",
+            kicker: "What's Next",
+            heading: "A refresh of VMM's website.",
           },
         ],
         tags: ["Branding", "Character Design", "Mascot Design"],
@@ -817,14 +902,18 @@ Deno.serve(async (req) => {
         // Design" while you're already on a Design page).
         link: "/projects/vmm-website",
         linkLabel: "see other VMM branding work",
-        // 16:9 (padded with the character art's own near-black background,
-        // not cropped) so the card thumbnail's aspect-video/object-cover
-        // box (see ProjectCard.tsx) shows the whole character instead of
-        // cutting off his feet. Also doubles as the opening full-bleed
-        // hero via heroImageFirst. The green colourway is the final pick —
+        // The cover is one of VMM's own mascot-announcement posts (the
+        // starry-night polaroid), opened beside the title via the split
+        // hero. card.jpg, the padded 16:9 character art that used to be
+        // the cover, is now unused — the finished character still appears
+        // in "The Result" below. The green colourway is the final pick;
         // the blue one (mascot-final-blue.png, card-final-blue.jpg) was
-        // tried and dropped, and those files are now unused.
-        image: "/projects/voices-meet-minds/card.jpg",
+        // tried and dropped, and those files are unused too.
+        image: "/projects/voices-meet-minds/mockups/mockup-naming-night.jpg",
+        // The cover is a 4:5 poster, which object-cover would crop to a
+        // meaningless band in a wide card. This is the same poster whole,
+        // on a blurred copy of itself.
+        cardImage: "/projects/voices-meet-minds/mockups/card-mockup.jpg",
         slug: "voices-meet-minds",
         heroLayout: "split",
       },
@@ -839,6 +928,7 @@ Deno.serve(async (req) => {
         tags: ["UI/UX"],
         slug: "alltrees-design",
         heroLayout: "split",
+        cardImage: "/projects/alltrees/alltrees-card.jpg",
         // Same waveGroup as the Build entry — the sea still recognizes
         // these as one project and draws a two-color wave for it, even
         // though each links to its own page now.
@@ -1225,22 +1315,149 @@ Deno.serve(async (req) => {
         // under Build — same photos, but framed as a design constraint
         // problem rather than the build/process story.
         title: "Route Design",
-        description: "The movement design behind my climbing routes.",
-        tags: ["Routesetting"],
+        description:
+          "The movement design behind my climbing routes — choosing holds, choosing the move, and testing whether the body agrees.",
+        tags: ["Routesetting", "Movement Design"],
         slug: "route-design",
         waveGroup: "routesetting",
-        image: "/projects/routesetting/cover.jpg",
+        image: "/projects/routesetting/september-boulder.jpg",
         heroImageFirst: true,
         body: [
           {
             type: "text",
             text: "I set boulder problems and routes at three gyms: Active Climbing in Athens, GA, the Brandeis Climbing Wall in Waltham, MA, and Central Rock Gym in Watertown, MA. Every route starts from the same limited set of holds and the same wall — the design problem is finding movement inside those constraints that reads clearly at its grade, feels good in the body, and doesn't leave an accidental easier way through.",
           },
+
+          {
+            type: "cards",
+            items: [
+              {
+                title: "Deciding movement",
+                subtitle: "Step 1 ⇄ Step 2",
+                text: "The move and the grade come first, and they tell you roughly what holds you need — how positive, what orientation, how far apart.",
+              },
+              {
+                title: "Selecting holds",
+                subtitle: "Step 2 ⇄ Step 1",
+                text: "The holds and the wall angle are the constraints you build inside. If none of your hold options fit the move, the move must change.",
+              },
+              {
+                title: "Assembly",
+                subtitle: "Step 3",
+                text: "Positions, angles and bolt-up. The plan meets the actual wall, where reach and spacing stop being theoretical.",
+              },
+              {
+                title: "Testing",
+                subtitle: "Step 4",
+                text: "Climb it. The body is the only reliable judge of whether the movement reads the way it looked from the ground.",
+              },
+            ],
+          },
+
+          {
+            type: "beat",
+            kicker: "The Material",
+            heading: "A hold is a set of constraints wearing a shape.",
+            text: "Size decides how much hand fits. Incut decides how secure the move feels. A macro gets picked for its profile and for how striking it looks on the wall — changing where the body can be is what follows from that. None of it tells you what to set: the bin and the wall angle are the constraint you work inside, not the prompt.",
+          },
           {
             type: "images",
             images: [
+              "/projects/routesetting/holds-set.jpg",
+              "/projects/routesetting/holds-volumes.jpg",
+              "/projects/routesetting/holds-macro.jpg",
+              "/projects/routesetting/holds-feature.jpg",
+            ],
+          },
+          {
+            type: "text",
+            text: "Hold images above are manufacturer product photographs, included to show the range of shapes a set draws from.",
+          },
+
+          {
+            // Two ideas do not need a full-viewport headline in front of
+            // them — but they do need a sentence, or they read as two
+            // boxes that arrived from nowhere. The label carries what the
+            // deleted beat used to say, in one line instead of a screen.
+            type: "cards",
+            label: "How you know a move will work before anyone tries it",
+            columns: 2,
+            items: [
+              {
+                title: "Climbing mechanics",
+                subtitle: "Years of doing and watching",
+                text: "Where weight has to sit, what directions a body can pull in, how long a foot holds. Physics you've felt, not calculated.",
+              },
+              {
+                title: "A library of moves",
+                subtitle: "Known solutions",
+                text: "Move types with known requirements. Build a climb around one and you know roughly what it will ask for.",
+              },
+            ],
+          },
+
+          {
+            type: "beat",
+            kicker: "Same Move, Different Setups",
+            heading: "Change one condition and it stops being the same move.",
+            text: "Four versions of the same movement, ordered by how much precision each one demands. What differs between them is the start hold — how incut it is and how you grip it — the angle of the wall, and what the landing asks for.",
+          },
+          {
+            type: "move-comparison",
+            label: "Four setups",
+            clips: [
+              {
+                src: "/projects/routesetting/move-steep.mp4",
+                poster: "/projects/routesetting/move-steep.jpg",
+                variable: "Single jug, forward grip, large foot",
+                rank: 1,
+                note: "Overhand off one jug onto a slab volume. The foot is big and the handhold is good, so the move asks for very little precision.",
+              },
+              {
+                src: "/projects/routesetting/move-overhang.mp4",
+                poster: "/projects/routesetting/move-overhang.jpg",
+                variable: "Slight overhang, two opposing jugs",
+                rank: 2,
+                note: "Momentum is the constraint — matching the left jug on the last swing generates enough of it. The landing balances over the foot first, then lets the upper body keep travelling until the hands reach the hold.",
+              },
+              {
+                src: "/projects/routesetting/move-slab.mp4",
+                poster: "/projects/routesetting/move-slab.jpg",
+                variable: "Low angle, downturned catch",
+                rank: 3,
+                note: "Starts from two opposing jugs. Because the catch hold is downturned, the far foot has to find opposition before the position is stable.",
+              },
+              {
+                src: "/projects/routesetting/move-vertical.mp4",
+                poster: "/projects/routesetting/move-vertical.jpg",
+                variable: "Flat jug, underhand grip, no-hands landing",
+                rank: 4,
+                note: "A flat, barely incut jug taken underhand — very little security in the hand. The no-hands landing only works with stacked hips and a committed foot placement.",
+              },
+            ],
+          },
+          {
+            type: "beat",
+            kicker: "One I Set",
+            heading: "The line traces one of mine, from the first hold to the anchor.",
+          },
+          {
+            type: "route-trace",
+            image: "/projects/routesetting/traced-route.jpg",
+            alt: "A lead wall with one of my routes traced from the first hold to the anchor",
+            viewBox: "0 0 1000 1333",
+            path: "M 526 1272 L 517 1242 L 516 1211 L 516 1181 L 505 1150 L 491 1120 L 480 1059 L 472 1028 L 470 998 L 467 967 L 465 937 L 466 906 L 471 876 L 480 846 L 489 815 L 501 785 L 518 754 L 536 708 L 547 678 L 552 647 L 559 617 L 563 587 L 567 556 L 570 526 L 573 495 L 575 465 L 576 434 L 576 404 L 576 373 L 577 343 L 574 312 L 567 282 L 559 251 L 550 221 L 538 190 L 531 160 L 528 129 L 526 99 L 524 69 L 524 38 L 524 8",
+          },
+
+          {
+            type: "gallery",
+            label: "More of what I've set",
+            images: [
+              "/projects/routesetting/lead-wall-blue.jpg",
+              "/projects/routesetting/august-lead-wall.jpg",
               "/projects/routesetting/route-1.jpg",
               "/projects/routesetting/route-2.jpg",
+              "/projects/routesetting/cover.jpg",
             ],
           },
         ],

@@ -14,6 +14,9 @@ import NumberedCards from "@/components/NumberedCards";
 import RouteTrace from "@/components/RouteTrace";
 import ProblemSolution from "@/components/ProblemSolution";
 import SplitHero from "@/components/SplitHero";
+import MoveComparison from "@/components/MoveComparison";
+import SettingGallery from "@/components/SettingGallery";
+import ImageRow from "@/components/ImageRow";
 import { slugProjects, getProjectBySlug } from "@/data/projects";
 
 export function generateStaticParams() {
@@ -121,12 +124,19 @@ export default function ProjectPage({
           )}
 
           {project.meta && project.meta.length > 0 && (
-            <RevealOnScroll className="mt-6 grid grid-cols-2 gap-x-6 gap-y-4 border-y border-white/10 py-5 sm:grid-cols-4">
+            <RevealOnScroll className="mt-6 flex flex-wrap gap-x-10 gap-y-5 border-y border-white/10 py-5">
               {/* Values render as pills rather than a stacked column of
                   bare text: a meta row is a set of short labelled facts,
                   and as running paragraphs they read as prose you're
                   meant to parse instead of chips you can scan. Matches
-                  the tag pills directly above. */}
+                  the tag pills directly above.
+
+                  Each group is as wide as its own pills, not a fixed
+                  quarter of the row. The old four-column grid gave every
+                  group the same narrow slot, so a group with two pills
+                  wrapped onto a second line while its neighbours held one
+                  — a ragged row. Now a group stays on one line and it is
+                  whole groups that wrap when the row runs out of room. */}
               {project.meta.map((m) => (
                 <div key={m.label}>
                   <h2 className="text-xs uppercase tracking-[0.2em] text-muted">
@@ -136,7 +146,7 @@ export default function ProjectPage({
                     {m.values.map((v) => (
                       <li
                         key={v}
-                        className="rounded-full border border-white/10 bg-surface px-3 py-1 text-sm text-paper"
+                        className="whitespace-nowrap rounded-full border border-white/10 bg-surface px-3 py-1 text-sm text-paper"
                       >
                         {v}
                       </li>
@@ -247,6 +257,33 @@ export default function ProjectPage({
                     />
                   );
                 }
+                if (block.type === "image-row") {
+                  return (
+                    <ImageRow
+                      key={i}
+                      images={block.images}
+                      ratio={block.ratio}
+                    />
+                  );
+                }
+                if (block.type === "gallery") {
+                  return (
+                    <SettingGallery
+                      key={i}
+                      label={block.label}
+                      images={block.images}
+                    />
+                  );
+                }
+                if (block.type === "move-comparison") {
+                  return (
+                    <MoveComparison
+                      key={i}
+                      label={block.label}
+                      clips={block.clips}
+                    />
+                  );
+                }
                 if (block.type === "route-trace") {
                   return (
                     <RouteTrace
@@ -276,6 +313,7 @@ export default function ProjectPage({
                       key={i}
                       label={block.label}
                       columns={block.columns}
+                      leadWith={block.leadWith}
                       items={block.items}
                     />
                   );
