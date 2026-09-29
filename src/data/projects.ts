@@ -192,7 +192,10 @@ export type Project = {
   // the title instead — for covers whose subject is a fixed size (an app
   // icon, a character, a chart), where the full-bleed treatment both
   // crops the subject and inflates it. Ignored when `video` is set.
-  heroLayout?: "full" | "split";
+  // "showcase" puts the title block on top and the image beneath it at
+  // its natural shape, wide — for composed shots (a phone collage) that
+  // the split layout's half-width column would shrink to a thumbnail.
+  heroLayout?: "full" | "split" | "showcase";
   // Short label/value pairs shown in a row near the top of the project
   // page (e.g. TIME, TOOLS, ROLE) — same idea as the meta row on
   // angelechendesigns.com's case studies.
@@ -361,11 +364,11 @@ export const categories: Category[] = [
         ],
         year: "2026",
         slug: "alltrees",
-        heroLayout: "split",
-        // Same composed shot as the Design entry's card. The icon stays as
-        // the page's own opening image; the cards get the mockup.
+        heroLayout: "showcase",
+        // The composed three-phone shot opens the page and is also the
+        // card cover, so the project reads the same everywhere.
         cardImage: "/projects/alltrees/alltrees-card.jpg",
-        image: "/projects/alltrees/icon.jpg",
+        image: "/projects/alltrees/alltrees-card.jpg",
         // Return leg of the Design ⇄ Build pair. The link renderer spots
         // an internal href and swaps the new-tab <a> for a same-tab
         // next/link, then names the destination discipline in the pill.
@@ -927,7 +930,7 @@ Deno.serve(async (req) => {
           "The interface behind AllTrees, designed in Figma before any code was written.",
         tags: ["UI/UX"],
         slug: "alltrees-design",
-        heroLayout: "split",
+        heroLayout: "showcase",
         cardImage: "/projects/alltrees/alltrees-card.jpg",
         // Same waveGroup as the Build entry — the sea still recognizes
         // these as one project and draws a two-color wave for it, even
@@ -935,7 +938,7 @@ Deno.serve(async (req) => {
         waveGroup: "alltrees",
         featured: true,
         heroImageFirst: true,
-        image: "/projects/alltrees/icon.jpg",
+        image: "/projects/alltrees/alltrees-card.jpg",
         year: "2026",
         meta: [
           { label: "Timeline", values: ["Apr – Sep 2026", "6 months"] },
@@ -948,7 +951,24 @@ Deno.serve(async (req) => {
         body: [
           {
             type: "text",
-            text: "AllTrees is a community map for tree climbers — find a tree, log an ascent, review it, and see what other climbers already knew about it. This page is the design side of the project: how the scope got set, what the research actually was, and what changed because of it. The engineering write-up lives on the Build page.",
+            text: "AllTrees is a community map for tree climbers — find a tree, log an ascent, review it, and see what other climbers already knew about it. This page is the design side: the app itself, how the scope got set, and what testing changed. The engineering write-up lives on the Build page.",
+          },
+
+          // ---- The app, first ---------------------------------------
+          // The product leads. Two phone-mockup strips composed from real
+          // captures, so the page opens on the thing rather than on the
+          // process that produced it.
+          { type: "heading", text: "Find a tree, and know it" },
+          {
+            type: "full-image",
+            image: "/projects/alltrees-design/tour-find.jpg",
+            bleed: true,
+          },
+          { type: "heading", text: "Keep a record, and share it" },
+          {
+            type: "full-image",
+            image: "/projects/alltrees-design/tour-keep.jpg",
+            bleed: true,
           },
 
           // ---- Timeline ----------------------------------------------
@@ -959,7 +979,7 @@ Deno.serve(async (req) => {
             type: "timeline",
             kicker: "Project Timeline",
             heading:
-              "A six-month project that started as a voice note on the way back from a climbing competition, and is now in its second beta.",
+              "Six months, from a voice note after a climbing competition to a second beta.",
             phases: [
               { label: "Ideation", span: 2, note: "April 2026" },
               { label: "Resource Research", span: 2, note: "May 2026" },
@@ -990,100 +1010,51 @@ Deno.serve(async (req) => {
             ],
           },
 
-          // ---- Ideation ----------------------------------------------
-          {
-            type: "beat",
-            kicker: "Ideation",
-            heading:
-              "Three climbers, one voice note, and a gap that neither Mountain Project nor AllTrails fills.",
-            text: "The idea got worked out on the drive back from a climbing competition, with two other climbers, recorded as a voice note. We used Mountain Project and AllTrails as the reference points — both prove that a community-maintained map of outdoor features works, and neither one has any concept of a climbable tree.",
-          },
+          // ---- Scope and stack ---------------------------------------
           {
             type: "cards",
-            label: "What that session settled",
+            label: "What the first session settled",
             items: [
               {
                 title: "The map comes first",
                 subtitle: "Non-negotiable",
-                text: "A community map where any user can drop a pin. Everything else in the app is downstream of it — without user-added pins there is nothing to look at, so no other feature could be allowed to compete for build time.",
+                text: "Every other feature depends on users dropping pins, so nothing was allowed to compete with it for build time.",
               },
               {
                 title: "Then a page per tree",
                 subtitle: "Second priority",
-                text: "Every pin needs somewhere to land: a profile page for the tree itself, so a pin is a record rather than a dot. Rating, difficulty, conditions, who climbed it first.",
+                text: "A pin needs somewhere to land — rating, difficulty, conditions, who climbed it first.",
               },
               {
                 title: "Then people, if it isn't too hard",
                 subtitle: "Conditional",
-                text: "User profiles and everything social were explicitly deferred behind the first two — worth building only if the map and tree pages came together without eating the whole timeline. They did, so they got built.",
+                text: "Profiles and social were deferred behind the first two. The map and tree pages came together in time, so they got built.",
               },
             ],
           },
-
-          // ---- Resource research -------------------------------------
-          {
-            type: "beat",
-            kicker: "Resource Research",
-            heading:
-              "A month spent picking what the app would stand on, before writing anything that would be expensive to undo.",
-            text: "Four decisions were load-bearing enough that changing them later would have meant a rewrite. Each one was made against the specific thing AllTrees needed rather than general popularity.",
-          },
           {
             type: "cards",
-            label: "The four load-bearing choices",
+            label: "Four choices that would have meant a rewrite to change",
             items: [
               {
                 title: "Mapbox",
                 subtitle: "over Google Maps & Apple MapKit",
-                text: "The map isn't a utility here, it's the product — so it had to look like AllTrees, not like a road atlas. Mapbox restyles vector tiles down to the individual layer, so the map could be pulled green and tree-forward with no custom assets. Google and Apple both hand you their look with only cosmetic control over it.",
+                text: "The map is the product, so it had to look like AllTrees. Mapbox restyles vector tiles layer by layer, which got the map green and tree-forward with no custom assets.",
               },
               {
                 title: "Supabase",
                 subtitle: "over Firebase",
-                text: "\"Trees near me\" is a geographic query, and Postgres does those natively — searching by radius is a real query rather than something faked client-side. Row-level security means a climber can only edit their own entries, enforced at the database instead of trusted to the app. Auth, storage and edge functions in one service, which matters when the team is one person.",
+                text: "\"Trees near me\" is a geographic query, and Postgres does those natively. Row-level security, auth and storage in one service suits a team of one.",
               },
               {
                 title: "Figma",
                 subtitle: "Design system & iconography",
-                text: "The map needed its pins, leaf icons and badges drawn before any of them could be built — a pin is the smallest, most repeated element in the app and the hardest to fix later. Screens iterate in minutes there and in hours in code.",
+                text: "Pins, leaf icons and badges had to be drawn before they could be built. Screens iterate in minutes there and in hours in code.",
               },
               {
                 title: "RevenueCat",
                 subtitle: "Subscriptions",
-                text: "Receipt validation, restore-purchases, trial states and cancellations are a long tail of edge cases that have nothing to do with tree climbing. RevenueCat collapses all of it into a single entitlement flag the app can read.",
-              },
-            ],
-          },
-
-          // ---- Testing & network ideation ----------------------------
-          {
-            type: "beat",
-            kicker: "Testing & Network Ideation",
-            heading:
-              "I climbed with it, fixed what annoyed me, then went and asked people what would make it worth paying for.",
-            text: "July was the first month the app was complete enough to properly use. Most of the bug-catching happened at home, working through the app screen by screen, with some of it out while looking for trees. In parallel I started asking my network what they'd actually value — which is where the business model got decided for me.",
-          },
-          {
-            type: "beat",
-            kicker: "Monetisation",
-            heading:
-              "The plan was a Kickstarter. I went with a premium tier instead.",
-            text: "I ran it past my brother, who's the COO of an e-commerce services company. He suggested a paid feature rather than crowdfunding, and pointed out that the app needed to be easy to share.",
-          },
-          {
-            type: "cards",
-            label: "What changed as a result",
-            columns: 2,
-            items: [
-              {
-                title: "A premium tier, not a Kickstarter",
-                subtitle: "Monetisation",
-                text: "A Kickstarter asks strangers to fund something that doesn't exist yet; a premium tier asks people already using the app to pay for something they can see working. I dropped the Kickstarter and scoped Treemium in its place — $1.99/month or $14.99/year, with a 7-day trial.",
-              },
-              {
-                title: "Make it easy to share",
-                subtitle: "Growth",
-                text: "His other point was that growth would more likely come from climbers showing the app to other climbers than from advertising. That moved sharing up the priority list: shareable profile cards, tree links that open straight to the right pin, and share buttons on the screens people are proudest of.",
+                text: "Receipts, restores, trials and cancellations are a long tail unrelated to tree climbing. RevenueCat reduces it to one entitlement flag.",
               },
             ],
           },
@@ -1094,78 +1065,78 @@ Deno.serve(async (req) => {
             kicker: "Treemium",
             heading:
               "Every core feature stays free. What you pay for is the part that's fun to show people.",
-            text: "The constraint I set was that nothing load-bearing — the map, adding trees, tree pages, logging ascents, search — could ever sit behind the paywall. A community map with a paywalled community is just a worse map. So Treemium had to be built out of things that are desirable without being necessary.",
+            text: "I'd planned a Kickstarter. Advice from my brother, COO of an e-commerce services company, moved it to a premium tier instead — and made sharing a priority. The constraint was that nothing load-bearing could sit behind the paywall, so Treemium is built from things that are desirable without being necessary.",
           },
           {
             type: "cards",
-            label: "Three paid features, chosen for two different reasons",
+            label: "Three paid features, chosen for different reasons",
             items: [
               {
                 title: "Custom pins",
                 subtitle: "Retention",
-                text: "Nine leaf shapes, one per botanical family — oak, maple, pine, birch, willow, apple, hickory, sycamore, magnolia — and each is unlocked by actually climbing a tree from that family. That makes them a reason to keep climbing rather than a cosmetic you buy once and forget.",
+                text: "Nine leaf shapes, one per botanical family, each unlocked by climbing a tree from that family — a reason to keep climbing, not a cosmetic you buy once.",
               },
               {
                 title: "The climber archetype",
                 subtitle: "Desire",
-                text: "The stats page scores six behavioural axes from your logged ascents — risk, novelty, range, diversity, difficulty and dedication — and resolves them into one of ten animals, from the Sloth to the Leopard. It's the feature I expect people to want because someone else has one and they don't.",
+                text: "Six behavioural axes scored from your ascents resolve into one of ten animals, from the Sloth to the Leopard.",
               },
               {
                 title: "For You",
                 subtitle: "Utility",
-                text: "Personalised tree recommendations, weighted by where you climb and what you've climbed before. The one paid feature that's genuinely useful rather than expressive — included so the tier isn't purely decorative.",
+                text: "Recommendations weighted by where you climb and what you've climbed. The one paid feature that's useful rather than expressive.",
               },
             ],
           },
           {
             type: "text-with-image",
-            text: "The six axes rendered as a radar chart, so the archetype is shown being derived rather than just asserted. Mine currently resolves to The Treecreeper — high diversity, high dedication, low risk — which is an accurate enough read that it was faintly annoying.",
+            text: "The six axes as a radar chart, so the archetype is shown being derived rather than asserted. Mine resolves to The Treecreeper — high diversity, high dedication, low risk.",
             image: "/projects/alltrees-design/stats-radar.jpg",
           },
 
-          // ---- Beta one ----------------------------------------------
+          // ---- Testing -----------------------------------------------
           {
             type: "beat",
             kicker: "Beta One",
             heading:
-              "Four testers: the two climbers who scoped it, and two UX designers who hadn't.",
-            text: "A four-person panel is small, so it was split deliberately rather than gathered conveniently — half with the full context of what the app was meant to become, half coming to it fresh.",
+              "Four testers, split on purpose: two climbers who helped scope it, two UX designers who hadn't.",
+            text: "Half had the full context of what the app was meant to become; half met it as a new interface. Feedback came as written notes and calls, and the useful part was unglamorous — specific, fixable problems, each of which shipped a change.",
           },
           {
             type: "cards",
-            label: "The panel",
-            columns: 2,
+            label: "What testing changed",
             items: [
               {
-                title: "Two climbers",
-                subtitle: "The original ideation group",
-                text: "The same two climbers from the April voice note. They knew exactly what the app had been meant to become, which made them the only people who could spot where the build had quietly drifted from the plan.",
+                title: "Form flow",
+                subtitle: "Input",
+                text: "Long text entry, like writing a review, needed a way to put the keyboard away. It got one.",
               },
               {
-                title: "Two UX designers",
-                subtitle: "Friends in tech, two other cities",
-                text: "Both with UX backgrounds, one of them a climber as well. Neither had been part of the original scoping, so they read the app as an interface rather than as the thing we'd planned — and caught the usability problems the others had already learned to work around.",
+                title: "Action clarity",
+                subtitle: "Comprehension",
+                text: "Adding a tree and logging the first ascent read as one step. A prompt after posting now separates them.",
+              },
+              {
+                title: "Broken controls",
+                subtitle: "Bugs",
+                text: "Small things that looked interactive and weren't, like the edit-profile-photo control. Fixed.",
+              },
+              {
+                title: "Legibility",
+                subtitle: "Visual",
+                text: "The tab bar. Shown below — it's the fix that's easiest to see.",
               },
             ],
-          },
-          {
-            type: "text",
-            text: "Feedback arrived as a mix of written notes and calls. What follows is the written half — the part I have an exact record of — rather than everything that was said. The useful notes were unglamorous: specific, fixable problems, each of which shipped a change.",
-          },
-          {
-            type: "text",
-            text: '"There\'s no option to collapse the keyboard back down when you finish typing a review, which makes the formatting a little weird." — added a collapsible keyboard.\n\n"It isn\'t obvious that logging a tree doesn\'t mean you\'re also logging the first ascent. Could there be a pop up after you post a tree that asks if you want to log the first ascent?" — added that pop-up.\n\n"The option to edit my profile picture is not clickable." — fixed.\n\n"The badges are so cute!" / "Huge fan of the tree name generator" — good signs that the small details are landing.',
-          },
-          {
-            type: "beat",
-            kicker: "The Fix With A Picture",
-            heading:
-              "\"Like white on green instead of green on green.\"",
-            text: "The tab bar had been dark green on green since the first build, and I'd stopped seeing it — it was legible to me because I already knew what the icons said. The icons and labels went white, and the active tab kept the bright green so it still reads as selected. Drag the slider.",
           },
           // Same crop from the same screen on the same device, so the two
           // halves line up exactly under the slider — the only thing that
           // moves is the thing that actually changed.
+          {
+            type: "beat",
+            kicker: "Example fix",
+            heading: "Tab bar contrast",
+            text: "Dark green on green since the first build, and I'd stopped seeing it — it was legible to me because I already knew what the icons said. Icons and labels went white; the active tab keeps the bright green. Drag the slider.",
+          },
           {
             type: "before-after",
             before: "/projects/alltrees-design/tabbar-before.jpg",
@@ -1176,132 +1147,35 @@ Deno.serve(async (req) => {
           {
             type: "beat",
             kicker: "The Login Screen",
-            heading: "A redesigned login screen, with a \"last used\" indicator.",
-            text: "The old layout wasn't working, so I reworked it — one tap back in, instead of hunting for which sign-in method you used last time. Four sign-in paths, including a guest mode so the map can be browsed before committing to an account.",
+            heading: "One tap back in, with a \"last used\" indicator.",
+            text: "Before: three full-width buttons, guest access reduced to a small underlined link, and nothing to say which method you used last time. After: four equal paths, the last one used flagged, and a guest mode so the map can be browsed before committing to an account.",
           },
-          // The "before" runs inline and small, the "after" full-bleed
-          // underneath — so the comparison reads as an escalation rather
-          // than showing the same screen twice at the same weight.
-          {
-            type: "text-with-image",
-            text: "Before: three full-width buttons stacked down the screen, guest access demoted to a small underlined link at the bottom, and nothing to indicate which method you'd used last time. It worked, but every return visit was a small guessing game — and the one option that lets someone look around before committing was the easiest one to miss.",
-            image: "/projects/alltrees-design/login-before.jpg",
-          },
-          // Full-bleed rather than an `image` on the beat above: the beat
-          // caps its image at the article's max-w-2xl column, which shrinks
-          // a full-screen capture down to thumbnail size and loses the point.
+          // One composed image, both screens in identical frames — the
+          // comparison is the layout, not the recording chrome around it.
           {
             type: "full-image",
-            image: "/projects/alltrees-design/login.jpg",
+            image: "/projects/alltrees-design/login-compare.jpg",
             bleed: true,
           },
 
-          // ---- Beta two ----------------------------------------------
+          // ---- Sharing ------------------------------------------------
+          {
+            type: "text-with-image",
+            text: "Sharing was designed as a requirement, not an add-on. The community mad-lib — \"Where ___ meets ___\" — turns the tagline into something climbers fill in themselves, with the blanks boxed so whatever gets typed reads as their words, never the brand's. Every card is a different, screenshot-ready ad.",
+            image: "/projects/alltrees-design/madlib-post.jpg",
+          },
+
+          // ---- Beta two / where it stands ----------------------------
           {
             type: "beat",
             kicker: "Beta Two — Running Now",
             heading:
               "The second round isn't testing whether it works. It's testing whether the map fills up.",
-            text: "Round one was bug discovery on a panel that already believed in the idea. Round two is the harder question: will climbers who weren't in the room add trees without being asked? So this round has a number attached rather than a feeling — 25 testers, and 100 trees on the map by the end of it.",
-          },
-          {
-            type: "cards",
-            label: "What round two has to prove",
-            columns: 2,
-            items: [
-              {
-                title: "25 testers",
-                subtitle: "Recruiting now",
-                text: "Large enough that a complaint repeated three times is a pattern rather than one person's taste, small enough that every piece of feedback still gets read properly. Recruiting through the gyms I set at and the competition circuit — climbers who already travel to climb are the ones who'll add pins in places I'll never get to.",
-              },
-              {
-                title: "100 trees on the map",
-                subtitle: "The real measure",
-                text: "The map is the product, and an empty map is just a demo. The number that matters isn't installs or session length, it's whether pins appear in places I've never been — which is the only evidence that this works as a community map rather than as my personal tree diary.",
-              },
-            ],
-          },
-
-          // ---- Feature details ---------------------------------------
-          // Riley's request: the feature-by-feature detail sits AFTER the
-          // research narrative, so the page argues for the decisions first
-          // and only then shows what got built.
-          {
-            type: "heading",
-            text: "The Features",
-          },
-          {
-            type: "text",
-            text: "What the research above actually turned into, in the order the ideation session prioritised them.",
-          },
-          {
-            type: "cards",
-            label: "The map, and everything downstream of it",
-            items: [
-              {
-                title: "The map",
-                subtitle: "Priority one from day one",
-                text: "A community map of climbable trees, where any climber can drop a pin at their location or place one by hand. Custom-styled so the map reads as woodland rather than road network.",
-              },
-              {
-                title: "Tree pages",
-                subtitle: "Priority two",
-                text: "Every tree gets a profile: a star rating, a leaf-icon difficulty scale, who claimed the first ascent, live-reported conditions, and reviews from other climbers.",
-              },
-              {
-                title: "Ascent logging",
-                subtitle: "The core loop",
-                text: "Log an ascent against a tree, separately from adding the tree itself — a distinction beta one showed was not obvious, and which now prompts explicitly after you post.",
-              },
-              {
-                title: "Search & filters",
-                subtitle: "Finding the next one",
-                text: "Filter by species, difficulty and conditions, with an adjustable search radius around wherever you are.",
-              },
-            ],
-          },
-          {
-            type: "cards",
-            label: "The social layer, built once the map held up",
-            items: [
-              {
-                title: "Species ID",
-                subtitle: "Claude API",
-                text: "A photo suggests the most likely species, weighted by GPS location so the shortlist is drawn from what actually grows nearby. Runs server-side so the API key never reaches the app.",
-              },
-              {
-                title: "Badges",
-                subtitle: "Seven, criteria-based",
-                text: "Off the Ground for a first ascent, Taxonomist for ten species, Twenty Trees Deep, Tree Hugger for thirty favourites, Ribbit Ribbit for forty reviews, Johnny Appleseed for fifty trees added, Part Squirrel for a hundred ascents.",
-              },
-              {
-                title: "Profiles, friends & life list",
-                subtitle: "Your own record",
-                text: "A public profile per climber and a running life list of every species climbed — the birdwatching convention applied to trees. Climbers find each other by @username and send friend requests, so the map has people on it, not just pins.",
-              },
-              {
-                title: "Sharing",
-                subtitle: "Built as a requirement",
-                text: "A swipeable set of cards — profile, tree, ascent, badge — that post straight to an Instagram Story or send as a link that opens the right tree in-app. It includes a community mad-lib card (\"Where ___ meets ___\") deliberately built so anything a user types stays boxed as their words, never AllTrees'. The direct output of the advisor session.",
-              },
-            ],
-          },
-
-          {
-            type: "text-with-image",
-            text: "Sharing turned into its own small design problem: make it effortless, and make it safe. The community mad-lib — \"Where ___ meets ___\" — turns the app's own tagline into something climbers fill in themselves, with the two blanks boxed so whatever gets typed always reads as their words rather than the brand's. Every filled-in card is a different, screenshot-ready ad.",
-            image: "/projects/alltrees-design/madlib-post.jpg",
-          },
-          {
-            type: "beat",
-            kicker: "Where It Stands",
-            heading:
-              "Built on iOS, going to Android, with a companion site — and now in its second beta.",
-            text: "The map, tree pages, ascent logging, search, profiles, friends, badges, sharing and the Treemium tier are all built and working end to end. An Android build is going out to testers, and a landing site at alltrees.app carries the deep links that let a shared tree open straight in the app. What's still unproven is the part no amount of design can settle on its own — whether climbers who weren't part of the plan will fill the map in.",
+            text: "25 testers, and 100 trees on the map by the end of it — a number instead of a feeling. The measure that matters is whether pins appear in places I've never been, which is the only evidence this works as a community map and not as my personal tree diary.",
           },
           {
             type: "text-with-image",
-            text: "alltrees.app does two quiet jobs: it gives the app somewhere to point people, and it carries the links so a shared tree or profile opens straight in the app instead of a browser.",
+            text: "Built on iOS with an Android build going to testers, plus a landing site at alltrees.app that carries the deep links so a shared tree opens straight in the app.",
             image: "/projects/alltrees-design/website.jpg",
           },
         ],

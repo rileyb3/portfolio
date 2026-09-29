@@ -39,7 +39,9 @@ export default function ProjectPage({
   // A video always wants the big full-bleed frame; `split` only applies
   // to still covers whose subject has a fixed size (icons, charts).
   const splitHero =
-    project.heroLayout === "split" && Boolean(project.image) && !project.video;
+    (project.heroLayout === "split" || project.heroLayout === "showcase") &&
+    Boolean(project.image) &&
+    !project.video;
 
   return (
     <>
@@ -60,6 +62,7 @@ export default function ProjectPage({
             <SplitHero
               title={project.title}
               image={project.image!}
+              showcase={project.heroLayout === "showcase"}
               categoryHref={`/${project.categoryId}`}
               categoryLabel={project.tagLabel ?? project.categoryLabel}
               year={project.year}
